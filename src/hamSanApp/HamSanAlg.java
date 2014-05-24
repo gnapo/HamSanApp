@@ -1,6 +1,7 @@
 package hamSanApp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HamSanAlg {
@@ -18,6 +19,7 @@ public class HamSanAlg {
 	boolean firstRun;
 	boolean done;
 	boolean verticalSol;
+	boolean colorSwap;
 	double verticalSolPos;
 	Point solution;
 	
@@ -81,6 +83,16 @@ public class HamSanAlg {
 		}
 	}
 	
+	public double levelpos(double x, boolean blue) {
+		//TODO implement with quickselect//
+		return 0.0d;
+	}
+	
+	public boolean blueTop(double x) {
+		//is the blue level higher than the red level at x?
+		return levelpos(x, true)>levelpos(x,false);
+	}
+	
 	public void doAlg() { //sets done to true iff it has found a solution
 		if (firstRun) {
 			//make sure that both sets are odd by deleting a point out of each set:
@@ -113,16 +125,35 @@ public class HamSanAlg {
 			return;
 		}
 		
-		// swap the lines if blue is smaller//
+		// swap the lines if blue is smaller:
+		if (lBlue.size() < lRed.size()) {
+			colorSwap = !colorSwap;
+			//TODO: 
+			//swap lBlue and lRed//
+			//also swap lBlueDel and lRedDel//
+		}
 		
-		//generate all the crossings//
-		List<Point> crossings = new ArrayList<Point>();
-			//there are three kinds of crossings: blue-blue
-			//									  blue-red
-			// 									  red-red
+		//generate all the crossings:
+		List<Crossing> crossings = new ArrayList<Crossing>();
+		for (int i = 0; i < lBlue.size();i++) {
+			for (int j = i+1; j < lBlue.size();j++){
+				crossings.add(new Crossing(lBlue.get(i),lBlue.get(j)));
+			}
+		}
+		for (int i = 0; i < lBlue.size();i++) {
+			for (int j = 0; j < lRed.size();j++){
+				crossings.add(new Crossing(lBlue.get(i),lRed.get(j)));
+			}
+		}
+		for (int i = 0; i < lRed.size();i++) {
+			for (int j = i+1; j < lRed.size();j++){
+				crossings.add(new Crossing(lRed.get(i),lRed.get(j)));
+			}
+		}
+		//sort them. crossings implements comparable.
+		Collections.sort(crossings);
 		
-		//sort them. crossings implements comparable.//
-		
+		//TODO: everything from here
 		//make stripes with at most alpha*(n choose 2) crossings a piece. //
 		//find strip with odd number of intersections by binary search.//
 		//figure out M //
