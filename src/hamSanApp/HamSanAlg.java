@@ -16,6 +16,10 @@ public class HamSanAlg {
 	int levelBlue;
 	int levelRed;
 	boolean firstRun;
+	boolean done;
+	boolean verticalSol;
+	double verticalSolPos;
+	Point solution;
 	
 	final double alpha = 1.0d/32.0d;
 	final double eps = 1.0d/8.0d;
@@ -34,6 +38,9 @@ public class HamSanAlg {
 		leftb = 0;
 		rightb = 0;
 		firstRun = true;
+		done = false;
+		solution = null;
+		verticalSol = false;
 	}
 	
 	public void addLine(double x, double y, boolean blue){
@@ -48,27 +55,64 @@ public class HamSanAlg {
 	
 	public void removeLine(Point l) {
 		if (!firstRun) {return;}
-		if (lBlue.contains(l)) {
-			lBlue.remove(l);
+		lBlue.remove(l);
+		lRed.remove(l);
+	}
+	
+	public void hideLine(Point l) {
+		if (lBlue.remove(l)) {
+			lBlueDel.add(l);
 		}
-		if (lRed.contains(l)) {
-			lRed.remove(l);
+		if (lRed.remove(l)) {
+			lRedDel.add(l);
 		}
 	}
 	
-	public void doAlg() {
+	public void presentSolution() {
+		if (!done) {
+			System.out.println("algorithm not done yet :(");
+		}
+		if (verticalSol) {
+			System.out.println("the solution is a vertical line with x = "+verticalSolPos);
+		}
+		else {
+			System.out.print("the solution is the ");
+			solution.repr_line();
+		}
+	}
+	
+	public void doAlg() { //sets done to true iff it has found a solution
 		if (firstRun) {
-			//make sure that both sets are odd by deleting a point out of each set// 
+			//make sure that both sets are odd by deleting a point out of each set:
+			if ((lBlue.size()%2) == 0) {
+				hideLine(lBlue.get(0));
+			}
+			if ((lRed.size()%2) == 0) {
+				hideLine(lRed.get(0));
+			}
 			//set the levelBlue and levelRed to the correct values:
 			levelBlue = (lBlue.size()+1/2);
 			levelRed = (lRed.size()+1/2);
-			firstRun = false; //so we don't change the points
+			firstRun = false; //so we don't change the points, and only do this once
 		}
 		
 		//check if trivial solution:
 		if (lBlue.size()==1 && lRed.size()==1) {
-			//find intersection point and return that. done!//
+			Point b = lBlue.get(0);
+			Point r = lRed.get(0);
+			//do we need a vertical line?
+			if (b.a == r.a) {
+				done = true;
+				verticalSol = true;
+				verticalSolPos = b.a;
+				return;
+			}
+			done = true;
+			//find intersection point and return that. done!
+			solution = new Point(b.cross(r),b.eval(b.cross(r)));
+			return;
 		}
+		
 		// swap the lines if blue is smaller//
 		
 		//generate all the crossings//
