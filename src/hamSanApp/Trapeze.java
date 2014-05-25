@@ -16,7 +16,7 @@ public class Trapeze {
 	double botleft;
 	double botright;
 	
-	public boolean intersects(Point i) { //TODO: testing
+	public boolean intersects(Point i) { //TODO: richtig machen!
 		double y1 = i.eval(left);
 		double y2 = i.eval(right);
 		if (((y1 < botleft) || ( y1 > topleft)) && ((y2 < botright) || (y2 > topright)))  {

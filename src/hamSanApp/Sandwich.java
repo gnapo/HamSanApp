@@ -22,7 +22,6 @@ public class Sandwich {
 		Point k = new Point(0.0d,0.0d);
 		int res = Point.op1naive(i, j, k);
 		System.out.println(res);
-		System.out.println(i.ell);
 	}
 
 }

@@ -4,17 +4,11 @@ public class Crossing implements Comparable<Crossing> {
 
 	Point a;
 	Point b;
-	Point cr;
-	boolean atInf= false;
+
 	Crossing(Point x, Point y){
 		a=x;
 		b=y;
-		if (x.a == y.a) {
-			atInf = true;
-		}
-		else {
-			cr = new Point(x.cross(y),x.eval(x.cross(y)));
-		}
+	
 	}
 	
 	@Override

@@ -11,7 +11,6 @@ public class Point {
 		public double a;
 		public double b;
 		public final int i;
-		public int ell = 5;
 		
 		public void repr_point(){
 			System.out.println("point at "+a+" "+b);
