@@ -1,9 +1,12 @@
 package hamSanApp;
 
 //import javax.swing.*;
-
+	/**
+	 * diese Klasse verwaltet alles: (HamSanAlg und Gui) und hat die main-methode. 
+	 * @author fabian
+	 *
+	 */
 public class Sandwich {
-	
 	/*
 	private static void makeGui() {
 		JFrame frame = new JFrame("draw thingie");
@@ -17,6 +20,7 @@ public class Sandwich {
 	}*/
 
 	public static void main(String[] args) {
+		//tests go here.
 		Point i = new Point(1.0d,-4.0d);
 		Point j = new Point(0.0d,-4.0d);
 		Point k = new Point(0.0d,0.0d);

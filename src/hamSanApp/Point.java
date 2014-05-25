@@ -1,31 +1,63 @@
 package hamSanApp;
-
-public class Point {
-		static int index = 0;
+		/**
+		 * Diese Klasse stellt einen Punkt/eine Linie (beides) dar und hat einige hilfsfunktionen
+		 * @author fabian
+		 *
+		 */
+	public class Point {
+		
+		public double a; 		//erste Variable
+		public double b; 		//zweite Variable
+		public final int i; 	//index
+		static int index = 0; 	//damit jeder Point einen eindeutigen index hat.
+		/**
+		 * Konstruktor
+		 * @param x erste variable
+		 * @param y zweite Variale
+		 */
 		Point(double x, double y) {
 			a = x;
 			b = y;
 			i = Point.index;
 			index +=1;
 		}
-		public double a;
-		public double b;
-		public final int i;
+
 		
+		/**
+		 * zum ausgeben als Punkt (nicht wichtig, höchstens zu debug-zwecken)
+		 */
 		public void repr_point(){
 			System.out.println("point at "+a+" "+b);
 		}
+		/**
+		 * zum ausgeben als Gerade (nicht wichtig, höchstens zu debug-zwecken)
+		 */
 		public void repr_line(){
 			System.out.println("line: y= "+a+"x + "+b);
 		}
+		/**
+		 * wertet die Gerade an einem Punkt aus.
+		 * @param x Auswertungspunkt
+		 * @return errechneter y wert
+		 */
 		public double eval(double x) {
 			return a*x + b;
 		}
+		/**
+		 * Schneidet die gerade mit einer anderen Gerade.
+		 * KEINE GERADEN MIT GLEICHER STEIGUNG SCHNEIDEN!
+		 * @param other Die andere gerade
+		 * @return Die x-koordinate des Schnittes
+		 */
 		public double cross(Point other) {
 			if (a == other.a) {return 0;}
 			return (b-other.b)/(a-other.a);
 		}
 		
+		
+		/**
+		 * errechnet eine determinante. nicht wichtig.
+		 */
 		public static double det3 (double a11, double a12, double a13,
 								   double a21, double a22, double a23,
 								   double a31, double a32, double a33) {
@@ -36,13 +68,17 @@ public class Point {
 					-a12*a21*a33
 					-a13*a22*a31;
 		} 
-		
+		/**
+		 * errechnet eine determinante. nicht wichtig.
+		 */
 		public static double det2 (double a11, double a12,
 								   double a21, double a22) {
 			return a11*a22-a12*a21;
 		}
-		
-		/*do lines i and j intersect above k (1), below k (-1) or on k (0) ?*/
+
+		/**
+		 * nicht funktionierende version von operation 1. lösch mich.
+		 */
 		public static int op1(Point i, Point j, Point k) {
 			double Delta1;
 			if (i.i < j.i) {
@@ -58,6 +94,13 @@ public class Point {
 			return 0;
 		}
 		
+		/**
+		 * gibt zurück, ob sich die Geraden i und j oberhalb der Geraden k schneiden oder unterhalb
+		 * @param i erste schnittgerade
+		 * @param j zweite schnittgerade
+		 * @param k vergleichsgerade
+		 * @return 1 wenn überhalb, -1 wenn unterhalb
+		 */
 		public static int op1naive(Point i, Point j, Point k) {
 			//calculate the crossing point of i and j:
 			if (i.a != j.a){
@@ -77,6 +120,12 @@ public class Point {
 			}
 		}
 		
+		/**
+		 * errechnet, ob sich i und j links von k und l schneiden oder nicht. 
+		 * i,j,k und l müssen sich unterscheiden!
+		 * @return -1 wenn sich ij links von kl schneiden, 1 sonst
+		 * @throws sollte eigentlich nicht, nur wenn du's verkackst
+		 */
 		public static int op2naive(Point i, Point j, Point k, Point l) throws Exception {
 			//if ij crosses left of kl, return -1, if right return +1
 			if (i.equals(j)||i.equals(k)||i.equals(l)||j.equals(k)||j.equals(l)||k.equals(l)) 
@@ -93,7 +142,7 @@ public class Point {
 					if (x1 > x2) {
 						return -1;
 					}
-					else {
+					else { //TODO but what if the crossings are at negative x? think about it
 						//find the smallest index of the four
 						if (i.i < j.i && i.i < k.i && i.i < l.i) {
 							if (diff1 > 0) {return -1;}
@@ -163,6 +212,9 @@ public class Point {
 				throw new Exception("uh, something went wrong comparing");
 			}
 		}
+		/**
+		 * dritte operation, brauchen wir warscheinlich nicht
+		 */
 		public static int op3naive(Point i, Point j, Point k, Point l, Point m) {
 			//sanity: make sure i,j,k,l pairwise distinct,
 			//even need to do? make sure we need this.

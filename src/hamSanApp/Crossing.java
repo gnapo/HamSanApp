@@ -1,16 +1,26 @@
 package hamSanApp;
 
+	/**
+	 * diese Klasse stellt die Kreuzung zweier Geraden dar und ist hauptsächlich zum sortieren da.
+	 * @author fabian
+	 *
+	 */
 public class Crossing implements Comparable<Crossing> {
 
-	Point a;
-	Point b;
+	Point a; //
+	Point b; // die beiden Linien
 
+	/**
+	 * Konstruktor
+	 */
 	Crossing(Point x, Point y){
 		a=x;
 		b=y;
-	
 	}
 	
+	/**
+	 * vergleichsfunktion. funktioniert so, wie im Interface vorausgesetzt
+	 */
 	@Override
 	public int compareTo(Crossing other) { //TODO: test this a bit
 		//returns -1 if this is left than other, 0 if this is other, 1 if this is to the right
