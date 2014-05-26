@@ -28,6 +28,8 @@ public class HamSanAlg {
 	boolean verticalSol;	//ist die Lösung eine Vertikale Linie?
 	double verticalSolPos;	//position der vertikalen Lösung
 	Point solution;			//position der nicht-vertikalen Lösung
+	double [] borders;		//positionen der grenzen zwischen streifen.
+								//konvention: borders[i] ist der linke rand von dem i-ten streifen
 	
 	final double alpha = 1.0d/32.0d; 	//
 	final double eps = 1.0d/8.0d;		//Konstanten für den Alg
@@ -55,6 +57,7 @@ public class HamSanAlg {
 		done = false;
 		solution = null;
 		verticalSol = false;
+		borders = new double[64];
 	}
 	
 	/**
@@ -121,7 +124,7 @@ public class HamSanAlg {
 	 * @param level wievielte linie von oben?
 	 * @return der y-Wert
 	 */
-	public double levelpos(double x, boolean blue, int level) {
+	public double levelPos(double x, boolean blue, int level) {
 		//TODO implement with quickselect//
 		//oder halt sortieren weils einfacher geht
 		return 0.0d;
@@ -134,9 +137,36 @@ public class HamSanAlg {
 	 */
 	public boolean blueTop(double x) {
 		//is the blue level higher than the red level at x?
-		return levelpos(x, true, levelBlue)>levelpos(x, false, levelRed);
+		return levelPos(x, true, levelBlue)>levelPos(x, false, levelRed);
 	}
 	
+	/**
+	 * Hilfsfunktion, um herauszufinden, ob wir eine Kreuzung berücksichtigen müssen.
+	 * Schaut nach, ob die Kreuzung innerhalb des momentanen Betrachtungsbereiches ist.
+	 * @param c die betreffende Kreuzung
+	 * @return true, falls wir die Kreuzung berücksichtigen müssen.
+	 */
+	public boolean inBorders(Crossing c) {
+		if (c.atInf()) {
+			if (c.atNegInf() && leftborder) {
+				return false;
+			}
+			if (!c.atNegInf() && rightborder) {
+				return false;
+			}
+		}
+		if (leftb <= c.crAt() && c.crAt() <= rightb) {return true;}
+		else {return false;}
+	}
+	
+	/**
+	 * Funktion, die errechnet, ob im unbeschränkten bereich links die blaue medianlinie über der Roten ist
+	 * @return true falls ja
+	 */
+	private boolean blueTopLeft() {
+		// TODO implementieren
+		return false;
+	}
 	/**
 	 * der eigentliche Algorithmus. ein ausführen dieses Algorithmus stellt einen
 	 * Iterationsschritt dar. wir wollen das warscheinlich noch weiter in 
@@ -183,37 +213,99 @@ public class HamSanAlg {
 		}
 		
 		//generate all the crossings:
-		//TODO: vorher abfragen, ob das crossing innerhalb unserer momentanen begrenzungen liegt.
 		List<Crossing> crossings = new ArrayList<Crossing>();
 		for (int i = 0; i < lBlue.size();i++) {
 			for (int j = i+1; j < lBlue.size();j++){
-				crossings.add(new Crossing(lBlue.get(i),lBlue.get(j)));
+				Crossing c = new Crossing(lBlue.get(i),lBlue.get(j));
+				if (inBorders(c)) {
+					crossings.add(c);
+				}
 			}
 		}
 		for (int i = 0; i < lBlue.size();i++) {
 			for (int j = 0; j < lRed.size();j++){
-				crossings.add(new Crossing(lBlue.get(i),lRed.get(j)));
+				Crossing c = new Crossing(lBlue.get(i),lRed.get(j));
+				if (inBorders(c)) {
+					crossings.add(c);
+				}
 			}
 		}
 		for (int i = 0; i < lRed.size();i++) {
 			for (int j = i+1; j < lRed.size();j++){
-				crossings.add(new Crossing(lRed.get(i),lRed.get(j)));
+				Crossing c = new Crossing(lRed.get(i),lRed.get(j));
+				if (inBorders(c)) {
+					crossings.add(c);
+				}
 			}
 		}
 		
 		//sort them. crossings implements comparable.
-		Collections.sort(crossings);
 		
-		//TODO: everything from here
+		//make stripes with at most alpha*(n choose 2) crossings a piece.
+		Collections.sort(crossings);
+		int minband = 0;
+		int maxband = 0; //wird überschrieben.
+		int band = 1;
+		int bandsize = (int) (crossings.size()*alpha);
+		for (int i = bandsize; i < crossings.size();i+=bandsize){
+			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;}
+			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
+				while (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
+					i--;
+				}
+				borders[band] = crossings.get(i).crAt();
+				maxband = band;
+				break;
+			}
+			borders[band] = crossings.get(i).crAt();
+			band++;
+		}
 			
-		//make stripes with at most alpha*(n choose 2) crossings a piece. //
-			//speichern als ein array von x-werten
-		//find strip with odd number of intersections by binary search.//
-			//dann haben wir leftb und rightb
-		//figure out M //
-			//nachlesen wie sich M berechnet
-		//construct Trapeze//
-			//sonderfall, falls trapez im unbeschränkten intervall ist!
-		//cut away lines, count and make sure levelB/R are correct//
+		//find strip with odd number of intersections by binary search:		
+		boolean bluetop = blueTopLeft();
+		while ((maxband-minband) > 1) { //TODO i think this needs to be more robust for the non-bounded cases?
+			int testband = (maxband-minband)/2;
+			boolean bluetesttop = blueTop(borders[testband]);
+			if (bluetop == bluetesttop) {
+				minband = testband;
+			}
+			else {
+				maxband = testband;
+			}
+		}
+		leftb = borders[minband];
+		rightb = borders[maxband];
+		
+		//TODO handle non-bounded case
+		int topLvl = levelBlue - (int) (eps*lBlue.size());
+		int botLvl = levelBlue - (int) (eps*lBlue.size());
+		double tl = levelPos(leftb,true,topLvl);
+		double tr = levelPos(rightb,true,topLvl);
+		double bl = levelPos(leftb,true,botLvl);
+		double br = levelPos(rightb,true,botLvl);
+		Trapeze t = new Trapeze(leftb, tl, bl, rightb, tr, br);
+		
+		//cut away lines, count and make sure levelB/R are correct:
+		for (int i = 0; i < lBlue.size(); ++i) {
+			int s = t.intersects(lBlue.get(i));
+			if (s != 0) {
+				if (s > 0) {
+					levelBlue --;
+				}
+				hideLine(lBlue.get(i));
+			}
+		}
+		for (int i = 0; i < lRed.size(); ++i) {
+			int s = t.intersects(lRed.get(i));
+			if (s != 0) {
+				if (s > 0) {
+					levelRed --;
+				}
+				hideLine(lRed.get(i));
+			}
+		}
+		
 	}
+
+	
 }

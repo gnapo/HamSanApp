@@ -27,17 +27,20 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 	/**
 	 * Testet, ob eine Linie das Trapez schneidet
 	 * @param i die zu testende Linie
-	 * @return true g.d.w schneidet
+	 * @return +1 wenn die linie obendrüber geht, 0 wenn sie schneidet, -1 wenn sie untendrunter geht
 	 */
-	public boolean intersects(Point i) { //TODO: testen
-		//TODO: vielleicht auch hier testen und zurückgeben, ob obendrüber oder untendrunter vorbei geht?
+	public int intersects(Point i) { //TODO: testen
+		
 		double y1 = i.eval(left);
 		double y2 = i.eval(right);
-		if (((y1 < botleft) && ( y2 < botright)) || ((y1 > topleft) && (y2 > topright)))  {
-			return false;
+		if ((y1 < botleft) && ( y2 < botright)) {
+			return -1;
+		}
+		if ((y1 > topleft) && (y2 > topright))  {
+			return 1;
 		}
 		else {
-			return true;
+			return 0;
 		}
 	}
 }

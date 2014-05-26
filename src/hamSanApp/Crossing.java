@@ -33,4 +33,41 @@ public class Crossing implements Comparable<Crossing> {
 		}
 		return 0;
 	}
+	
+	/**
+	 * funktion um herauszufinden, ob der Schnittpunkt sich bei +- Unendlich befindet
+	 * @return true wenn ja
+	 */
+	public boolean atInf() {
+		return a.a==b.a;
+	}
+	
+	/**
+	 * funktion um herauszufinden, ob der schnittpunkt bei unendlich bei - oder bei + Unendlich ist
+	 * @return true wenn bei -unendl
+	 */
+	public boolean atNegInf() { //TODO testen
+		if (a.i<b.i){
+			if (a.b < b.b) {return false;}
+			else {return true;}
+		}
+		else {
+			if (a.b < b.b) {return true;}
+			else {return false;}
+		}
+	}
+	
+	/**
+	 * hilfsfunktion, um schnell auf den x-wert des Schnittpunkts zuzugreifen.
+	 * CRosses AT
+	 * @return der X-wert, falls es einen gibt, sonst 0.
+	 */
+	public double crAt() {
+		if (!atInf()) {
+			return a.cross(b);
+		}
+		else {
+			return 0;
+		}
+	}
 }
