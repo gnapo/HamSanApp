@@ -1,12 +1,14 @@
 package hamSanApp;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.lang.Math;
 
 /**
  * Diese Klasse beinhaltet den eigentlichen Algorithmus und einige Hilfsfunktionen.
+ * wichtigie Methoden von außen: 
+ * addLine, removeLine, findLine, findPoint, doAlg
  * @author fabian
  *
  */
@@ -101,8 +103,64 @@ public class HamSanAlg {
 		}
 	}
 	
+	
 	/**
-	 * gib die lösung aus. warscheinlich nicht so wichtig.
+	 * Funktion, die einen Punkt zurückgibt, der in der nähe der position (x,y) ist.
+	 * @param tolerance wie weit entfernt (x,y) von dem Punkt sein darf;
+	 * @return der Punkt
+	 */
+	public Point findPoint(double x, double y, double tolerance) {
+		Point best = null;
+		double bestdist = 9999;
+		for (int i = 0; i < lBlue.size(); i++) {
+			Point test = lBlue.get(i);
+			double dist = Math.sqrt((test.a-x)*(test.a-x)+(test.b-y)*(test.b-y));
+			if (dist < tolerance && dist < bestdist) {
+				best = test;
+				bestdist = dist;
+			}
+		}
+		for (int i = 0; i < lRed.size(); i++) {
+			Point test = lRed.get(i);
+			double dist = Math.sqrt((test.a-x)*(test.a-x)+(test.b-y)*(test.b-y));
+			if (dist < tolerance && dist < bestdist) {
+				best = test;
+				bestdist = dist;
+			}
+		}
+		return best;
+	}
+	
+	/**
+	 * Funktion, die eine Gerade zurückgibt, der in der nähe der position (x,y) ist.
+	 * @param tolerance wie weit entfernt (x,y) von dem Punkt sein darf;
+	 * @return der Punkt
+	 */
+	public Point findLine(double x, double y, double tolerance) {
+		Point best = null;
+		double bestdist = 9999;
+		for (int i = 0; i < lBlue.size(); i++) {
+			Point test = lBlue.get(i);
+			double dist = (Math.abs(y-test.eval(x)))*Math.cos(Math.atan(test.a));
+			if (dist < tolerance && dist < bestdist) {
+				best = test;
+				bestdist = dist;
+			}
+		}
+		for (int i = 0; i < lRed.size(); i++) {
+			Point test = lRed.get(i);
+			double dist = (Math.abs(y-test.eval(x)))*Math.cos(Math.atan(test.a));
+			if (dist < tolerance && dist < bestdist) {
+				best = test;
+				bestdist = dist;
+			}
+		}
+		return best;
+	}
+	
+	/**
+	 * gib die lösung aus. warscheinlich nicht so wichtig, da das später anders gemacht wird,
+	 * aber ohne graphikinterface so in ordnung
 	 */
 	public void presentSolution() {
 		if (!done) {
@@ -207,9 +265,12 @@ public class HamSanAlg {
 		// swap the lines if blue is smaller:
 		if (lBlue.size() < lRed.size()) {
 			colorSwap = !colorSwap;
-			//TODO: 
-			//swap lBlue and lRed//
-			//also swap lBlueDel and lRedDel//
+			List<Point> temp = lBlue;
+			lBlue = lRed;
+			lRed = temp;
+			temp = lBlueDel;
+			lBlueDel = lRedDel;
+			lRedDel = temp;
 		}
 		
 		//generate all the crossings:
@@ -305,7 +366,5 @@ public class HamSanAlg {
 			}
 		}
 		
-	}
-
-	
+	}	
 }

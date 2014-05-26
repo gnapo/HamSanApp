@@ -21,11 +21,12 @@ public class Sandwich {
 
 	public static void main(String[] args) {
 		//tests go here.
-		Point i = new Point(1.0d,-4.0d);
-		Point j = new Point(0.0d,-4.0d);
-		Point k = new Point(0.0d,0.0d);
-		int res = Point.op1naive(i, j, k);
-		System.out.println(res);
+		HamSanAlg hsa = new HamSanAlg();
+		hsa.addLine(1, 2, true);
+		hsa.addLine(3, 4, false);
+		hsa.addLine(6, 5, false);
+		System.out.println(hsa.lBlue);
+		System.out.println(hsa.lRed);
 	}
 
 }
