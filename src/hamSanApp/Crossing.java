@@ -19,6 +19,23 @@ public class Crossing implements Comparable<Crossing> {
 	}
 	
 	/**
+	 * diese Methode wird aufgerufen, wenn man z.B. println(irgendein crossing) ausführt.
+	 */
+	public String tostring() {
+		String r = "Crossing of: "+this.a.toString()+" and "+this.b.toString()+" \n";
+		if (atInf() && atNegInf()) {
+			r +="crossing at -inf";
+		}
+		if (atInf() && !atNegInf()) {
+			r +="crossing at +inf";
+		}
+		else {
+			//eh
+		}
+		return r;
+	}
+	
+	/**
 	 * vergleichsfunktion. funktioniert so, wie im Interface vorausgesetzt
 	 */
 	@Override

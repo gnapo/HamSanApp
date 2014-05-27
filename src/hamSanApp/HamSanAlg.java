@@ -32,6 +32,8 @@ public class HamSanAlg {
 	Point solution;			//position der nicht-vertikalen Lösung
 	double [] borders;		//positionen der grenzen zwischen streifen.
 								//konvention: borders[i] ist der linke rand von dem i-ten streifen
+	List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
+	boolean DEBUG = true;
 	
 	final double alpha = 1.0d/32.0d; 	//
 	final double eps = 1.0d/8.0d;		//Konstanten für den Alg
@@ -60,6 +62,7 @@ public class HamSanAlg {
 		solution = null;
 		verticalSol = false;
 		borders = new double[64];
+		crossings = new ArrayList<Crossing>();
 	}
 	
 	/**
@@ -213,8 +216,9 @@ public class HamSanAlg {
 				return false;
 			}
 		}
-		if (leftb <= c.crAt() && c.crAt() <= rightb) {return true;}
-		else {return false;}
+		if (leftborder && c.crAt() < leftb) { return false;}
+		if (rightborder && c.crAt() > rightb) { return false;}
+		return true;
 	}
 	
 	/**
@@ -258,7 +262,8 @@ public class HamSanAlg {
 			}
 			done = true;
 			//find intersection point and return that. done!
-			solution = new Point(b.cross(r),b.eval(b.cross(r)));
+			double sl = (b.b-r.b)/(b.a-r.a);
+			solution = new Point(sl,r.a*sl+r.b);
 			return;
 		}
 		
@@ -274,12 +279,13 @@ public class HamSanAlg {
 		}
 		
 		//generate all the crossings:
-		List<Crossing> crossings = new ArrayList<Crossing>();
+		crossings = new ArrayList<Crossing>();
 		for (int i = 0; i < lBlue.size();i++) {
 			for (int j = i+1; j < lBlue.size();j++){
 				Crossing c = new Crossing(lBlue.get(i),lBlue.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
+					//System.out.print("Pang!");
 				}
 			}
 		}
@@ -288,6 +294,7 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lBlue.get(i),lRed.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
+					//System.out.print("Ping!");
 				}
 			}
 		}
@@ -296,14 +303,20 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lRed.get(i),lRed.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
+					//System.out.print("POng!");
 				}
 			}
 		}
+		
 		
 		//sort them. crossings implements comparable.
 		
 		//make stripes with at most alpha*(n choose 2) crossings a piece.
 		Collections.sort(crossings);
+		Collections.reverse(crossings);
+		if (DEBUG) {
+			return;
+		}
 		int minband = 0;
 		int maxband = 0; //wird überschrieben.
 		int band = 1;

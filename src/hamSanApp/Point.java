@@ -24,6 +24,13 @@ package hamSanApp;
 
 		
 		/**
+		 * Diese Methode wird aufgerufen, wenn man z.B. println(irgendein Point) aufruft
+		 */
+		public String toString() {
+			return "a: "+this.a+" b: "+this.b+" i: "+this.i;
+		}
+		
+		/**
 		 * zum ausgeben als Punkt (nicht wichtig, höchstens zu debug-zwecken)
 		 */
 		public void repr_point(){
@@ -51,7 +58,7 @@ package hamSanApp;
 		 */
 		public double cross(Point other) {
 			if (a == other.a) {return 0;}
-			return (b-other.b)/(a-other.a);
+			return (other.b-b)/(a-other.a);
 		}
 		
 		
@@ -129,7 +136,7 @@ package hamSanApp;
 		 */
 		public static int op2naive(Point i, Point j, Point k, Point l) throws Exception {
 			//if ij crosses left of kl, return -1, if right return +1
-			if (i.equals(j)||i.equals(k)||i.equals(l)||j.equals(k)||j.equals(l)||k.equals(l)) 
+			if (i.equals(j)||k.equals(l)) 
 				{throw new Exception("op2 was called with stupid arguments");}
 			double diff1 = i.a - j.a;
 			double diff2 = k.a - l.a;
@@ -143,23 +150,24 @@ package hamSanApp;
 					if (x1 > x2) {
 						return -1;
 					}
-					else { //TODO but what if the crossings are at negative x? think about it
+					else { 
 						//find the smallest index of the four
+						int s = (int) Math.signum(x1);
 						if (i.i < j.i && i.i < k.i && i.i < l.i) {
-							if (diff1 > 0) {return -1;}
-							else {return 1;}
+							if (diff1 > 0) {return -1*s;}
+							else {return 1*s;}
 						}
 						if (j.i < i.i && j.i < k.i && j.i < l.i) {
-							if (diff1 < 0) {return -1;}
-							else {return 1;}
+							if (diff1 < 0) {return -1*s;}
+							else {return 1*s;}
 						}
 						if (k.i < i.i && k.i < j.i && k.i < l.i) {
-							if (diff2 < 0) {return -1;}
-							else {return 1;}
+							if (diff2 < 0) {return -1*s;}
+							else {return 1*s;}
 						}
 						if (l.i < i.i && l.i < j.i && l.i < k.i) {
-							if (diff2 > 0) {return -1;}
-							else {return 1;}
+							if (diff2 > 0) {return -1*s;}
+							else {return 1*s;}
 						}
 						throw new Exception("no smallest index found, this shouldn't happen. :(");
 					}
