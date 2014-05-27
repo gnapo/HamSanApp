@@ -1,7 +1,7 @@
 package hamSanApp;
 
 	/**
-	 * diese Klasse stellt die Kreuzung zweier Geraden dar und ist hauptsächlich zum sortieren da.
+	 * diese Klasse stellt die Kreuzung zweier Geraden dar und ist hauptsï¿½chlich zum sortieren da.
 	 * @author fabian
 	 *
 	 */

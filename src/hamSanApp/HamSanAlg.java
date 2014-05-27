@@ -7,34 +7,34 @@ import java.lang.Math;
 
 /**
  * Diese Klasse beinhaltet den eigentlichen Algorithmus und einige Hilfsfunktionen.
- * wichtigie Methoden von außen: 
+ * wichtigie Methoden von auï¿½en: 
  * addLine, removeLine, findLine, findPoint, doAlg
  * @author fabian
  *
  */
 public class HamSanAlg {
 
-	List<Point> lBlue; 		//hier werden die vom Alg. berücksichtigten Blauen Linien gespeichert
-	List<Point> lRed;		//hier werden die vom Alg. berücksichtigten Roten Linien gespeichert
-	List<Point> lBlueDel;	// Del für deleted
-	List<Point> lRedDel;	//hier werden die nicht berücksichtigten linien gespeichert
+	List<Point> lBlue; 		//hier werden die vom Alg. berï¿½cksichtigten Blauen Linien gespeichert
+	List<Point> lRed;		//hier werden die vom Alg. berï¿½cksichtigten Roten Linien gespeichert
+	List<Point> lBlueDel;	// Del fï¿½r deleted
+	List<Point> lRedDel;	//hier werden die nicht berï¿½cksichtigten linien gespeichert
 	boolean leftborder;		//
-	boolean rightborder;	//bools, die wahr sind, falls der Momentane betrachtungsbereich nach links/rechts beschränkt ist
+	boolean rightborder;	//bools, die wahr sind, falls der Momentane betrachtungsbereich nach links/rechts beschrï¿½nkt ist
 	double leftb;			//
 	double rightb;			//der linke und Rechte Rand des betrachtungsbereiches
 	int levelBlue;			//
 	int levelRed;			//die wievielte linie von oben ist die gesuchte medianlinie?
-	boolean firstRun;		//ist der Algorithmus schonmal etwas gelaufen (können wir noch linien verändern?
+	boolean firstRun;		//ist der Algorithmus schonmal etwas gelaufen (kï¿½nnen wir noch linien verï¿½ndern?
 	boolean done;			//ist der Algorithmus fertig?
-	boolean colorSwap;		//müssen wir die Farben gerade vertauscht zeichnen?
-	boolean verticalSol;	//ist die Lösung eine Vertikale Linie?
-	double verticalSolPos;	//position der vertikalen Lösung
-	Point solution;			//position der nicht-vertikalen Lösung
+	boolean colorSwap;		//mï¿½ssen wir die Farben gerade vertauscht zeichnen?
+	boolean verticalSol;	//ist die Lï¿½sung eine Vertikale Linie?
+	double verticalSolPos;	//position der vertikalen Lï¿½sung
+	Point solution;			//position der nicht-vertikalen Lï¿½sung
 	double [] borders;		//positionen der grenzen zwischen streifen.
 								//konvention: borders[i] ist der linke rand von dem i-ten streifen
 	
 	final double alpha = 1.0d/32.0d; 	//
-	final double eps = 1.0d/8.0d;		//Konstanten für den Alg
+	final double eps = 1.0d/8.0d;		//Konstanten fï¿½r den Alg
 	
 	/**
 	 * Konstruktor, macht nichts besonderes.
@@ -44,7 +44,7 @@ public class HamSanAlg {
 	}
 	
 	/** 
-	 * setzt alle Variablen auf startzustände
+	 * setzt alle Variablen auf startzustï¿½nde
 	 */
 	public void init() {
 		lBlue = new ArrayList<Point>();
@@ -63,8 +63,8 @@ public class HamSanAlg {
 	}
 	
 	/**
-	 * Linien hinzufügen in Form zweier Koordinaten.
-	 * nur möglich, wenn der Algorithmus noch nicht angelaufen ist.
+	 * Linien hinzufï¿½gen in Form zweier Koordinaten.
+	 * nur mï¿½glich, wenn der Algorithmus noch nicht angelaufen ist.
 	 * @param x erste
 	 * @param y zweite koordinate
 	 * @param blue ist es eine blaus linie?
@@ -80,9 +80,9 @@ public class HamSanAlg {
 	}
 	
 	/**
-	 * lösche eine linie aus lBlue und lRed heraus. 
-	 * nur möglich, wenn der Algorithmus noch nicht angelaufen ist.
-	 * @param l die zu löschende linie
+	 * lï¿½sche eine linie aus lBlue und lRed heraus. 
+	 * nur mï¿½glich, wenn der Algorithmus noch nicht angelaufen ist.
+	 * @param l die zu lï¿½schende linie
 	 */
 	public void removeLine(Point l) {
 		if (!firstRun) {return;}
@@ -105,7 +105,7 @@ public class HamSanAlg {
 	
 	
 	/**
-	 * Funktion, die einen Punkt zurückgibt, der in der nähe der position (x,y) ist.
+	 * Funktion, die einen Punkt zurï¿½ckgibt, der in der nï¿½he der position (x,y) ist.
 	 * @param tolerance wie weit entfernt (x,y) von dem Punkt sein darf;
 	 * @return der Punkt
 	 */
@@ -132,7 +132,7 @@ public class HamSanAlg {
 	}
 	
 	/**
-	 * Funktion, die eine Gerade zurückgibt, der in der nähe der position (x,y) ist.
+	 * Funktion, die eine Gerade zurï¿½ckgibt, der in der nï¿½he der position (x,y) ist.
 	 * @param tolerance wie weit entfernt (x,y) von dem Punkt sein darf;
 	 * @return der Punkt
 	 */
@@ -159,7 +159,7 @@ public class HamSanAlg {
 	}
 	
 	/**
-	 * gib die lösung aus. warscheinlich nicht so wichtig, da das später anders gemacht wird,
+	 * gib die lï¿½sung aus. warscheinlich nicht so wichtig, da das spï¿½ter anders gemacht wird,
 	 * aber ohne graphikinterface so in ordnung
 	 */
 	public void presentSolution() {
@@ -183,13 +183,21 @@ public class HamSanAlg {
 	 * @return der y-Wert
 	 */
 	public double levelPos(double x, boolean blue, int level) {
-		//TODO implement with quickselect//
-		//oder halt sortieren weils einfacher geht
-		return 0.0d;
+		Point.value=x;
+		if(blue=true){
+			List<Point>locList= new ArrayList<Point>(lBlue);
+			Collections.sort(locList);
+			return locList.get(level-1).eval(x);
+					}
+		else {
+			List<Point>locList= new ArrayList<Point>(lRed);
+		    Collections.sort(locList);	
+		    return locList.get(level-1).eval(x);
+		}
 	}
 	
 	/**
-	 * Ist an der stelle die Blaue Medianlinie höher als die Rote?
+	 * Ist an der stelle die Blaue Medianlinie hï¿½her als die Rote?
 	 * @param x die Stelle
 	 * @return true, falls Blau oben.
 	 */
@@ -199,10 +207,10 @@ public class HamSanAlg {
 	}
 	
 	/**
-	 * Hilfsfunktion, um herauszufinden, ob wir eine Kreuzung berücksichtigen müssen.
+	 * Hilfsfunktion, um herauszufinden, ob wir eine Kreuzung berï¿½cksichtigen mï¿½ssen.
 	 * Schaut nach, ob die Kreuzung innerhalb des momentanen Betrachtungsbereiches ist.
 	 * @param c die betreffende Kreuzung
-	 * @return true, falls wir die Kreuzung berücksichtigen müssen.
+	 * @return true, falls wir die Kreuzung berï¿½cksichtigen mï¿½ssen.
 	 */
 	public boolean inBorders(Crossing c) {
 		if (c.atInf()) {
@@ -218,7 +226,7 @@ public class HamSanAlg {
 	}
 	
 	/**
-	 * Funktion, die errechnet, ob im unbeschränkten bereich links die blaue medianlinie über der Roten ist
+	 * Funktion, die errechnet, ob im unbeschrï¿½nkten bereich links die blaue medianlinie ï¿½ber der Roten ist
 	 * @return true falls ja
 	 */
 	private boolean blueTopLeft() {
@@ -226,7 +234,7 @@ public class HamSanAlg {
 		return false;
 	}
 	/**
-	 * der eigentliche Algorithmus. ein ausführen dieses Algorithmus stellt einen
+	 * der eigentliche Algorithmus. ein ausfï¿½hren dieses Algorithmus stellt einen
 	 * Iterationsschritt dar. wir wollen das warscheinlich noch weiter in 
 	 * kleinere Schritte aufteilen.
 	 */
@@ -305,7 +313,7 @@ public class HamSanAlg {
 		//make stripes with at most alpha*(n choose 2) crossings a piece.
 		Collections.sort(crossings);
 		int minband = 0;
-		int maxband = 0; //wird überschrieben.
+		int maxband = 0; //wird ï¿½berschrieben.
 		int band = 1;
 		int bandsize = (int) (crossings.size()*alpha);
 		for (int i = bandsize; i < crossings.size();i+=bandsize){
