@@ -96,6 +96,7 @@ package hamSanApp;
 		
 		/**
 		 * gibt zurück, ob sich die Geraden i und j oberhalb der Geraden k schneiden oder unterhalb
+		 * ist nicht fertig implementiert! (brauchen wir glaub ich auch nicht)
 		 * @param i erste schnittgerade
 		 * @param j zweite schnittgerade
 		 * @param k vergleichsgerade
@@ -109,12 +110,12 @@ package hamSanApp;
 				double diff = y -( k.a * x + k.b);
 				if (diff > 0) {return 1;}
 				if (diff < 0) {return -1;}
-				//TODO handle
+				//-> handle
 				return 0;
 			} 
 			else {
 				//they don't cross
-				//TODO handle
+				//-> handle
 				
 				return -2;
 			}
