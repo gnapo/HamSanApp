@@ -124,14 +124,14 @@ public class Sandwich {
 		//Point.value = 1;
 		//System.out.println(b.compareTo(a));
 		//Testlevelpos();
-///////////////////////////////
-		/*HamSanAlg hsa = new HamSanAlg();
+
+		HamSanAlg hsa = new HamSanAlg();
 		MyFrame f = new MyFrame(hsa);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Insets insets = f.getInsets();
 		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
-		f.setVisible(true);*/
-		System.out.println("Sortierung stimmt mit compareto überein "+Test_wellordered());
+		f.setVisible(true);
+		//System.out.println("Sortierung stimmt mit compareto überein "+Test_wellordered());
 	}
 
 }
