@@ -201,11 +201,19 @@ public class HamSanAlg {
 	/**
 	 * Ist an der stelle die Blaue Medianlinie h�her als die Rote?
 	 * @param x die Stelle
-	 * @return true, falls Blau oben.
+	 * @return 1, falls blau oben, -1 falls rot, 0 falls wir einen Schnittpunkt haben.
 	 */
-	public boolean blueTop(double x) {
+	public int blueTop(double x) {
 		//is the blue level higher than the red level at x?
-		return levelPos(x, true, levelBlue)>levelPos(x, false, levelRed);
+		double bluePos = levelPos(x, true, levelBlue);
+		double redPos = levelPos(x, false, levelRed);
+		if (bluePos > redPos) {
+			return 1;
+		}	
+		if (bluePos > redPos) {
+			return -1;
+		}
+		return 0;
 	}
 	
 	/**
@@ -236,6 +244,8 @@ public class HamSanAlg {
 		// TODO implementieren
 		return false;
 	}
+	
+	
 	/**
 	 * der eigentliche Algorithmus. ein ausf�hren dieses Algorithmus stellt einen
 	 * Iterationsschritt dar. wir wollen das warscheinlich noch weiter in 
@@ -269,8 +279,11 @@ public class HamSanAlg {
 			}
 			done = true;
 			//find intersection point and return that. done!
-			double sl = (b.b-r.b)/(b.a-r.a);
-			solution = new Point(sl,r.a*sl+r.b);
+			//double sl = (b.b-r.b)/(b.a-r.a);
+			//solution = new Point(sl,r.b-r.a*sl);
+			//or should it be:
+			Crossing c = new Crossing(r, b);
+			solution = new Point(-c.crAt(),r.eval(c.crAt()));
 			return;
 		}
 		
@@ -292,7 +305,6 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lBlue.get(i),lBlue.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
-					//System.out.print("Pang!");
 				}
 			}
 		}
@@ -301,7 +313,6 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lBlue.get(i),lRed.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
-					//System.out.print("Ping!");
 				}
 			}
 		}
@@ -310,7 +321,6 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lRed.get(i),lRed.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
-					//System.out.print("POng!");
 				}
 			}
 		}
@@ -321,15 +331,16 @@ public class HamSanAlg {
 		//make stripes with at most alpha*(n choose 2) crossings a piece.
 		Collections.sort(crossings);
 		Collections.reverse(crossings);
-		if (DEBUG) {
-			return;
-		}
+		
 		int minband = 0;
 		int maxband = 0; //wird �berschrieben.
 		int band = 1;
 		int bandsize = (int) (crossings.size()*alpha);
+		bandsize = Math.max(1, bandsize); 
+		System.out.println(crossings.size());
+		System.out.println(bandsize);
 		for (int i = bandsize; i < crossings.size();i+=bandsize){
-			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;}
+			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, add later
 			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 				while (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 					i--;
@@ -340,18 +351,31 @@ public class HamSanAlg {
 			}
 			borders[band] = crossings.get(i).crAt();
 			band++;
+			maxband = band;
 		}
-			
+		
+		if (DEBUG) {
+			for (int i = 0; i<= maxband; i++) {
+				System.out.println(borders[i]);
+			}
+			return;
+		}
 		//find strip with odd number of intersections by binary search:		
 		boolean bluetop = blueTopLeft();
 		while ((maxband-minband) > 1) { //TODO i think this needs to be more robust for the non-bounded cases?
 			int testband = (maxband-minband)/2;
-			boolean bluetesttop = blueTop(borders[testband]);
-			if (bluetop == bluetesttop) {
+			int bluetesttop = blueTop(borders[testband]);
+			if (bluetop == (bluetesttop==1)) {
 				minband = testband;
 			}
-			else {
+			else if (bluetop == (bluetesttop==-1)) {
 				maxband = testband;
+			}
+			else if (bluetesttop ==0) { //we have a winner!
+				System.out.println("schnittpunkt gefunden!");
+				done = true;
+				solution = new Point(-borders[testband],levelPos(borders[testband], true, levelBlue));
+				return;
 			}
 		}
 		leftb = borders[minband];
