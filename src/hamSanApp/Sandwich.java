@@ -1,6 +1,9 @@
 package hamSanApp;
 
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 //import java.awt.*;
@@ -42,14 +45,15 @@ public class Sandwich {
 		hsa.addLine(0,4, true);
 		hsa.addLine(0,5, true);
 		hsa.addLine(0,6, true);
+		System.out.println(hsa.blueTopLeft());
 		//System.out.println(hsa.lBlue);
 		//System.out.println(hsa.lRed);
-	     for (int i = 0; i < hsa.lBlue.size(); i++) {
+	    /* for (int i = 0; i < hsa.lBlue.size(); i++) {
 	            System.out.println(hsa.lBlue.get(i)+"y-Wert: "+hsa.lBlue.get(i).eval(1));
 	        }
 	     for (int i = 1; i < hsa.lBlue.size()+1; i++) {
 	            System.out.println(i+" te Linie von Oben hat y-Wert "+hsa.levelPos(1, true, i));
-	        }
+	        }*/
 		/*hsa.addLine(1,1, true);
 		hsa.addLine(1, 2, true);
 		Point a = hsa.lBlue.get(0);
@@ -69,6 +73,14 @@ public class Sandwich {
 	
 	public static void main(String[] args) {
 		//tests go here.
+
+		//randomlines();
+		//Testlevelpos();
+	
+		//Point.value = 1;
+		//System.out.println(b.compareTo(a));
+		//Testlevelpos();
+
 		HamSanAlg hsa = new HamSanAlg();
 		MyFrame f = new MyFrame(hsa);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
