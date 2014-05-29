@@ -4,6 +4,8 @@ import hamSanApp.HamSanAlg;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -11,7 +13,7 @@ import javax.swing.JPanel;
 //import java.util.Date;
 
 
-public class LinePanel extends JPanel {
+public class LinePanel extends JPanel implements MouseMotionListener {
 	/**
 	 * I have no Idea what this is or why i need it
 	 */
@@ -23,11 +25,18 @@ public class LinePanel extends JPanel {
 	public int ymin = -10;
 	public int ymax = 10;
 	
+	private PointPanel pointPanel;
+	
 	private List<VisualPoint> visualPoints;
 
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;
 		visualPoints = hsa.getVisualPoints();
+		this.addMouseMotionListener(this);
+	}
+	
+	public void setPointPanel(PointPanel pp) {
+		this.pointPanel = pp;
 	}
 	
 	public void setVisualPoints(List<VisualPoint> visualPoints) {
@@ -74,5 +83,31 @@ public class LinePanel extends JPanel {
         g.drawRect(0,0,300,300);
 
      }
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		for (VisualPoint v : visualPoints) {
+			v.highlighted = false;
+		}
+		
+		for (VisualPoint v : visualPoints) {
+			if (v.containsCursorLine(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
+				v.highlighted = true;
+				pointPanel.setVisualPoints(visualPoints);
+				break;
+			}
+		}
+		
+		this.revalidate();
+		this.repaint();
+		pointPanel.revalidate();
+		pointPanel.repaint();
+	}
 
 }

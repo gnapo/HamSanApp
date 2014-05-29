@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 
 public class VisualPoint {
 	private double a;
@@ -34,7 +37,7 @@ public class VisualPoint {
 		return (this.a == other.a && this.b == other.b);
 	}
 	
-	public boolean containsCursor(int x, int y, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
+	public boolean containsCursorPoint(int x, int y, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
 		double xscale = componentSize.getWidth() / (xmax - xmin);
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		
@@ -47,6 +50,65 @@ public class VisualPoint {
 		double deltaY = Math.abs(y-yb);
 		
 		if (deltaX < 2 && deltaY < 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static Point2D.Double toXY(Point2D.Double pointAB, double xmin, double ymin, double xmax, double ymax, Dimension componentSize) {
+		double xscale = componentSize.getWidth() / (xmax - xmin);
+		double yscale = componentSize.getHeight() / (ymax - ymin);
+		double pointX = (pointAB.x - xmin) * xscale;
+		double pointY = (-pointAB.y + ymax) * yscale;
+		Point2D.Double p = new Point2D.Double(pointX, pointY);
+		return p;
+	}
+	
+	public static double aToX(double value, double xmin, double xmax, Dimension componentSize) {
+		double xscale = componentSize.getWidth() / (xmax - xmin);
+		double asX = (value - xmin) * xscale;
+		return asX;
+	}
+	
+	public static double xToA(double value, double xmin, double xmax, Dimension componentSize) {
+		double xscale = componentSize.getWidth() / (xmax - xmin);
+		double asA = ((double) value / xscale) + xmin;
+		return asA;
+	}
+	
+	public static Point2D.Double toAB(Point2D.Double pointXY, double xmin, double ymin, double xmax, double ymax, Dimension componentSize) {
+		double xscale = componentSize.getWidth() / (xmax - xmin);
+		double yscale = componentSize.getHeight() / (ymax - ymin);
+		
+		double a = ((double) pointXY.x / xscale) + xmin;
+		double b = ((double) -pointXY.y / yscale) - ymin;
+		Point2D.Double p = new Point2D.Double(a, b);
+		return p;
+	}
+	
+	public double evaluate(double value) {
+		return a*value+b;
+	}
+	
+	public boolean containsCursorLine(int x, int y, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
+		
+		// Linie ausgewertet an der Stelle x = 0
+		double a0 = xToA(0, xmin, xmax, componentSize);
+		double b0 = evaluate(a0);
+		Point2D.Double inABCoords0 = new Point2D.Double(a0,b0);
+		Point2D.Double inXYCoords0 = toXY(inABCoords0, xmin, ymin, xmax, ymax, componentSize);
+		
+		// Linie ausgewertet an der Stelle x = 42
+		double a1 = xToA(42, xmin, xmax, componentSize);
+		double b1 = evaluate(a1);
+		Point2D.Double inABCoords1 = new Point2D.Double(a1,b1);
+		Point2D.Double inXYCoords1 = toXY(inABCoords1, xmin, ymin, xmax, ymax, componentSize);
+		
+		Line2D line = new Line2D.Double(inXYCoords0.getX(), inXYCoords0.getY(), inXYCoords1.getX(), inXYCoords1.getY());
+		double dist = line.ptLineDist(x, y);
+		
+		if (dist < 2) {
 			return true;
 		} else {
 			return false;

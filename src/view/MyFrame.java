@@ -27,6 +27,7 @@ public class MyFrame extends JFrame {
 		h = hsa;
 		lp = new LinePanel(h);
 		pp = new PointPanel(h,lp);
+		lp.setPointPanel(pp);
 		startAlgButton = new JButton("Do Alg");
 		startAlgButton.setVisible(true);
 		
