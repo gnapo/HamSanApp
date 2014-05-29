@@ -1,8 +1,12 @@
-package hamSanApp;
+package view;
 
-import javax.swing.*;
+import hamSanApp.HamSanAlg;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.List;
+
+import javax.swing.JPanel;
 
 //import java.util.Date;
 
@@ -36,36 +40,19 @@ public class LinePanel extends JPanel {
 	}
 	
 	@Override
-	public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+	public void paint(Graphics g) {
+        super.paint(g);
         drawCross(g);
         int xscale = 300/(xmax-xmin); 
         int yscale = 300/(ymax-ymin);
-
-        /*
-    	g.setColor(Color.blue.darker());
-        for (int i = 0; i < h.lBlueDel.size(); ++i) {
-        	double y1 = h.lBlueDel.get(i).eval(xmin);
-        	double y2 = h.lBlueDel.get(i).eval(xmax);
-
-        	double dy1 = ((-y1)+ ymax)*yscale;
-        	double dy2 = ((-y2)+ ymax)*yscale;
-        	
-        	g.drawLine(0,(int) dy1,300, (int) dy2);
+        
+        List<VisualPoint> visualPoints = h.getVisualPoints();
+        for (VisualPoint p : visualPoints) {
+        	p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
         }
         
-        g.setColor(Color.red.darker());
-        for (int i = 0; i < h.lRedDel.size(); ++i) {
-        	double y1 = h.lRedDel.get(i).eval(xmin);
-        	double y2 = h.lRedDel.get(i).eval(xmax);
-
-        	double dy1 = ((-y1)+ ymax)*yscale;
-        	double dy2 = ((-y2)+ ymax)*yscale;
-        	
-        	g.drawLine(0,(int) dy1,300, (int) dy2);
-        } */
         
-    	g.setColor(Color.blue);
+    	/*g.setColor(Color.blue);
         for (int i = 0; i < h.lBlue.size(); ++i) {
         	double y1 = h.lBlue.get(i).eval(xmin);
         	double y2 = h.lBlue.get(i).eval(xmax);
@@ -85,7 +72,9 @@ public class LinePanel extends JPanel {
         	double dy2 = ((-y2)+ ymax)*yscale;
         	
         	g.drawLine(0,(int) dy1,300, (int) dy2);
-        }
+        }*/
+        
+        
         g.setColor(Color.gray);
         /*Date d = new Date();
         long upto = d.getSeconds() % h.crossings.size();

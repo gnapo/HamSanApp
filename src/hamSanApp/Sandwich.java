@@ -2,8 +2,11 @@ package hamSanApp;
 
 import java.awt.Insets;
 
+
 //import java.awt.*;
 import javax.swing.JFrame;
+
+import view.MyFrame;
 
 
 	/**
@@ -82,6 +85,10 @@ public class Sandwich {
 		//Point b = new Point(0,1);
 		//Point.value = 1;
 		//System.out.println(b.compareTo(a));
+		//Testlevelpos();
+		Point a = new Point(1,0);
+		Point b = new Point(0,1);
+
 	}
 
 }

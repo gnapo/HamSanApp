@@ -1,7 +1,12 @@
-package hamSanApp;
+package view;
+
+import hamSanApp.HamSanAlg;
 
 import java.awt.*;
+
 import javax.swing.*;
+
+import control.ToggleListener;
 
 public class MyFrame extends JFrame {
 
@@ -17,8 +22,11 @@ public class MyFrame extends JFrame {
 	
 	public MyFrame(HamSanAlg hsa) {
 		h = hsa;
-		pp = new PointPanel(h);
 		lp = new LinePanel(h);
+		pp = new PointPanel(h,lp);
+		
+		this.addKeyListener(new ToggleListener(pp));
+		
 		Container container = getContentPane();
 		container.setLayout(null);
 		Insets ins = container.getInsets();

@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.lang.Math;
 
+import view.PointType;
+import view.VisualPoint;
+
 /**
  * Diese Klasse beinhaltet den eigentlichen Algorithmus und einige Hilfsfunktionen.
  * wichtigie Methoden von au�en: 
@@ -14,10 +17,10 @@ import java.lang.Math;
  */
 public class HamSanAlg {
 
-	List<Point> lBlue; 		//hier werden die vom Alg. ber�cksichtigten Blauen Linien gespeichert
-	List<Point> lRed;		//hier werden die vom Alg. ber�cksichtigten Roten Linien gespeichert
-	List<Point> lBlueDel;	// Del f�r deleted
-	List<Point> lRedDel;	//hier werden die nicht ber�cksichtigten linien gespeichert
+	public List<Point> lBlue; 		//hier werden die vom Alg. ber�cksichtigten Blauen Linien gespeichert
+	public List<Point> lRed;		//hier werden die vom Alg. ber�cksichtigten Roten Linien gespeichert
+	public List<Point> lBlueDel;	// Del f�r deleted
+	public List<Point> lRedDel;	//hier werden die nicht ber�cksichtigten linien gespeichert
 	boolean leftborder;		//
 	boolean rightborder;	//bools, die wahr sind, falls der Momentane betrachtungsbereich nach links/rechts beschr�nkt ist
 	double leftb;			//
@@ -25,14 +28,14 @@ public class HamSanAlg {
 	int levelBlue;			//
 	int levelRed;			//die wievielte linie von oben ist die gesuchte medianlinie?
 	boolean firstRun;		//ist der Algorithmus schonmal etwas gelaufen (k�nnen wir noch linien ver�ndern?
-	boolean done;			//ist der Algorithmus fertig?
+	public boolean done;			//ist der Algorithmus fertig?
 	boolean colorSwap;		//m�ssen wir die Farben gerade vertauscht zeichnen?
-	boolean verticalSol;	//ist die L�sung eine Vertikale Linie?
-	double verticalSolPos;	//position der vertikalen L�sung
-	Point solution;			//position der nicht-vertikalen L�sung
+	public boolean verticalSol;	//ist die L�sung eine Vertikale Linie?
+	public double verticalSolPos;	//position der vertikalen L�sung
+	public Point solution;			//position der nicht-vertikalen L�sung
 	double [] borders;		//positionen der grenzen zwischen streifen.
 								//konvention: borders[i] ist der linke rand von dem i-ten streifen
-	List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
+	public List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
 	boolean DEBUG = true;
 	
 	final double alpha = 1.0d/32.0d; 	//
@@ -72,14 +75,15 @@ public class HamSanAlg {
 	 * @param y zweite koordinate
 	 * @param blue ist es eine blaus linie?
 	 */
-	public void addLine(double x, double y, boolean blue){
-		if (!firstRun) {return;}
+	public boolean addLine(double x, double y, boolean blue){
+		if (!firstRun) {return false;}
 		if (blue){
 			lBlue.add(new Point(x, y));
 		}
 		else {
 			lRed.add(new Point(x, y));
 		}
+		return true;
 	}
 	
 	/**
@@ -411,4 +415,49 @@ public class HamSanAlg {
 		}
 		
 	}	
+	
+	public List<VisualPoint> getVisualPoints() {
+		List<VisualPoint> result = new ArrayList<VisualPoint>();
+		for (Point p : lBlue) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lRed) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lBlueDel) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lRedDel) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				result.add(newPoint);
+			}
+		}
+		
+		return result;
+	}
 }
