@@ -6,8 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -20,10 +19,8 @@ public class PointPanel extends JPanel implements MouseListener {
 	
 	private PointType currentType = PointType.BLUE;
 	private boolean addingAllowed = true;
-	private Set<VisualPoint> visualPoints;
 	
 	private LinePanel linePanel;
-	
 	
 	private HamSanAlg h;
 	public int getXmin() {
@@ -44,7 +41,6 @@ public class PointPanel extends JPanel implements MouseListener {
 		this.addMouseListener(this);
 		
 		this.linePanel = lp;
-		visualPoints = new HashSet<VisualPoint>();
 	}
 	
 	public void togglePointType() {
@@ -57,6 +53,8 @@ public class PointPanel extends JPanel implements MouseListener {
 	
 	public boolean addPoint(int x, int y, PointType type) {
 		if (addingAllowed) {
+			List<VisualPoint> visualPoints = h.getVisualPoints();
+			
 			double a = ((double) x / xscale) + xmin;
 			double b = ((double) -y / yscale) - ymin;
 			
@@ -113,6 +111,7 @@ public class PointPanel extends JPanel implements MouseListener {
 		g.setColor(Color.black);
 		g.drawRect(0, 0, 300, 300);
 
+		List<VisualPoint> visualPoints = h.getVisualPoints();
 		for (VisualPoint v : visualPoints) {
 			v.drawAsPoint(g, xmin, xmax, ymin, ymax, this.getSize());
 		}
@@ -147,4 +146,13 @@ public class PointPanel extends JPanel implements MouseListener {
 
 	}
 
+	public boolean isAddingAllowed() {
+		return addingAllowed;
+	}
+
+	public void setAddingAllowed(boolean addingAllowed) {
+		this.addingAllowed = addingAllowed;
+	}
+
+	
 }

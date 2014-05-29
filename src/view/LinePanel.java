@@ -73,8 +73,6 @@ public class LinePanel extends JPanel {
         	
         	g.drawLine(0,(int) dy1,300, (int) dy2);
         }*/
-        
-        
         g.setColor(Color.gray);
         /*Date d = new Date();
         long upto = d.getSeconds() % h.crossings.size();
