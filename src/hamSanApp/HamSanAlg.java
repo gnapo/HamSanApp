@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.lang.Math;
 
+import view.PointType;
+import view.VisualPoint;
+
 /**
  * Diese Klasse beinhaltet den eigentlichen Algorithmus und einige Hilfsfunktionen.
  * wichtigie Methoden von au�en: 
@@ -14,10 +17,10 @@ import java.lang.Math;
  */
 public class HamSanAlg {
 
-	List<Point> lBlue; 		//hier werden die vom Alg. ber�cksichtigten Blauen Linien gespeichert
-	List<Point> lRed;		//hier werden die vom Alg. ber�cksichtigten Roten Linien gespeichert
-	List<Point> lBlueDel;	// Del f�r deleted
-	List<Point> lRedDel;	//hier werden die nicht ber�cksichtigten linien gespeichert
+	public List<Point> lBlue; 		//hier werden die vom Alg. ber�cksichtigten Blauen Linien gespeichert
+	public List<Point> lRed;		//hier werden die vom Alg. ber�cksichtigten Roten Linien gespeichert
+	public List<Point> lBlueDel;	// Del f�r deleted
+	public List<Point> lRedDel;	//hier werden die nicht ber�cksichtigten linien gespeichert
 	boolean leftborder;		//
 	boolean rightborder;	//bools, die wahr sind, falls der Momentane betrachtungsbereich nach links/rechts beschr�nkt ist
 	double leftb;			//
@@ -25,14 +28,14 @@ public class HamSanAlg {
 	int levelBlue;			//
 	int levelRed;			//die wievielte linie von oben ist die gesuchte medianlinie?
 	boolean firstRun;		//ist der Algorithmus schonmal etwas gelaufen (k�nnen wir noch linien ver�ndern?
-	boolean done;			//ist der Algorithmus fertig?
+	public boolean done;			//ist der Algorithmus fertig?
 	boolean colorSwap;		//m�ssen wir die Farben gerade vertauscht zeichnen?
-	boolean verticalSol;	//ist die L�sung eine Vertikale Linie?
-	double verticalSolPos;	//position der vertikalen L�sung
-	Point solution;			//position der nicht-vertikalen L�sung
+	public boolean verticalSol;	//ist die L�sung eine Vertikale Linie?
+	public double verticalSolPos;	//position der vertikalen L�sung
+	public Point solution;			//position der nicht-vertikalen L�sung
 	double [] borders;		//positionen der grenzen zwischen streifen.
-								//konvention: borders[i] ist der linke rand von dem i-ten streifen
-	List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
+								//konvention: borders[i] ist der linke rand von dem i-ten streifen und die streifen sind halboffen, linker punkt ist drin.
+	public List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
 	boolean DEBUG = true;
 	
 	final double alpha = 1.0d/32.0d; 	//
@@ -72,14 +75,15 @@ public class HamSanAlg {
 	 * @param y zweite koordinate
 	 * @param blue ist es eine blaus linie?
 	 */
-	public void addLine(double x, double y, boolean blue){
-		if (!firstRun) {return;}
+	public boolean addLine(double x, double y, boolean blue){
+		if (!firstRun) {return false;}
 		if (blue){
 			lBlue.add(new Point(x, y));
 		}
 		else {
 			lRed.add(new Point(x, y));
 		}
+		return true;
 	}
 	
 	/**
@@ -242,11 +246,19 @@ public class HamSanAlg {
 	/**
 	 * Ist an der stelle die Blaue Medianlinie h�her als die Rote?
 	 * @param x die Stelle
-	 * @return true, falls Blau oben.
+	 * @return 1, falls blau oben, -1 falls rot, 0 falls wir einen Schnittpunkt haben.
 	 */
-	public boolean blueTop(double x) {
+	public int blueTop(double x) {
 		//is the blue level higher than the red level at x?
-		return levelPos(x, true, levelBlue)>levelPos(x, false, levelRed);
+		double bluePos = levelPos(x, true, levelBlue);
+		double redPos = levelPos(x, false, levelRed);
+		if (bluePos > redPos) {
+			return 1;
+		}	
+		if (bluePos > redPos) {
+			return -1;
+		}
+		return 0;
 	}
 	
 	/**
@@ -265,7 +277,7 @@ public class HamSanAlg {
 			}
 		}
 		if (leftborder && c.crAt() < leftb) { return false;}
-		if (rightborder && c.crAt() > rightb) { return false;}
+		if (rightborder && c.crAt() >= rightb) { return false;}
 		return true;
 	}
 	
@@ -273,10 +285,17 @@ public class HamSanAlg {
 	 * Funktion, die errechnet, ob im unbeschr�nkten bereich links die blaue medianlinie �ber der Roten ist
 	 * @return true falls ja
 	 */
-	private boolean blueTopLeft() {
-		// TODO implementieren
-		return false;
+	public boolean blueTopLeft() {
+		LineComparator2 c = new LineComparator2();
+		
+		List<Point> blueLoc = new ArrayList<Point>(lBlue);
+		List<Point> redLoc = new ArrayList<Point>(lRed);
+		Collections.sort(blueLoc, c);
+		Collections.sort(redLoc, c);
+		return 1 == c.compare(blueLoc.get(levelBlue+1), redLoc.get(levelRed+1));
 	}
+	
+	
 	/**
 	 * der eigentliche Algorithmus. ein ausf�hren dieses Algorithmus stellt einen
 	 * Iterationsschritt dar. wir wollen das warscheinlich noch weiter in 
@@ -310,8 +329,11 @@ public class HamSanAlg {
 			}
 			done = true;
 			//find intersection point and return that. done!
-			double sl = (b.b-r.b)/(b.a-r.a);
-			solution = new Point(sl,r.a*sl+r.b);
+			//double sl = (b.b-r.b)/(b.a-r.a);
+			//solution = new Point(sl,r.b-r.a*sl);
+			//or should it be:
+			Crossing c = new Crossing(r, b);
+			solution = new Point(-c.crAt(),r.eval(c.crAt()));
 			return;
 		}
 		
@@ -333,7 +355,6 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lBlue.get(i),lBlue.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
-					//System.out.print("Pang!");
 				}
 			}
 		}
@@ -342,7 +363,6 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lBlue.get(i),lRed.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
-					//System.out.print("Ping!");
 				}
 			}
 		}
@@ -351,7 +371,6 @@ public class HamSanAlg {
 				Crossing c = new Crossing(lRed.get(i),lRed.get(j));
 				if (inBorders(c)) {
 					crossings.add(c);
-					//System.out.print("POng!");
 				}
 			}
 		}
@@ -362,15 +381,16 @@ public class HamSanAlg {
 		//make stripes with at most alpha*(n choose 2) crossings a piece.
 		Collections.sort(crossings);
 		Collections.reverse(crossings);
-		if (DEBUG) {
-			return;
-		}
+		
 		int minband = 0;
 		int maxband = 0; //wird �berschrieben.
 		int band = 1;
 		int bandsize = (int) (crossings.size()*alpha);
+		bandsize = Math.max(1, bandsize); 
+		System.out.println(crossings.size());
+		System.out.println(bandsize);
 		for (int i = bandsize; i < crossings.size();i+=bandsize){
-			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;}
+			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, test later
 			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 				while (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 					i--;
@@ -381,18 +401,31 @@ public class HamSanAlg {
 			}
 			borders[band] = crossings.get(i).crAt();
 			band++;
+			maxband = band;
 		}
-			
+		
+		if (DEBUG) {
+			for (int i = 0; i<= maxband; i++) {
+				System.out.println(borders[i]);
+			}
+			return;
+		}
 		//find strip with odd number of intersections by binary search:		
 		boolean bluetop = blueTopLeft();
 		while ((maxband-minband) > 1) { //TODO i think this needs to be more robust for the non-bounded cases?
 			int testband = (maxband-minband)/2;
-			boolean bluetesttop = blueTop(borders[testband]);
-			if (bluetop == bluetesttop) {
+			int bluetesttop = blueTop(borders[testband]);
+			if (bluetop == (bluetesttop==1)) {
 				minband = testband;
 			}
-			else {
+			else if (bluetop == (bluetesttop==-1)) {
 				maxband = testband;
+			}
+			else if (bluetesttop ==0) { //we have a winner!
+				System.out.println("schnittpunkt gefunden!");
+				done = true;
+				solution = new Point(-borders[testband],levelPos(borders[testband], true, levelBlue));
+				return;
 			}
 		}
 		leftb = borders[minband];
@@ -428,4 +461,49 @@ public class HamSanAlg {
 		}
 		
 	}	
+	
+	public List<VisualPoint> getVisualPoints() {
+		List<VisualPoint> result = new ArrayList<VisualPoint>();
+		for (Point p : lBlue) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lRed) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lBlueDel) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lRedDel) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				result.add(newPoint);
+			}
+		}
+		
+		return result;
+	}
 }
