@@ -6,11 +6,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JPanel;
 
-public class PointPanel extends JPanel implements MouseListener {
+public class PointPanel extends JPanel implements MouseListener, MouseMotionListener {
 	
 	/**
 	 * 
@@ -19,6 +20,8 @@ public class PointPanel extends JPanel implements MouseListener {
 	
 	private PointType currentType = PointType.BLUE;
 	private boolean addingAllowed = true;
+	
+	private List<VisualPoint> visualPoints;
 	
 	private LinePanel linePanel;
 	
@@ -39,10 +42,18 @@ public class PointPanel extends JPanel implements MouseListener {
 		super();
 		h = hsa;
 		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 		
+		visualPoints = h.getVisualPoints();
 		this.linePanel = lp;
 	}
 	
+	
+	public void setVisualPoints(List<VisualPoint> visualPoints) {
+		this.visualPoints = visualPoints;
+	}
+
+
 	public void togglePointType() {
 		if (currentType == PointType.BLUE) {
 			currentType = PointType.RED;
@@ -51,10 +62,10 @@ public class PointPanel extends JPanel implements MouseListener {
 		}
 	}
 	
+	
+	
 	public boolean addPoint(int x, int y, PointType type) {
 		if (addingAllowed) {
-			List<VisualPoint> visualPoints = h.getVisualPoints();
-			
 			double a = ((double) x / xscale) + xmin;
 			double b = ((double) -y / yscale) - ymin;
 			
@@ -111,7 +122,6 @@ public class PointPanel extends JPanel implements MouseListener {
 		g.setColor(Color.black);
 		g.drawRect(0, 0, 300, 300);
 
-		List<VisualPoint> visualPoints = h.getVisualPoints();
 		for (VisualPoint v : visualPoints) {
 			v.drawAsPoint(g, xmin, xmax, ymin, ymax, this.getSize());
 		}
@@ -152,6 +162,32 @@ public class PointPanel extends JPanel implements MouseListener {
 
 	public void setAddingAllowed(boolean addingAllowed) {
 		this.addingAllowed = addingAllowed;
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		for (VisualPoint v : visualPoints) {
+			v.highlighted = false;
+		}
+		
+		for (VisualPoint v : visualPoints) {
+			if (v.containsCursor(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
+				v.highlighted = true;
+				linePanel.setVisualPoints(visualPoints);
+			}
+		}
+		
+		this.revalidate();
+		this.repaint();
+		linePanel.revalidate();
+		linePanel.repaint();
 	}
 
 	
