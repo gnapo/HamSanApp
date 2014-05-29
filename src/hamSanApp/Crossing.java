@@ -64,7 +64,7 @@ public class Crossing implements Comparable<Crossing> {
 	 * funktion um herauszufinden, ob der schnittpunkt bei unendlich bei - oder bei + Unendlich ist
 	 * @return true wenn bei -unendl
 	 */
-	public boolean atNegInf() { //TODO testen
+	public boolean atNegInf() {
 		if (a.i<b.i){
 			if (a.b < b.b) {return false;}
 			else {return true;}

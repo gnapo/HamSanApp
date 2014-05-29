@@ -48,11 +48,24 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		this.linePanel = lp;
 	}
 	
+	public void refreshAll() {
+		this.revalidate();
+		this.repaint();
+		linePanel.setVisualPoints(visualPoints);
+		linePanel.revalidate();
+		linePanel.repaint();
+	}
+	
 	
 	public void setVisualPoints(List<VisualPoint> visualPoints) {
 		this.visualPoints = visualPoints;
 	}
+	
 
+
+	public List<VisualPoint> getVisualPoints() {
+		return visualPoints;
+	}
 
 	public void togglePointType() {
 		if (currentType == PointType.BLUE) {
@@ -80,10 +93,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 					h.addLine(a, b, false);
 				}
 				System.out.println(visualPoints.size());
-				this.revalidate();
-				this.repaint();
-				linePanel.revalidate();
-				linePanel.repaint();
+				this.refreshAll();
 				return true;
 			}
 		} else {
@@ -178,7 +188,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		}
 		
 		for (VisualPoint v : visualPoints) {
-			if (v.containsCursor(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
+			if (v.containsCursorPoint(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
 				v.highlighted = true;
 				linePanel.setVisualPoints(visualPoints);
 			}
@@ -188,6 +198,14 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		this.repaint();
 		linePanel.revalidate();
 		linePanel.repaint();
+	}
+
+	public PointType getCurrentType() {
+		return currentType;
+	}
+
+	public void setCurrentType(PointType currentType) {
+		this.currentType = currentType;
 	}
 
 	

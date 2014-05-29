@@ -6,7 +6,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import control.ButtonListener;
+import control.DoAlgButtonListener;
+import control.ResetButtonListener;
 import control.ToggleListener;
 
 public class MyFrame extends JFrame {
@@ -20,6 +21,7 @@ public class MyFrame extends JFrame {
 	LinePanel lp;
 	
 	JButton startAlgButton;
+	JButton resetButton;
 	
 	HamSanAlg h;
 	
@@ -27,8 +29,12 @@ public class MyFrame extends JFrame {
 		h = hsa;
 		lp = new LinePanel(h);
 		pp = new PointPanel(h,lp);
+		lp.setPointPanel(pp);
 		startAlgButton = new JButton("Do Alg");
 		startAlgButton.setVisible(true);
+		
+		resetButton = new JButton("Reset");
+		resetButton.setVisible(true);
 		
 		JPanel dualPanels = new JPanel(new BorderLayout());
 		
@@ -49,11 +55,15 @@ public class MyFrame extends JFrame {
 	    this.add(lp);
 	    pp.setBounds(20+ins.left+size.width, 10+ins.top, size.width, size.height);
 	    startAlgButton.setBounds(20,320,90,40);
-	    
 	    startAlgButton.setFocusable(false);
-	    startAlgButton.addActionListener(new ButtonListener(hsa, pp));
+	    startAlgButton.addActionListener(new DoAlgButtonListener(hsa, pp, lp));
+	    
+	    resetButton.setBounds(130,320,90,40);
+	    resetButton.setFocusable(false);
+	    resetButton.addActionListener(new ResetButtonListener(hsa, pp));
 	    
 	    this.add(startAlgButton);
+	    this.add(resetButton);
 	    
 	    setFocusable(true);
 	    

@@ -109,7 +109,7 @@ public class Sandwich {
 		f.setVisible(true);
 		//Test1
 		hsa.addLine(-1,2, true);
-		hsa.addLine(1,1, true);
+
 		hsa.addLine(0,1, true);
 		return hsa.TestLineSort2(x,true);
 
@@ -119,12 +119,16 @@ public class Sandwich {
 		//tests go here.
 		
 		//randomlines();
-		//Testlevelpos();
+		//System.out.println(Testlevelpos());
 	
+		//Point a = new Point(1,2);
+		//Point b = new Point(1,1);
+		//Crossing c = new Crossing(a,b);
+		//System.out.println(c.atNegInf());
 		//Point.value = 1;
 		//System.out.println(b.compareTo(a));
 		//Testlevelpos();
-
+		
 		HamSanAlg hsa = new HamSanAlg();
 		MyFrame f = new MyFrame(hsa);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

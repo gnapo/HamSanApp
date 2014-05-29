@@ -292,7 +292,7 @@ public class HamSanAlg {
 		List<Point> redLoc = new ArrayList<Point>(lRed);
 		Collections.sort(blueLoc, c);
 		Collections.sort(redLoc, c);
-		return 1 == c.compare(blueLoc.get(levelBlue+1), redLoc.get(levelRed+1));
+		return 1 == c.compare(blueLoc.get(levelBlue-1), redLoc.get(levelRed-1));
 	}
 	
 	
@@ -404,12 +404,7 @@ public class HamSanAlg {
 			maxband = band;
 		}
 		
-		if (DEBUG) {
-			for (int i = 0; i<= maxband; i++) {
-				System.out.println(borders[i]);
-			}
-			return;
-		}
+		
 		//find strip with odd number of intersections by binary search:		
 		boolean bluetop = blueTopLeft();
 		while ((maxband-minband) > 1) { //TODO i think this needs to be more robust for the non-bounded cases?
@@ -427,6 +422,10 @@ public class HamSanAlg {
 				solution = new Point(-borders[testband],levelPos(borders[testband], true, levelBlue));
 				return;
 			}
+		}
+		if (DEBUG) {
+			System.out.println("nop");			
+			return;
 		}
 		leftb = borders[minband];
 		rightb = borders[maxband];
