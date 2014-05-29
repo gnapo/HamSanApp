@@ -139,7 +139,9 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		addPoint(e.getX(), e.getY(), currentType);
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			addPoint(e.getX(), e.getY(), currentType);
+		}
 	}
 
 	@Override
