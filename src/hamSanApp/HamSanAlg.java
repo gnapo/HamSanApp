@@ -62,6 +62,7 @@ public class HamSanAlg {
 		rightb = 0;
 		firstRun = true;
 		done = false;
+		colorSwap = false;
 		solution = null;
 		verticalSol = false;
 		borders = new double[64];
@@ -255,7 +256,7 @@ public class HamSanAlg {
 		if (bluePos > redPos) {
 			return 1;
 		}	
-		if (bluePos > redPos) {
+		if (bluePos < redPos) {
 			return -1;
 		}
 		return 0;
@@ -346,6 +347,9 @@ public class HamSanAlg {
 			temp = lBlueDel;
 			lBlueDel = lRedDel;
 			lRedDel = temp;
+			int tempint = levelBlue;
+			levelBlue = levelRed;
+			levelRed = tempint;
 		}
 		
 		//generate all the crossings:
@@ -382,6 +386,22 @@ public class HamSanAlg {
 		Collections.sort(crossings);
 		//Collections.reverse(crossings);
 		
+		//might work?
+		if (DEBUG && false) {
+			//warning: cheating going on.
+			for (int i = 0; i < crossings.size(); i++) {
+				double pos = crossings.get(i).crAt();
+				if (levelPos(pos,true,levelBlue)==levelPos(pos,false,levelRed)) {
+					System.out.println("yayy!");
+					done = true;
+					solution = new Point(-pos,levelPos(pos, true, levelBlue));
+					return;
+				}
+			}
+			System.out.println("aww :'(");
+		}
+		
+		
 		int minband = 0;
 		int maxband = 0; //wird �berschrieben.
 		int band = 1;
@@ -390,6 +410,7 @@ public class HamSanAlg {
 		//System.out.println(crossings.size());
 		//System.out.println(bandsize);
 		for (int i = bandsize; i < crossings.size();i+=bandsize){ //TODO unbounded case
+			/*
 			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, test later
 			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 				while (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
@@ -398,17 +419,16 @@ public class HamSanAlg {
 				borders[band] = crossings.get(i).crAt();
 				maxband = band;
 				break;
-			}
+			}*/
 			borders[band] = crossings.get(i).crAt();
 			band++;
 			maxband = band;
 		}
 		
-		
 		//find strip with odd number of intersections by binary search:		
 		boolean bluetop = blueTopLeft();
 		while ((maxband-minband) > 1) { //TODO i think this needs to be more robust for the non-bounded cases?
-			int testband = (maxband-minband)/2;
+			int testband = minband+(maxband-minband)/2;
 			int bluetesttop = blueTop(borders[testband]);
 			if (bluetop == (bluetesttop==1)) {
 				minband = testband;
@@ -417,9 +437,9 @@ public class HamSanAlg {
 				maxband = testband;
 			}
 			else if (bluetesttop ==0) { //we have a winner!
-				System.out.println("schnittpunkt gefunden!");
+			System.out.println("schnittpunkt gefunden!");
 				done = true;
-				solution = new Point(borders[testband],levelPos(borders[testband], true, levelBlue));
+				solution = new Point(-borders[testband],levelPos(borders[testband], true, levelBlue));
 				return;
 			}
 		}
