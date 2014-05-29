@@ -74,7 +74,6 @@ public class PointPanel extends JPanel implements MouseListener {
 					h.addLine(a, b, false);
 				}
 				System.out.println(visualPoints.size());
-				System.out.println("wuff");
 				this.revalidate();
 				this.repaint();
 				return true;
@@ -94,7 +93,6 @@ public class PointPanel extends JPanel implements MouseListener {
 
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("painting");
 		super.paint(g);
 		drawCross(g);
 

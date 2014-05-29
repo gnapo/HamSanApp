@@ -22,7 +22,6 @@ public class ToggleListener implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			System.out.println("moooooo");
 			myPointPanel.togglePointType();
 		}
 		

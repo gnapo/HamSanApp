@@ -30,14 +30,6 @@ public class VisualPoint {
 		return (this.a == other.a && this.b == other.b);
 	}
 	
-	/*public boolean sameCoordinates(VisualPoint otherVisualPoint) {
-		if (otherVisualPoint == null) {
-			return false;
-		} else {
-			return (this.a == otherVisualPoint.a && this.b == otherVisualPoint.b);
-		}
-	}*/
-	
 	public void draw(Graphics g, double xmin, double xmax, double ymin, double ymax) {
 		double xscale = 300 / (xmax - xmin);
 		double yscale = 300 / (ymax - ymin);
