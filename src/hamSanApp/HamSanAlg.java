@@ -321,7 +321,7 @@ public class HamSanAlg {
 			Point b = lBlue.get(0);
 			Point r = lRed.get(0);
 			//do we need a vertical line?
-			if (b.a == r.a) {
+			if (b.a == r.a) { //TODO das hier testen
 				done = true;
 				verticalSol = true;
 				verticalSolPos = b.a;
@@ -387,9 +387,9 @@ public class HamSanAlg {
 		int band = 1;
 		int bandsize = (int) (crossings.size()*alpha);
 		bandsize = Math.max(1, bandsize); 
-		System.out.println(crossings.size());
-		System.out.println(bandsize);
-		for (int i = bandsize; i < crossings.size();i+=bandsize){
+		//System.out.println(crossings.size());
+		//System.out.println(bandsize);
+		for (int i = bandsize; i < crossings.size();i+=bandsize){ //TODO unbounded case
 			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, test later
 			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 				while (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
@@ -419,7 +419,7 @@ public class HamSanAlg {
 			else if (bluetesttop ==0) { //we have a winner!
 				System.out.println("schnittpunkt gefunden!");
 				done = true;
-				solution = new Point(-borders[testband],levelPos(borders[testband], true, levelBlue));
+				solution = new Point(borders[testband],levelPos(borders[testband], true, levelBlue));
 				return;
 			}
 		}
