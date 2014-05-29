@@ -171,7 +171,7 @@ package hamSanApp;
 							if (diff2 > 0) {return -1*s;}
 							else {return 1*s;}
 						}
-						throw new Exception("no smallest index found, this shouldn't happen. :(");
+						throw new Exception("no smallest index found, this shouldn't happen. :(, x values were "+x1+" and "+x2);
 					}
 				}
 			}

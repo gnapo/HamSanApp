@@ -29,8 +29,9 @@ public class Sandwich {
 		f.setVisible(true);
 		//Test1
 		hsa.addLine(-1,2, true);
-		hsa.addLine(1,1, true);
+
 		hsa.addLine(0,1, true);
+		hsa.addLine(1,0, true);
 		//Test2
 		/*hsa.addLine(1,2, true);
 		hsa.addLine(-1,0, true);
@@ -60,18 +61,18 @@ public class Sandwich {
 		//tests go here.
 		
 		//randomlines();
-		//Testlevelpos();
+		System.out.println(Testlevelpos());
 	
 		//Point.value = 1;
 		//System.out.println(b.compareTo(a));
 		//Testlevelpos();
-
+		/*
 		HamSanAlg hsa = new HamSanAlg();
 		MyFrame f = new MyFrame(hsa);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Insets insets = f.getInsets();
 		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
-		f.setVisible(true);
+		f.setVisible(true);*/
 	}
 
 }
