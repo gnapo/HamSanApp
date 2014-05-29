@@ -1,6 +1,9 @@
-package hamSanApp;
+package view;
+
+import hamSanApp.HamSanAlg;
 
 import java.awt.*;
+
 import javax.swing.*;
 
 public class MyFrame extends JFrame {

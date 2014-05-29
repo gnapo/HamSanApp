@@ -1,4 +1,6 @@
-package hamSanApp;
+package view;
+
+import hamSanApp.HamSanAlg;
 
 import javax.swing.*;
 

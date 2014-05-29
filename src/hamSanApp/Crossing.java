@@ -7,8 +7,8 @@ package hamSanApp;
 	 */
 public class Crossing implements Comparable<Crossing> {
 
-	Point a; //
-	Point b; // die beiden Linien
+	public Point a; //
+	public Point b; // die beiden Linien
 
 	/**
 	 * Konstruktor
@@ -19,7 +19,7 @@ public class Crossing implements Comparable<Crossing> {
 	}
 	
 	/**
-	 * diese Methode wird aufgerufen, wenn man z.B. println(irgendein crossing) ausführt.
+	 * diese Methode wird aufgerufen, wenn man z.B. println(irgendein crossing) ausfï¿½hrt.
 	 */
 	public String tostring() {
 		String r = "Crossing of: "+this.a.toString()+" and "+this.b.toString()+" \n";
