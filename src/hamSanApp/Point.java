@@ -4,13 +4,12 @@ package hamSanApp;
 		 * @author fabian
 		 *
 		 */
-	public class Point implements Comparable<Point>{
+	public class Point{
 		
 		public double a; 		//erste Variable
 		public double b; 		//zweite Variable
 		public final int i; 	//index
 		static int index = 0; 	//damit jeder Point einen eindeutigen index hat.
-		static double value =0; //Stelle, an der zwei Linien verglichen werden sollen
 		/**
 		 * Konstruktor
 		 * @param x erste variable
@@ -23,47 +22,7 @@ package hamSanApp;
 			index +=1;
 		}
 		
-		/**
-		 * vergleichsfunktion. 
-		 * Daf√ºr da, um zwei Geraden an der x- Stelle value zu vergleichen.
-		 */ 
-		@SuppressWarnings("static-access")
-		@Override
-		public int compareTo(Point other) { //TODO: test this a bit
-			//returns 1 if other is below this, 0 if the y-coordinates  are the same, -1 if other is above this
-			if (other == null) {throw new NullPointerException("tried to compare to null. whoops.");}
-			if (this.equals(other)) {return(0);}
-			
-			if (this.eval(value)== other.eval(value)){
-				//Bei Gleichheit: ist value positiv, so ist Gerade mit kleinerem Index oberhalb
-				//ist value negativ, so ist Gerade mit kleinerem Index unterhalb
-				//ist value = 0 und Schneiden sich die Geraden im Positiven, 
-				//so ist die Gerade mit kleinerem Index oberhalb der anderen. 
-				// ist value = 0 und schneiden sich die Geraden im Negativen, so ist 
-				// die Gerade mit kleinerem Index unterhalb von der anderen. 
-				//(Hier: this nimmt Rolle der Gerade des kleineren Index an. )
-				if (value<0){
-					if (this.index<other.index){return(-1);}
-					else return(1);
-				}
-				else if(value>0){
-					if (this.index<other.index){return(1);}
-					else return(-1);
-				}
-				else{
-					if (this.eval(value)<0){
-						if (this.index<other.index){return(-1);}
-						else return(1);
-					}
-					else if (this.index<other.index){return(1);}
-					else return(-1);
-				}
-			}
-			else if(other.eval(value)< this.eval(value)){return(-1);}
-			else return(1);
-		}
 		
-
 		
 		/**
 		 * Diese Methode wird aufgerufen, wenn man z.B. println(irgendein Point) aufruft
@@ -73,7 +32,7 @@ package hamSanApp;
 		}
 		
 		/**
-		 * zum ausgeben als Punkt (nicht wichtig, hˆchstens zu debug-zwecken)
+		 * zum ausgeben als Punkt (nicht wichtig, hÔøΩchstens zu debug-zwecken)
 		 */
 		public void repr_point(){
 			System.out.println("point at "+a+" "+b);

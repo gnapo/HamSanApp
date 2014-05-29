@@ -186,17 +186,16 @@ public class HamSanAlg {
 	 * @return der y-Wert
 	 */
 	public double levelPos(double x, boolean blue, int level) {
-		Point.value=x;
+		LineComparator x_evaluation = new LineComparator(x);
+		List<Point>locList;
 		if(blue=true){
-			List<Point>locList= new ArrayList<Point>(lBlue);
-			Collections.sort(locList);
-			return locList.get(level-1).eval(x);
-					}
-		else {
-			List<Point>locList= new ArrayList<Point>(lRed);
-		    Collections.sort(locList);	
-		    return locList.get(level-1).eval(x);
+			locList = new ArrayList<Point>(lBlue);
 		}
+		else {
+			locList= new ArrayList<Point>(lRed);
+		}
+		Collections.sort(locList, x_evaluation);
+		return locList.get(level-1).eval(x);
 	}
 	
 	/**
