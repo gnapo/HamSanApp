@@ -10,10 +10,11 @@ public class VisualPoint {
 	public boolean deleted; // points not used in the algorithm
 	public boolean highlighted;
 	
-	public VisualPoint(double a, double b, PointType type) {
+	public VisualPoint(double a, double b, PointType type, boolean deleted) {
 		this.a = a;
 		this.b = b;
 		this.type = type;
+		this.deleted = deleted;
 	}
 	
 	/**

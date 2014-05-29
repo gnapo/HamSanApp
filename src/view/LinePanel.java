@@ -43,29 +43,6 @@ public class LinePanel extends JPanel {
         drawCross(g);
         int xscale = 300/(xmax-xmin); 
         int yscale = 300/(ymax-ymin);
-
-        /*
-    	g.setColor(Color.blue.darker());
-        for (int i = 0; i < h.lBlueDel.size(); ++i) {
-        	double y1 = h.lBlueDel.get(i).eval(xmin);
-        	double y2 = h.lBlueDel.get(i).eval(xmax);
-
-        	double dy1 = ((-y1)+ ymax)*yscale;
-        	double dy2 = ((-y2)+ ymax)*yscale;
-        	
-        	g.drawLine(0,(int) dy1,300, (int) dy2);
-        }
-        
-        g.setColor(Color.red.darker());
-        for (int i = 0; i < h.lRedDel.size(); ++i) {
-        	double y1 = h.lRedDel.get(i).eval(xmin);
-        	double y2 = h.lRedDel.get(i).eval(xmax);
-
-        	double dy1 = ((-y1)+ ymax)*yscale;
-        	double dy2 = ((-y2)+ ymax)*yscale;
-        	
-        	g.drawLine(0,(int) dy1,300, (int) dy2);
-        } */
         
     	g.setColor(Color.blue);
         for (int i = 0; i < h.lBlue.size(); ++i) {

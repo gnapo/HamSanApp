@@ -1,21 +1,15 @@
 package view;
 
 import hamSanApp.HamSanAlg;
-import hamSanApp.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.JPanel;
-
-import control.ToggleListener;
 
 public class PointPanel extends JPanel implements MouseListener {
 	
@@ -63,7 +57,7 @@ public class PointPanel extends JPanel implements MouseListener {
 			double a = ((double) x / xscale) + xmin;
 			double b = ((double) -y / yscale) - ymin;
 			
-			VisualPoint candidate = new VisualPoint(a, b, type);
+			VisualPoint candidate = new VisualPoint(a, b, type, false);
 			if (visualPoints.contains(candidate)) {
 				return false;
 			} else {

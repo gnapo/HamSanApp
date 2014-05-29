@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.lang.Math;
 
+import view.PointType;
+import view.VisualPoint;
+
 /**
  * Diese Klasse beinhaltet den eigentlichen Algorithmus und einige Hilfsfunktionen.
  * wichtigie Methoden von au�en: 
@@ -388,4 +391,49 @@ public class HamSanAlg {
 		}
 		
 	}	
+	
+	public List<VisualPoint> getVisualPoints() {
+		List<VisualPoint> result = new ArrayList<VisualPoint>();
+		for (Point p : lBlue) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lRed) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lBlueDel) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				result.add(newPoint);
+			}
+		}
+		
+		for (Point p : lRedDel) {
+			if (colorSwap) {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				result.add(newPoint);
+			} else {
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				result.add(newPoint);
+			}
+		}
+		
+		return result;
+	}
 }
