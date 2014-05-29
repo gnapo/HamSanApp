@@ -30,6 +30,7 @@ public class LineComparator implements Comparator<Point> {
 	//(y0 < y1) gdw y0 unbterhalb von y1 gdw return 1
 	@Override
 	public int compare(Point arg0, Point arg1) {
+		if (arg0.equals(arg1)) return 0;
 		double y0 = arg0.eval(x);
 		double y1 = arg1.eval(x);
 		if(y0 < y1)
