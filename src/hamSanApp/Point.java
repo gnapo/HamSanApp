@@ -153,6 +153,7 @@ package hamSanApp;
 					}
 					else { 
 						//find the smallest index of the four
+						//TODO: ROBUSTNES, not all points need to be different
 						int s = (int) Math.signum(x1);
 						if (i.i < j.i && i.i < k.i && i.i < l.i) {
 							if (diff1 > 0) {return -1*s;}

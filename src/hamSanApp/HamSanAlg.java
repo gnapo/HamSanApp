@@ -34,7 +34,7 @@ public class HamSanAlg {
 	public double verticalSolPos;	//position der vertikalen L�sung
 	public Point solution;			//position der nicht-vertikalen L�sung
 	double [] borders;		//positionen der grenzen zwischen streifen.
-								//konvention: borders[i] ist der linke rand von dem i-ten streifen
+								//konvention: borders[i] ist der linke rand von dem i-ten streifen und die streifen sind halboffen, linker punkt ist drin.
 	public List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
 	boolean DEBUG = true;
 	
@@ -236,7 +236,7 @@ public class HamSanAlg {
 			}
 		}
 		if (leftborder && c.crAt() < leftb) { return false;}
-		if (rightborder && c.crAt() > rightb) { return false;}
+		if (rightborder && c.crAt() >= rightb) { return false;}
 		return true;
 	}
 	
@@ -244,9 +244,14 @@ public class HamSanAlg {
 	 * Funktion, die errechnet, ob im unbeschr�nkten bereich links die blaue medianlinie �ber der Roten ist
 	 * @return true falls ja
 	 */
-	private boolean blueTopLeft() {
-		// TODO implementieren
-		return false;
+	public boolean blueTopLeft() {
+		LineComparator2 c = new LineComparator2();
+		
+		List<Point> blueLoc = new ArrayList<Point>(lBlue);
+		List<Point> redLoc = new ArrayList<Point>(lRed);
+		Collections.sort(blueLoc, c);
+		Collections.sort(redLoc, c);
+		return 1 == c.compare(blueLoc.get(levelBlue+1), redLoc.get(levelRed+1));
 	}
 	
 	
@@ -344,7 +349,7 @@ public class HamSanAlg {
 		System.out.println(crossings.size());
 		System.out.println(bandsize);
 		for (int i = bandsize; i < crossings.size();i+=bandsize){
-			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, add later
+			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, test later
 			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 				while (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
 					i--;
