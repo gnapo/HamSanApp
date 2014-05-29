@@ -5,6 +5,8 @@ import hamSanApp.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashSet;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JPanel;
+
+import control.ToggleListener;
 
 public class PointPanel extends JPanel implements MouseListener {
 	
@@ -44,6 +48,14 @@ public class PointPanel extends JPanel implements MouseListener {
 		this.addMouseListener(this);
 		
 		visualPoints = new HashSet<VisualPoint>();
+	}
+	
+	public void togglePointType() {
+		if (currentType == PointType.BLUE) {
+			currentType = PointType.RED;
+		} else {
+			currentType = PointType.BLUE;
+		}
 	}
 	
 	public boolean addPoint(int x, int y, PointType type) {
