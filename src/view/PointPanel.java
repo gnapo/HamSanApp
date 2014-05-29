@@ -200,5 +200,13 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		linePanel.repaint();
 	}
 
+	public PointType getCurrentType() {
+		return currentType;
+	}
+
+	public void setCurrentType(PointType currentType) {
+		this.currentType = currentType;
+	}
+
 	
 }

@@ -10,13 +10,13 @@ import view.LinePanel;
 import view.PointPanel;
 import view.VisualPoint;
 
-public class ButtonListener implements ActionListener {
+public class DoAlgButtonListener implements ActionListener {
 
 	private HamSanAlg hsa;
 	private PointPanel pp;
 	private LinePanel lp;
 	
-	public ButtonListener(HamSanAlg h, PointPanel pp, LinePanel lp) {
+	public DoAlgButtonListener(HamSanAlg h, PointPanel pp, LinePanel lp) {
 		this.hsa = h;
 		this.pp = pp;
 		this.lp = lp;
