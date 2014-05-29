@@ -9,10 +9,8 @@ import java.util.Comparator;
 //Je größer der Wert der Geraden in Koordinate x, desto kleiner ist Gerade in Geradenordnung.
 //Bei Gleichheit: ist value positiv, so ist Gerade mit kleinerem Index oberhalb
 //ist value negativ, so ist Gerade mit kleinerem Index unterhalb
-//ist value = 0 und Schneiden sich die Geraden im Positiven, 
-//so ist die Gerade mit kleinerem Index oberhalb der anderen. 
-// ist value = 0 und schneiden sich die Geraden im Negativen, so ist 
-// die Gerade mit kleinerem Index unterhalb von der anderen. 
+//ist value = 0 so ist die Gerade mit kleinerem Index oberhalb der anderen. 
+
 
 /**
  * @author annette
@@ -29,6 +27,7 @@ public class LineComparator implements Comparator<Point> {
 
 	private double x;
 	
+	//(y0 < y1) gdw y0 unbterhalb von y1 gdw return 1
 	@Override
 	public int compare(Point arg0, Point arg1) {
 		double y0 = arg0.eval(x);
@@ -40,19 +39,19 @@ public class LineComparator implements Comparator<Point> {
 		else
 		{
 			//y0==y1
-			if(x > 0 || (x == 0 && y0 > 0))
+			if(x >=0)
 			{
-				if(arg0.i < arg1.i)
-					return 1;
-				else
+				if(arg0.i < arg1.i)//y0 soll in diesem Fall oberhalb von y1 liegen
 					return -1;
+				else
+					return 1;
 			}
 			else
 			{
-				if(arg0.i < arg1.i)
-					return -1;
-				else
+				if(arg0.i < arg1.i)//y0 soll in diesem Fall unterhalb von y1 liegen
 					return 1;
+				else
+					return -1;
 
 			}
 		}

@@ -180,15 +180,56 @@ public class HamSanAlg {
 	
 	/**
 	 * gibt die y-Koordinate der level'ten linie von Oben an der stelle x aus
+	 * Dabei nimmt Level Werte zwischen 1 und lBlue.size()+1 bzw l.size()+1 an! 
 	 * @param x die x-Koordinate
 	 * @param blue von den Blauen oder Roten linien?
 	 * @param level wievielte linie von oben?
 	 * @return der y-Wert
 	 */
+	public boolean TestLineSort(double x, boolean blue){
+		boolean r=true;
+		LineComparator x_evaluation = new LineComparator(x);
+		List<Point> locList;
+		if(blue==true){
+			locList = new ArrayList<Point>(lBlue);
+		}
+		else {
+			locList= new ArrayList<Point>(lRed);
+		}
+		Collections.sort(locList, x_evaluation);
+		for (int i = 0; i < locList.size(); i++) {
+	        if (i+1!=locList.size()){
+	        	if(  (locList.get(i).eval(x)==locList.get(i+1).eval(x)) && ( locList.get(i).i <=locList.get(i+1).i ) ){
+	        		if (x<0){r=false;}
+	        	}
+	        	else if ( locList.get(i).i >locList.get(i+1).i ){
+	        		if (x>=0){r=false;}
+	        	}
+	        }
+	        		
+
+        }
+		return r;
+	}
+	
+	public  List<Point> TestLineSort2(double x, boolean blue){
+		LineComparator x_evaluation = new LineComparator(x);
+		List<Point> locList;
+		if(blue==true){
+			locList = new ArrayList<Point>(lBlue);
+		}
+		else {
+			locList= new ArrayList<Point>(lRed);
+		}
+		Collections.sort(locList, x_evaluation);
+
+		return locList;
+	}
+
 	public double levelPos(double x, boolean blue, int level) {
 		LineComparator x_evaluation = new LineComparator(x);
-		List<Point>locList;
-		if(blue=true){
+		List<Point> locList;
+		if(blue==true){
 			locList = new ArrayList<Point>(lBlue);
 		}
 		else {
