@@ -53,9 +53,7 @@ public class VisualPoint {
 		}
 	}
 	
-	public void drawAsPoint(Graphics g, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
-		System.out.println("drawing");
-		
+	public void drawAsPoint(Graphics g, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {	
 		double xscale = componentSize.getWidth() / (xmax - xmin);
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		double xd = (a - xmin) * xscale;
@@ -65,15 +63,15 @@ public class VisualPoint {
 		
 		if (this.type == PointType.BLUE) {
 			if (this.highlighted) {
-				g.setColor(Color.cyan.brighter());
+				g.setColor(Color.cyan);
 			} else {
-				g.setColor(Color.blue.darker());
+				g.setColor(Color.blue);
 			}
 		} else if (this.type == PointType.RED) {
 			if (this.highlighted) {
-				g.setColor(Color.orange.brighter());
+				g.setColor(Color.orange);
 			} else {
-				g.setColor(Color.red.darker());
+				g.setColor(Color.red);
 			}
 		} else {
 			throw new IllegalStateException("Invalid point type.");
@@ -100,15 +98,15 @@ public class VisualPoint {
 		
 		if (this.type == PointType.BLUE) {
 			if (this.highlighted) {
-				g.setColor(Color.cyan.brighter());
+				g.setColor(Color.cyan);
 			} else {
-				g.setColor(Color.blue.darker());
+				g.setColor(Color.blue);
 			}
 		} else if (this.type == PointType.RED) {
 			if (this.highlighted) {
-				g.setColor(Color.orange.brighter());
+				g.setColor(Color.orange);
 			} else {
-				g.setColor(Color.red.darker());
+				g.setColor(Color.red);
 			}
 		} else {
 			throw new IllegalStateException("Invalid point type.");

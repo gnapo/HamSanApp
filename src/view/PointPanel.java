@@ -21,6 +21,8 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	private PointType currentType = PointType.BLUE;
 	private boolean addingAllowed = true;
 	
+	private List<VisualPoint> visualPoints;
+	
 	private LinePanel linePanel;
 	
 	private HamSanAlg h;
@@ -42,9 +44,16 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		
+		visualPoints = h.getVisualPoints();
 		this.linePanel = lp;
 	}
 	
+	
+	public void setVisualPoints(List<VisualPoint> visualPoints) {
+		this.visualPoints = visualPoints;
+	}
+
+
 	public void togglePointType() {
 		if (currentType == PointType.BLUE) {
 			currentType = PointType.RED;
@@ -53,10 +62,10 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		}
 	}
 	
+	
+	
 	public boolean addPoint(int x, int y, PointType type) {
 		if (addingAllowed) {
-			List<VisualPoint> visualPoints = h.getVisualPoints();
-			
 			double a = ((double) x / xscale) + xmin;
 			double b = ((double) -y / yscale) - ymin;
 			
@@ -113,7 +122,6 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		g.setColor(Color.black);
 		g.drawRect(0, 0, 300, 300);
 
-		List<VisualPoint> visualPoints = h.getVisualPoints();
 		for (VisualPoint v : visualPoints) {
 			v.drawAsPoint(g, xmin, xmax, ymin, ymax, this.getSize());
 		}
@@ -165,22 +173,21 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-		List<VisualPoint> points = h.getVisualPoints();
-		for (VisualPoint v : points) {
+		for (VisualPoint v : visualPoints) {
 			v.highlighted = false;
 		}
 		
-		for (VisualPoint v : points) {
+		for (VisualPoint v : visualPoints) {
 			if (v.containsCursor(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
 				v.highlighted = true;
-				System.out.println("moooooo");
-				break;
+				linePanel.setVisualPoints(visualPoints);
 			}
 		}
 		
 		this.revalidate();
 		this.repaint();
+		linePanel.revalidate();
+		linePanel.repaint();
 	}
 
 	
