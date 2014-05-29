@@ -51,7 +51,7 @@ public class MyFrame extends JFrame {
 	    startAlgButton.setBounds(20,320,90,40);
 	    
 	    startAlgButton.setFocusable(false);
-	    startAlgButton.addActionListener(new ButtonListener(hsa, pp));
+	    startAlgButton.addActionListener(new ButtonListener(hsa, pp, lp));
 	    
 	    this.add(startAlgButton);
 	    
