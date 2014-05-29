@@ -6,11 +6,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JPanel;
 
-public class PointPanel extends JPanel implements MouseListener {
+public class PointPanel extends JPanel implements MouseListener, MouseMotionListener {
 	
 	/**
 	 * 
@@ -39,6 +40,7 @@ public class PointPanel extends JPanel implements MouseListener {
 		super();
 		h = hsa;
 		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 		
 		this.linePanel = lp;
 	}
@@ -152,6 +154,33 @@ public class PointPanel extends JPanel implements MouseListener {
 
 	public void setAddingAllowed(boolean addingAllowed) {
 		this.addingAllowed = addingAllowed;
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		List<VisualPoint> points = h.getVisualPoints();
+		for (VisualPoint v : points) {
+			v.highlighted = false;
+		}
+		
+		for (VisualPoint v : points) {
+			if (v.containsCursor(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
+				v.highlighted = true;
+				System.out.println("moooooo");
+				break;
+			}
+		}
+		
+		this.revalidate();
+		this.repaint();
 	}
 
 	

@@ -34,7 +34,28 @@ public class VisualPoint {
 		return (this.a == other.a && this.b == other.b);
 	}
 	
+	public boolean containsCursor(int x, int y, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
+		double xscale = componentSize.getWidth() / (xmax - xmin);
+		double yscale = componentSize.getHeight() / (ymax - ymin);
+		
+		double xd = (a - xmin) * xscale;
+		double yd = (-b + ymax) * yscale;
+		int xa = (int) xd;
+		int yb = (int) yd;
+		
+		double deltaX = Math.abs(x-xa);
+		double deltaY = Math.abs(y-yb);
+		
+		if (deltaX < 2 && deltaY < 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public void drawAsPoint(Graphics g, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
+		System.out.println("drawing");
+		
 		double xscale = componentSize.getWidth() / (xmax - xmin);
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		double xd = (a - xmin) * xscale;
@@ -44,13 +65,13 @@ public class VisualPoint {
 		
 		if (this.type == PointType.BLUE) {
 			if (this.highlighted) {
-				g.setColor(Color.blue.brighter());
+				g.setColor(Color.cyan.brighter());
 			} else {
 				g.setColor(Color.blue.darker());
 			}
 		} else if (this.type == PointType.RED) {
 			if (this.highlighted) {
-				g.setColor(Color.red.brighter());
+				g.setColor(Color.orange.brighter());
 			} else {
 				g.setColor(Color.red.darker());
 			}
@@ -59,7 +80,7 @@ public class VisualPoint {
 		}
 		
 		if (this.deleted) {
-			g.drawOval(x - 2, y - 2, 4, 4);
+			g.drawOval(x - 3, y - 3, 6, 6);
 		} else {
 			g.fillOval(x - 3, y - 3, 6, 6);
 		}
@@ -79,13 +100,13 @@ public class VisualPoint {
 		
 		if (this.type == PointType.BLUE) {
 			if (this.highlighted) {
-				g.setColor(Color.blue.brighter());
+				g.setColor(Color.cyan.brighter());
 			} else {
 				g.setColor(Color.blue.darker());
 			}
 		} else if (this.type == PointType.RED) {
 			if (this.highlighted) {
-				g.setColor(Color.red.brighter());
+				g.setColor(Color.orange.brighter());
 			} else {
 				g.setColor(Color.red.darker());
 			}
@@ -94,10 +115,10 @@ public class VisualPoint {
 		}
 		
 		if (this.deleted) {
-			//g.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
+			g.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
 			g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
-		} else {
 			g.setStroke(new BasicStroke());
+		} else {
         	g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
 		}
 	}
