@@ -311,8 +311,8 @@ public class HamSanAlg {
 				hideLine(lRed.get(0));
 			}
 			//set the levelBlue and levelRed to the correct values:
-			levelBlue = (lBlue.size()+1/2);
-			levelRed = (lRed.size()+1/2);
+			levelBlue = ((lBlue.size()+1)/2);
+			levelRed = ((lRed.size()+1)/2);
 			firstRun = false; //so we don't change the points, and only do this once
 		}
 		
