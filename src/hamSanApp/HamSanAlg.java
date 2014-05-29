@@ -380,7 +380,7 @@ public class HamSanAlg {
 		
 		//make stripes with at most alpha*(n choose 2) crossings a piece.
 		Collections.sort(crossings);
-		Collections.reverse(crossings);
+		//Collections.reverse(crossings);
 		
 		int minband = 0;
 		int maxband = 0; //wird �berschrieben.

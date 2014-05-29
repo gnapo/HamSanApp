@@ -21,8 +21,9 @@ public class Crossing implements Comparable<Crossing> {
 	/**
 	 * diese Methode wird aufgerufen, wenn man z.B. println(irgendein crossing) ausf�hrt.
 	 */
-	public String tostring() {
-		String r = "Crossing of: "+this.a.toString()+" and "+this.b.toString()+" \n";
+	public String toString() {
+		String r = "";
+		//"Crossing of: "+this.a.toString()+" and "+this.b.toString()+" \n";
 		if (atInf() && atNegInf()) {
 			r +="crossing at -inf";
 		}
@@ -30,7 +31,7 @@ public class Crossing implements Comparable<Crossing> {
 			r +="crossing at +inf";
 		}
 		else {
-			//eh
+			r +="crossing at "+ crAt();
 		}
 		return r;
 	}
@@ -44,7 +45,7 @@ public class Crossing implements Comparable<Crossing> {
 		if (other == null) {throw new NullPointerException("tried to compare to null. whoops.");}
 		if (this.equals(other)) {return(0);}
 		try {
-			return Point.op2naive(a, b, other.a, other.b);
+			return (-1)* Point.op2naive(a, b, other.a, other.b);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
