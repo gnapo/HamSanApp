@@ -22,6 +22,8 @@ public class PointPanel extends JPanel implements MouseListener {
 	private boolean addingAllowed = true;
 	private Set<VisualPoint> visualPoints;
 	
+	private LinePanel linePanel;
+	
 	
 	private HamSanAlg h;
 	public int getXmin() {
@@ -36,11 +38,12 @@ public class PointPanel extends JPanel implements MouseListener {
 	private int xscale = 300 / (xmax - xmin);
 	private int yscale = 300 / (ymax - ymin);
 
-	PointPanel(HamSanAlg hsa) {
+	PointPanel(HamSanAlg hsa, LinePanel lp) {
 		super();
 		h = hsa;
 		this.addMouseListener(this);
 		
+		this.linePanel = lp;
 		visualPoints = new HashSet<VisualPoint>();
 	}
 	
@@ -70,6 +73,8 @@ public class PointPanel extends JPanel implements MouseListener {
 				System.out.println(visualPoints.size());
 				this.revalidate();
 				this.repaint();
+				linePanel.revalidate();
+				linePanel.repaint();
 				return true;
 			}
 		} else {
@@ -109,7 +114,7 @@ public class PointPanel extends JPanel implements MouseListener {
 		g.drawRect(0, 0, 300, 300);
 
 		for (VisualPoint v : visualPoints) {
-			v.draw(g, xmin, xmax, ymin, ymax);
+			v.drawAsPoint(g, xmin, xmax, ymin, ymax, this.getSize());
 		}
 	}
 

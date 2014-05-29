@@ -22,8 +22,8 @@ public class MyFrame extends JFrame {
 	
 	public MyFrame(HamSanAlg hsa) {
 		h = hsa;
-		pp = new PointPanel(h);
 		lp = new LinePanel(h);
+		pp = new PointPanel(h,lp);
 		
 		this.addKeyListener(new ToggleListener(pp));
 		
