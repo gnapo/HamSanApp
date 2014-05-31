@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
@@ -185,7 +184,6 @@ public class VisualPoint {
 	public void drawAsLine(Graphics graphics, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
 		Graphics2D g = (Graphics2D) graphics;
 		
-		double xscale = componentSize.getWidth() / (xmax - xmin);
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		
 		double y1 = a*xmin + b;
