@@ -137,6 +137,8 @@ package hamSanApp;
 		 */
 		public static int op2naive(Point i, Point j, Point k, Point l) throws Exception {
 			//if ij crosses left of kl, return -1, if right return +1
+			if ((i.equals(k)&& j.equals(l))||(i.equals(l)&&j.equals(k))) return 0;
+			int smallindex=Math.min(Math.min(Math.min(i.i,j.i),k.i),l.i);
 			if (i.equals(j)||k.equals(l)) 
 				{throw new Exception("op2 was called with stupid arguments");}
 			double diff1 = i.a - j.a;
@@ -155,22 +157,35 @@ package hamSanApp;
 						//find the smallest index of the four
 						//TODO: ROBUSTNES, not all points need to be different also make sure this fix does what we want? 
 						int s = (int) Math.signum(x1);
-						if ((i.i < j.i) && (i.i < k.i) && (i.i < l.i)) {
+						if ( ((i.i < j.i) && (i.i < k.i) && (i.i < l.i)) ||
+							 (smallindex==i.i)&& (i.i!=k.i)&& (i.i!=l.i) ){
 							if (diff1 > 0) {return -1*s;}
 							else {return 1*s;}
 						}
-						if ((j.i < i.i) && (j.i < k.i) && (j.i < l.i)) {
+						if ( ((j.i < i.i) && (j.i < k.i) && (j.i < l.i)) ||
+						   (smallindex==j.i)&& (j.i!=k.i)&& (j.i!=l.i) ){
 							if (diff1 < 0) {return -1*s;}
 							else {return 1*s;}
 						}
-						if ((k.i < i.i) && (k.i < j.i) && (k.i < l.i)) {
+						if ( ((k.i < i.i) && (k.i < j.i) && (k.i < l.i)) ||
+							(smallindex==k.i)&& (k.i!=i.i)&& (k.i!=j.i) ){
 							if (diff2 < 0) {return -1*s;}
 							else {return 1*s;}
 						}
-						if ((l.i < i.i) && (l.i < j.i) && (l.i < k.i)) {
+						if ( ((l.i < i.i) && (l.i < j.i) && (l.i < k.i)) ||
+							(smallindex==l.i)&& (l.i!=i.i)&& (l.i!=j.i) ){
 							if (diff2 > 0) {return -1*s;}
 							else {return 1*s;}
-						}
+						}//Fall, dass es nur drei Geraden gibt
+						//kleinster Index ist j und j kommt doppelt vor
+						if ( (smallindex==j.i)&& ((j.i==k.i)|| (j.i==l.i)) ){
+							if ((l.a>j.a)&&(j.a>i.a)) {return -1*s;}
+							else {return 1*s;}
+						}//kleinster Index ist i und i kommt doppelt vor
+						if ( (smallindex==i.i)&& ((i.i==k.i)|| (i.i==l.i)) ){
+							if ((l.a>i.a)&&(i.a>j.a)) {return -1*s;}
+							else {return 1*s;}
+						}						
 						throw new Exception("no smallest index found, this shouldn't happen. :(, x values were "+x1+" and "+x2+" and our four lines were "+i+" "+j+" "+k+" "+l);
 					}
 				}
