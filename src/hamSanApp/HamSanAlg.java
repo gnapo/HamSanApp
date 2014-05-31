@@ -37,6 +37,7 @@ public class HamSanAlg {
 								//konvention: borders[i] ist der linke rand von dem i-ten streifen und die streifen sind halboffen, linker punkt ist drin.
 	public List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
 	boolean DEBUG = true;
+	public Trapeze trapeze;
 	
 	final double alpha = 1.0d/32.0d; 	//
 	final double eps = 1.0d/8.0d;		//Konstanten f�r den Alg
@@ -67,6 +68,7 @@ public class HamSanAlg {
 		verticalSol = false;
 		borders = new double[64];
 		crossings = new ArrayList<Crossing>();
+		trapeze = null;
 	}
 	
 	/**
@@ -304,12 +306,16 @@ public class HamSanAlg {
 	 * kleinere Schritte aufteilen.
 	 */
 	public void doAlg() { //sets done to true iff it has found a solution
+		if (lBlue.size() == 0 && lRed.size() == 0) {
+			return; //nix zu tun!
+		}
+		
 		if (firstRun) {
 			//make sure that both sets are odd by deleting a point out of each set:
-			if ((lBlue.size()%2) == 0) {
+			if (((lBlue.size()%2) == 0)&&lBlue.size()>0) {
 				hideLine(lBlue.get(0));
 			}
-			if ((lRed.size()%2) == 0) {
+			if (((lRed.size()%2) == 0)&&lRed.size()>0) {
 				hideLine(lRed.get(0));
 			}
 			//set the levelBlue and levelRed to the correct values:
@@ -317,6 +323,23 @@ public class HamSanAlg {
 			levelRed = ((lRed.size()+1)/2);
 			firstRun = false; //so we don't change the points, and only do this once
 		}
+		
+		if (lBlue.size() == 0) { //only red lines.
+			double rL = levelPos(0, false, (levelRed));
+			solution = new Point(0,rL);
+			done = true;
+			firstRun = false;
+			return;
+		}
+		if (lRed.size() == 0) { //only red lines.
+			double bL = levelPos(0, true, (levelBlue));
+			solution = new Point(0,bL);
+			done = true;
+			firstRun = false;
+			return;
+		}
+		
+		
 		
 		//check if trivial solution:
 		if (lBlue.size()==1 && lRed.size()==1) {
@@ -410,7 +433,7 @@ public class HamSanAlg {
 		bandsize = Math.max(1, bandsize); 
 		//System.out.println(crossings.size());
 		//System.out.println(bandsize);
-		for (int i = bandsize; i < crossings.size();i+=bandsize){ //TODO unbounded case
+		for (int i = bandsize; i < crossings.size();i+=bandsize){ //TODO many crossings at inf
 			/*
 			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, test later
 			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
@@ -428,14 +451,16 @@ public class HamSanAlg {
 		
 		//find strip with odd number of intersections by binary search:		
 		boolean bluetop = blueTopLeft();
-		while ((maxband-minband) > 1) { //TODO i think this needs to be more robust for the non-bounded cases?
+		while ((maxband-minband) > 1) { 
 			int testband = minband+(maxband-minband)/2;
 			int bluetesttop = blueTop(borders[testband]);
 			if (bluetop == (bluetesttop==1)) {
 				minband = testband;
+				leftborder = true;
 			}
 			else if (bluetop == (bluetesttop==-1)) {
 				maxband = testband;
+				rightborder = true;
 			}
 			else if (bluetesttop ==0) { //we have a winner!
 			System.out.println("schnittpunkt gefunden!");
@@ -444,13 +469,27 @@ public class HamSanAlg {
 				return;
 			}
 		}
-		if (DEBUG) {
-			System.out.println("nop");			
+		
+
+		//grenzen nur setzen, falls wir wissen, dass da welche sind. 
+		if (leftborder) {
+			leftb = borders[minband];
+		}
+		if (rightborder) {
+			rightb = borders[maxband];
+		}
+		
+		if (!leftborder && !rightborder) {
+			System.out.println("nope, this shouldn't ever happen. no bounds were set. do we even have crossings?");
 			return;
 		}
-		leftb = borders[minband];
-		rightb = borders[maxband];
 		
+		
+		
+		if (!leftborder || !rightborder) {
+			System.out.println("unbounded trapeze not yet implemented. aw.");
+			return;
+		}
 		//TODO handle non-bounded case
 		int topLvl = levelBlue - (int) (eps*lBlue.size());
 		int botLvl = levelBlue - (int) (eps*lBlue.size());
@@ -458,11 +497,11 @@ public class HamSanAlg {
 		double tr = levelPos(rightb,true,topLvl);
 		double bl = levelPos(leftb,true,botLvl);
 		double br = levelPos(rightb,true,botLvl);
-		Trapeze t = new Trapeze(leftb, tl, bl, rightb, tr, br);
+		trapeze  = new Trapeze(leftb, tl, bl, rightb, tr, br);
 		
 		//cut away lines, count and make sure levelB/R are correct:
 		for (int i = 0; i < lBlue.size(); ++i) {
-			int s = t.intersects(lBlue.get(i));
+			int s = trapeze.intersects(lBlue.get(i));
 			if (s != 0) {
 				if (s > 0) {
 					levelBlue --;
@@ -471,7 +510,7 @@ public class HamSanAlg {
 			}
 		}
 		for (int i = 0; i < lRed.size(); ++i) {
-			int s = t.intersects(lRed.get(i));
+			int s = trapeze.intersects(lRed.get(i));
 			if (s != 0) {
 				if (s > 0) {
 					levelRed --;

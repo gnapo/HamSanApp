@@ -199,11 +199,23 @@ public class VisualPoint {
 		}
 		
 		if (this.deleted) {
-			g.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
+			g.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
 			g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
 			g.setStroke(new BasicStroke());
 		} else {
         	g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
 		}
+	}
+
+	public double getA() {
+		return this.a;
+	}
+	
+	public double getB() {
+		return this.b;
+	}
+
+	public boolean isBlue() {
+		return this.type == PointType.BLUE;
 	}
 }

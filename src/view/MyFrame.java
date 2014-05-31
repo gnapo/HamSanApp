@@ -26,52 +26,43 @@ public class MyFrame extends JFrame {
 	HamSanAlg h;
 	
 	public MyFrame(HamSanAlg hsa) {
+		this.setPreferredSize(new Dimension(1200,1000));
+		this.setLayout(new BorderLayout());
+		
+		// the dual panels
 		h = hsa;
 		lp = new LinePanel(h);
 		pp = new PointPanel(h,lp);
 		lp.setPointPanel(pp);
+		pp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
+		lp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
+		JPanel dualPanels = new JPanel(new GridLayout(1, 2));
+		
+		dualPanels.setPreferredSize(new Dimension(this.getWidth(), 800));
+		dualPanels.add(lp);
+		dualPanels.add(pp);
+		
+		// the buttons
 		startAlgButton = new JButton("Do Alg");
 		startAlgButton.setVisible(true);
-		
-		resetButton = new JButton("Reset");
-		resetButton.setVisible(true);
-		
-		JPanel dualPanels = new JPanel(new BorderLayout());
-		
-		dualPanels.add(lp, BorderLayout.WEST);
-		dualPanels.add(pp, BorderLayout.EAST);
-		
-		this.addKeyListener(new ToggleListener(pp));
-		this.setLayout(new FlowLayout());
-		
-		Container container = getContentPane();
-		container.setLayout(null);
-		
-		Insets ins = container.getInsets();
-		Dimension size = new Dimension(301,301);			    
-		
-	    this.add(pp);
-	    lp.setBounds(10+ ins.left, 10 + ins.top, size.width, size.height);
-	    this.add(lp);
-	    pp.setBounds(20+ins.left+size.width, 10+ins.top, size.width, size.height);
-	    startAlgButton.setBounds(20,320,90,40);
+		startAlgButton.setBounds(20,320,90,40);
 	    startAlgButton.setFocusable(false);
 	    startAlgButton.addActionListener(new DoAlgButtonListener(hsa, pp, lp));
-	    
+		resetButton = new JButton("Reset");
+		resetButton.setVisible(true);
 	    resetButton.setBounds(130,320,90,40);
 	    resetButton.setFocusable(false);
 	    resetButton.addActionListener(new ResetButtonListener(hsa, pp));
-	    
-	    this.add(startAlgButton);
-	    this.add(resetButton);
-	    
+	    JPanel buttonPanel = new JPanel();
+	    buttonPanel.setLayout(new FlowLayout());
+	    buttonPanel.add(startAlgButton);
+	    buttonPanel.add(resetButton);
+		
+		this.add(dualPanels, BorderLayout.CENTER);
+	    this.add(buttonPanel, BorderLayout.SOUTH);
+	    this.addKeyListener(new ToggleListener(pp));
 	    setFocusable(true);
 	    
 	    this.pack();
-	   
-	    //this.add(dualPanels);
-	    //this.add(startAlgButton);
-	    
-	    //container.add(startAlgButton);
 	}
 }
