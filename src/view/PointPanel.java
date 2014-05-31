@@ -143,6 +143,12 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			addPoint(e.getX(), e.getY(), currentType);
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			if (highlightedPoint != null && addingAllowed) {
+				h.removeLine(highlightedPoint.getMyPoint());
+				visualPoints.remove(highlightedPoint);
+				this.refreshAll();
+			}
 		}
 	}
 
