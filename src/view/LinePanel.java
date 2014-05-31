@@ -5,7 +5,6 @@ import hamSanApp.HamSanAlg;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
@@ -14,22 +13,26 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputListener;
 
 //import java.util.Date;
 
-public class LinePanel extends JPanel implements MouseMotionListener, MouseWheelListener {
+public class LinePanel extends JPanel implements MouseMotionListener, MouseWheelListener, MouseInputListener {
+
 	/**
-	 * I have no Idea what this is or why i need it
+	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1230109349211303663L;
 
 	private HamSanAlg h;
-	private int xmin = -10;
-	private int xmax = 10;
-	private int ymin = -10;
-	private int ymax = 10;
+	private double xmin = -10;
+	private double xmax = 10;
+	private double ymin = -10;
+	private double ymax = 10;
+
 	private double zoomFactor = 0;
-	
+	private Point2D.Double corner1, corner2;
+
 	private boolean showCrossings = true;
 
 	private PointPanel pointPanel;
@@ -41,6 +44,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		visualPoints = hsa.getVisualPoints();
 		this.addMouseMotionListener(this);
 		this.addMouseWheelListener(this);
+		this.addMouseListener(this);
 	}
 
 	public void setPointPanel(PointPanel pp) {
@@ -84,11 +88,11 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				Point2D.Double asXY = VisualPoint.toXY(asAB, xmin, ymin, xmax, ymax, this.getSize());
 				int x = (int) asXY.x;
 				int y = (int) asXY.y;
-				
-				g.drawLine(x-2, y, x+2, y);
-				g.drawLine(x, y-2, x, y+2);
-				
-				//drawPoint(g, (int) asXY.x, (int) asXY.y);
+
+				g.drawLine(x - 2, y, x + 2, y);
+				g.drawLine(x, y - 2, x, y + 2);
+
+				// drawPoint(g, (int) asXY.x, (int) asXY.y);
 			}
 		}
 
@@ -101,15 +105,14 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 			g.fillOval(x - 4, y - 4, 8, 8);
 		}
+		
+		if (corner1 != null && corner2 != null) {
+			g.setColor(Color.YELLOW);
+			g.drawRect((int) corner1.x, (int) corner1.y, (int) corner2.x - (int) corner1.x,(int) corner2.y - (int) corner1.y);
+		}
 
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -143,7 +146,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.setZoomFactor(zoom);
 		this.repaint();
 	}
-	
+
 	public void setZoomFactor(double zoomFactor) {
 		this.zoomFactor = zoomFactor;
 		System.out.println(zoomFactor);
@@ -159,12 +162,77 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			ymax = (int) (zoomFactor * 10);
 		} else {
 			double absZoom = Math.abs(zoomFactor);
-			xmin = (int) (1/absZoom * -10);
-			xmax = (int) (1/absZoom * 10);
-			ymin = (int) (1/absZoom * -10);
-			ymax = (int) (1/absZoom * 10);
+			xmin = (int) (1 / absZoom * -10);
+			xmax = (int) (1 / absZoom * 10);
+			ymin = (int) (1 / absZoom * -10);
+			ymax = (int) (1 / absZoom * 10);
 		}
 		this.repaint();
 	}
-	
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		corner1 = new Point2D.Double(e.getX(), e.getY());
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		corner2 = new Point2D.Double(e.getX(), e.getY());
+		this.repaint();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		corner2 = new Point2D.Double(e.getX(), e.getY());
+
+		// set new xmin, xmax, ymin, ymax
+		int x1, y1, x2, y2;
+		if (corner1.x < corner2.x) {
+			x1 = (int) corner1.x;
+			x2 = (int) corner2.x;
+		} else {
+			x1 = (int) corner2.x;
+			x2 = (int) corner1.x;
+		}
+		if (corner1.y < corner2.y) {
+			y1 = (int) corner1.y;
+			y2 = (int) corner2.y;
+		} else {
+			y1 = (int) corner2.y;
+			y2 = (int) corner1.y;
+		}
+
+		double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
+		double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
+		double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
+		double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
+
+		xmin = aMin;
+		xmax = aMax;
+		ymin = bMin;
+		ymax = bMax;
+
+		corner1 = null;
+		corner2 = null;
+		this.repaint();
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
