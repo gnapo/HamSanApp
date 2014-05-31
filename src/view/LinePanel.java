@@ -68,14 +68,14 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 		for (VisualPoint p : visualPoints) {
 			p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
 		}
-
-		g.setColor(Color.gray);
+		
 		/*
 		 * Date d = new Date(); long upto = d.getSeconds() % h.crossings.size();
 		 * System.out.println(upto); System.out.println(h.crossings.size());//
 		 */
 
 		if (showCrossings) {
+			g.setColor(Color.GREEN);
 			for (Crossing c : h.crossings) {
 				if (c.atInf()) {
 					continue;
@@ -85,8 +85,13 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 
 				Point2D.Double asAB = new Point2D.Double(crossingA, crossingB);
 				Point2D.Double asXY = VisualPoint.toXY(asAB, xmin, ymin, xmax, ymax, this.getSize());
-
-				drawPoint(g, (int) asXY.x, (int) asXY.y);
+				int x = (int) asXY.x;
+				int y = (int) asXY.y;
+				
+				g.drawLine(x-2, y, x+2, y);
+				g.drawLine(x, y-2, x, y+2);
+				
+				//drawPoint(g, (int) asXY.x, (int) asXY.y);
 			}
 		}
 

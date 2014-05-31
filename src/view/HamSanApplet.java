@@ -64,7 +64,7 @@ public class HamSanApplet extends JApplet {
 	    crossingBox.setEnabled(true);
 	    crossingBox.setSelected(true);
 	    crossingBox.setVisible(true);
-	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
+	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp, this));
 	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
