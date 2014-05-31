@@ -59,8 +59,12 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		g.setColor(Color.gray);
-		g.drawLine(0, this.getHeight() / 2, this.getWidth(), this.getHeight() / 2);
-		g.drawLine(this.getWidth() / 2, 0, this.getWidth() / 2, this.getHeight());
+		
+		int x0 = (int) VisualPoint.aToX(0, xmin, xmax, this.getSize());
+		int y0 = (int) VisualPoint.bToY(0, ymin, ymax, this.getSize());
+		
+		g.drawLine(0, y0, this.getWidth(), y0);
+		g.drawLine(x0, 0, x0, this.getHeight());
 	}
 
 	public void drawPoint(Graphics g, int x, int y) {
