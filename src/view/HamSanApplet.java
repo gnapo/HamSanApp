@@ -5,6 +5,7 @@ import hamSanApp.HamSanAlg;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import javax.swing.JApplet;
@@ -25,6 +26,11 @@ public class HamSanApplet extends JApplet {
 	 * 
 	 */
 	private static final long serialVersionUID = 6049999518358173580L;
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		this.requestFocus();
+	}
 
 	public void init() {
 		this.setPreferredSize(new Dimension(1200,1000));
@@ -82,6 +88,7 @@ public class HamSanApplet extends JApplet {
 	    this.add(buttonsAndLabel, BorderLayout.SOUTH);
 	    this.addKeyListener(new ToggleListener(pp));
 	    setFocusable(true);
+	    this.requestFocusInWindow();
 	    this.requestFocus();
 	}
 
