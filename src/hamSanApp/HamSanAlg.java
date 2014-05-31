@@ -306,6 +306,7 @@ public class HamSanAlg {
 	 * kleinere Schritte aufteilen.
 	 */
 	public void doAlg() { //sets done to true iff it has found a solution
+		if (done) {return;}
 		if (lBlue.size() == 0 && lRed.size() == 0) {
 			return; //nix zu tun!
 		}
@@ -488,34 +489,41 @@ public class HamSanAlg {
 		
 		if (!leftborder || !rightborder) {
 			System.out.println("unbounded trapeze not yet implemented. aw.");
+			done = true;
 			return;
 		}
-		//TODO handle non-bounded case
-		int topLvl = levelBlue - (int) (eps*lBlue.size());
-		int botLvl = levelBlue - (int) (eps*lBlue.size());
-		double tl = levelPos(leftb,true,topLvl);
-		double tr = levelPos(rightb,true,topLvl);
-		double bl = levelPos(leftb,true,botLvl);
-		double br = levelPos(rightb,true,botLvl);
-		trapeze  = new Trapeze(leftb, tl, bl, rightb, tr, br);
-		
+		else {
+			int topLvl = levelBlue - (int) (eps*lBlue.size());
+			int botLvl = levelBlue + (int) (eps*lBlue.size());
+			double tl = levelPos(leftb,true,topLvl);
+			double tr = levelPos(rightb,true,topLvl);
+			double bl = levelPos(leftb,true,botLvl);
+			double br = levelPos(rightb,true,botLvl);
+			trapeze  = new Trapeze(leftb, tl, bl, rightb, tr, br);
+		}
 		//cut away lines, count and make sure levelB/R are correct:
-		for (int i = 0; i < lBlue.size(); ++i) {
+		for (int i = 0; i < lBlue.size();) {
 			int s = trapeze.intersects(lBlue.get(i));
 			if (s != 0) {
 				if (s > 0) {
 					levelBlue --;
-				}
+				} 
 				hideLine(lBlue.get(i));
 			}
+			else {
+				i++;
+			}
 		}
-		for (int i = 0; i < lRed.size(); ++i) {
+		for (int i = 0; i < lRed.size();) {
 			int s = trapeze.intersects(lRed.get(i));
 			if (s != 0) {
 				if (s > 0) {
 					levelRed --;
 				}
 				hideLine(lRed.get(i));
+			}
+			else {
+				i++;
 			}
 		}
 		
