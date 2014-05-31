@@ -184,7 +184,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseDragged(MouseEvent e) {
 		if (highlightedPoint != null && addingAllowed) {
 			highlightedPoint.setXY(new Point2D.Double(e.getX(),  e.getY()), xmin, ymin, xmax, ymax, this.getSize());
-			repaint();
+			refreshAll();
 		}
 		
 		// TODO Auto-generated method stub
