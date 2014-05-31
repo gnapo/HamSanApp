@@ -155,19 +155,19 @@ package hamSanApp;
 						//find the smallest index of the four
 						//TODO: ROBUSTNES, not all points need to be different also make sure this fix does what we want? 
 						int s = (int) Math.signum(x1);
-						if ((i.i <= j.i) && (i.i <= k.i) && (i.i <= l.i)) {
+						if ((i.i < j.i) && (i.i < k.i) && (i.i < l.i)) {
 							if (diff1 > 0) {return -1*s;}
 							else {return 1*s;}
 						}
-						if ((j.i <= i.i) && (j.i <= k.i) && (j.i <= l.i)) {
+						if ((j.i < i.i) && (j.i < k.i) && (j.i < l.i)) {
 							if (diff1 < 0) {return -1*s;}
 							else {return 1*s;}
 						}
-						if ((k.i <= i.i) && (k.i <= j.i) && (k.i <= l.i)) {
+						if ((k.i < i.i) && (k.i < j.i) && (k.i < l.i)) {
 							if (diff2 < 0) {return -1*s;}
 							else {return 1*s;}
 						}
-						if ((l.i <= i.i) && (l.i <= j.i) && (l.i <= k.i)) {
+						if ((l.i < i.i) && (l.i < j.i) && (l.i < k.i)) {
 							if (diff2 > 0) {return -1*s;}
 							else {return 1*s;}
 						}
