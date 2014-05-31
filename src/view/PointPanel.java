@@ -110,14 +110,9 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		super.paint(g);
 		drawCross(g);
 
-		double xscale = this.getWidth() / (xmax - xmin);
-		double yscale = this.getHeight() / (ymax - ymin);
-
 		g.setColor(Color.magenta);
 		if (h.done) {
 			if (h.verticalSol) {
-				double dx = (h.verticalSolPos - xmin) * xscale;
-				
 				double xVal = VisualPoint.aToX(h.verticalSolPos, xmin, xmax, this.getSize());
 				
 				g.drawLine((int) xVal, 0, (int) xVal, this.getHeight());

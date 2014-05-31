@@ -52,7 +52,7 @@ public class MyFrame extends JFrame {
 		resetButton.setVisible(true);
 	    resetButton.setBounds(130,320,90,40);
 	    resetButton.setFocusable(false);
-	    resetButton.addActionListener(new ResetButtonListener(hsa, pp));
+	    resetButton.addActionListener(new ResetButtonListener(hsa, pp, lp));
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
 	    buttonPanel.add(startAlgButton);
