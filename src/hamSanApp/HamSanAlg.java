@@ -498,15 +498,27 @@ public class HamSanAlg {
 		}
 		
 		
-		
+		int topLvl = levelBlue - (int) (eps*lBlue.size());
+		int botLvl = levelBlue + (int) (eps*lBlue.size());		
 		if (!leftborder || !rightborder) {
-			System.out.println("unbounded trapeze not yet implemented. aw.");
-			done = true;
-			return;
+			
+			if (!leftborder){ //nach rechts offen
+				double tr = levelPos(rightb,true,topLvl);
+				double br = levelPos(rightb,true,botLvl);
+				double ts = getslope(true, topLvl);
+				double bs = getslope(true, botLvl);
+				trapeze = new Trapeze(true,rightb,tr,br,ts,bs);
+			}
+			else if (!rightborder) { //nach links offen
+				double tr = levelPos(rightb,true,topLvl);
+				double br = levelPos(rightb,true,botLvl);
+				double ts = getslope(true, topLvl);
+				double bs = getslope(true, botLvl);
+				trapeze = new Trapeze(true,rightb,tr,br,ts,bs);
+			}
+
 		}
 		else {
-			int topLvl = levelBlue - (int) (eps*lBlue.size());
-			int botLvl = levelBlue + (int) (eps*lBlue.size());
 			double tl = levelPos(leftb,true,topLvl);
 			double tr = levelPos(rightb,true,topLvl);
 			double bl = levelPos(leftb,true,botLvl);
