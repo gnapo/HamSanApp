@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import control.CrossingsListener;
 import control.DoAlgButtonListener;
 import control.ResetButtonListener;
+import control.ResetZoomListener;
 import control.ToggleListener;
 
 public class HamSanApplet extends JApplet {
@@ -44,12 +45,10 @@ public class HamSanApplet extends JApplet {
 		// the buttons
 		JButton startAlgButton = new JButton("Next Step");
 		startAlgButton.setVisible(true);
-		startAlgButton.setBounds(20,320,90,40);
 	    startAlgButton.setFocusable(false);
 	    startAlgButton.addActionListener(new DoAlgButtonListener(hsa, pp, lp));
 	    JButton resetButton = new JButton("Reset");
 		resetButton.setVisible(true);
-	    resetButton.setBounds(130,320,90,40);
 	    resetButton.setFocusable(false);
 	    resetButton.addActionListener(new ResetButtonListener(hsa, pp, lp));
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
@@ -59,11 +58,16 @@ public class HamSanApplet extends JApplet {
 	    crossingBox.setFocusable(false);
 	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
 	    
+	    JButton resetZoomButton = new JButton("Reset Zoom");
+	    resetZoomButton.setFocusable(false);
+	    resetZoomButton.addActionListener(new ResetZoomListener(lp));
+	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
 	    buttonPanel.add(startAlgButton);
 	    buttonPanel.add(resetButton);
 	    buttonPanel.add(crossingBox);
+	    buttonPanel.add(resetZoomButton);
 	    
 	    // the step label
 	    JLabel infoLabel = new JLabel("Step 0: Place the points! Yes! Now! Place them!");
