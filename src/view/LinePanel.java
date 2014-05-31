@@ -200,6 +200,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		corner2 = new Point2D.Double(e.getX(), e.getY());
+		
+		if (corner1.equals(corner2)) {
+			return;
+		}
 
 		// set new xmin, xmax, ymin, ymax
 		int x1 = (int) Math.min(corner1.x, corner2.x);
@@ -216,6 +220,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		xmax = aMax;
 		ymin = bMin;
 		ymax = bMax;
+		zoomFactor = 0;
 
 		corner1 = null;
 		corner2 = null;
