@@ -76,7 +76,6 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 			if (c.atInf()) {
 				continue;
 			}
-			System.out.println("a= " + c.crAt() + ", b = " + c.a.eval(c.crAt()));
 			double crossingA = c.crAt();
 			double crossingB = c.a.a * crossingA + c.a.b;
 			
