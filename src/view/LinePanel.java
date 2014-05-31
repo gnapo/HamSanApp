@@ -114,6 +114,14 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			g.setColor(Color.YELLOW);
 			drawZoomRectangle(g);
 		}
+		
+		g.setColor(Color.gray.brighter()); //draw vertical lines to distinguish intervals
+		
+		for (int i = Math.max(1, h.minband); i < h.maxband; i++) {
+			int x0 = (int) VisualPoint.aToX(h.borders[i], xmin, xmax, this.getSize());
+			g.drawLine(x0, 0, x0, this.getHeight());
+		}  
+		 
 
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);

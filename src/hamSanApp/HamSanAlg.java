@@ -33,13 +33,13 @@ public class HamSanAlg {
 	public boolean verticalSol;	//ist die Lï¿½sung eine Vertikale Linie?
 	public double verticalSolPos;	//position der vertikalen Lï¿½sung
 	public Point solution;			//position der nicht-vertikalen Lï¿½sung
-	double [] borders;		//positionen der grenzen zwischen streifen.
+	public double [] borders;		//positionen der grenzen zwischen streifen.
 								//konvention: borders[i] ist der linke rand von dem i-ten streifen und die streifen sind halboffen, linker punkt ist drin.
 	public List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
 	boolean DEBUG = true;
 	public Trapeze trapeze;	//das trapez (zum zeichnen)
-	int minband;		//
-	int maxband;		// zur binären suche auf den intervallen(bändern)
+	public int minband;		//
+	public int maxband;		// zur binären suche auf den intervallen(bändern)
 	public int step;	//in welchem shritt sind wir?
 						// 0: Ausgangssituation
 						// 1: Intervalle Eingeteilt
@@ -436,6 +436,7 @@ public class HamSanAlg {
 			// Collections.reverse(crossings);
 
 			// might work?
+			/*
 			if (DEBUG && false) {
 				// warning: cheating going on.
 				for (int i = 0; i < crossings.size(); i++) {
@@ -450,7 +451,7 @@ public class HamSanAlg {
 					}
 				}
 				System.out.println("aww :'(");
-			}
+			}*/
 
 			minband = 0;
 			maxband = 0; // wird ï¿½berschrieben.
@@ -543,6 +544,9 @@ public class HamSanAlg {
 			}
 			step++;
 			if (DEBUG) System.out.println("Trapez konstruiert");
+			borders = new double[64];
+			minband = 0;
+			maxband = 0;
 			break;
 		case 3:
 			
