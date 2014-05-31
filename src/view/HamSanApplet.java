@@ -31,7 +31,7 @@ public class HamSanApplet extends JApplet {
 	
 	HamSanAlg hsa;
 	
-	public HamSanApplet() {
+	public void init() {
 		this.setPreferredSize(new Dimension(1200,1000));
 		this.setLayout(new BorderLayout());
 		
