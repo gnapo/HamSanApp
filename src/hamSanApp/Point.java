@@ -178,14 +178,23 @@ package hamSanApp;
 							else {return 1*s;}
 						}//Fall, dass es nur drei Geraden gibt
 						//kleinster Index ist j und j kommt doppelt vor
-						if ( (smallindex==j.i)&& ((j.i==k.i)|| (j.i==l.i)) ){
+						if ( (smallindex==j.i)&& (j.i==k.i) ){
 							if ((l.a>j.a)&&(j.a>i.a)) {return -1*s;}
 							else {return 1*s;}
-						}//kleinster Index ist i und i kommt doppelt vor
-						if ( (smallindex==i.i)&& ((i.i==k.i)|| (i.i==l.i)) ){
+						}
+						if ( (smallindex==j.i)&& (j.i==l.i) ){
+							if ((k.a>j.a)&&(j.a>i.a)) {return -1*s;}
+							else {return 1*s;}
+						}
+						//kleinster Index ist i und i kommt doppelt vor
+						if ( (smallindex==i.i)&& ((i.i==k.i)) ){
 							if ((l.a>i.a)&&(i.a>j.a)) {return -1*s;}
 							else {return 1*s;}
 						}						
+						if ( (smallindex==i.i)&& ((i.i==l.i)) ){
+							if ((k.a>i.a)&&(i.a>j.a)) {return -1*s;}
+							else {return 1*s;}
+						}	
 						throw new Exception("no smallest index found, this shouldn't happen. :(, x values were "+x1+" and "+x2+" and our four lines were "+i+" "+j+" "+k+" "+l);
 					}
 				}

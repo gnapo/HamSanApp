@@ -10,6 +10,9 @@ import java.util.List;
 
 
 
+
+
+
 //import java.awt.*;
 import javax.swing.JFrame;
 
@@ -115,7 +118,23 @@ public class Sandwich {
 
 	}
 	
-	public static void main(String[] args) {
+	static public void Testopt2() throws Exception 
+	//static public boolean Testlevelpos() 
+	{   //boolean r =true;
+		HamSanAlg hsa = new HamSanAlg();
+		MyFrame f = new MyFrame(hsa);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Insets insets = f.getInsets();
+		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
+		f.setVisible(true);
+		Point a,b,c;
+		a=hsa.addLine(1,0,true);
+		b=hsa.addLine(0,1,true);
+		c=hsa.addLine(-1,2,true);
+		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(a,b,a,c));
+	}
+	
+	public static void main(String[] args) throws Exception {
 		//tests go here.
 		
 		//randomlines();
@@ -135,8 +154,6 @@ public class Sandwich {
 		Insets insets = f.getInsets();
 		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
 		f.setVisible(true);
-		
-		//System.out.println("Sortierung stimmt mit compareto überein "+Test_wellordered());
 	}
 
 }
