@@ -9,9 +9,11 @@ import java.awt.GridLayout;
 
 import javax.swing.JApplet;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import control.CrossingsListener;
 import control.DoAlgButtonListener;
 import control.ResetButtonListener;
 import control.ToggleListener;
@@ -58,10 +60,17 @@ public class HamSanApplet extends JApplet {
 	    resetButton.setBounds(130,320,90,40);
 	    resetButton.setFocusable(false);
 	    resetButton.addActionListener(new ResetButtonListener(hsa, pp));
+	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
+	    crossingBox.setEnabled(true);
+	    crossingBox.setSelected(true);
+	    crossingBox.setVisible(true);
+	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
+	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
 	    buttonPanel.add(startAlgButton);
 	    buttonPanel.add(resetButton);
+	    buttonPanel.add(crossingBox);
 	    
 	    // the step label
 	    JLabel infoLabel = new JLabel("Step 0: Place the points! Yes! Now! Place them!");
