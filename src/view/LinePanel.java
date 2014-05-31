@@ -230,7 +230,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	}
 	
-	public void setBounds(double xmin, double ymin, double xmax, double ymax) {
+	public void setMinAndMax(double xmin, double ymin, double xmax, double ymax) {
 		this.xmin = xmin;
 		this.xmax = xmax;
 		this.ymin = ymin;
