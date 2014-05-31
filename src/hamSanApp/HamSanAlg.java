@@ -325,14 +325,14 @@ public class HamSanAlg {
 		}
 		
 		if (lBlue.size() == 0) { //only red lines.
-			double rL = levelPos(0, false, (levelBlue));
+			double rL = levelPos(0, false, (levelRed));
 			solution = new Point(0,rL);
 			done = true;
 			firstRun = false;
 			return;
 		}
 		if (lRed.size() == 0) { //only red lines.
-			double bL = levelPos(0, true, (levelRed));
+			double bL = levelPos(0, true, (levelBlue));
 			solution = new Point(0,bL);
 			done = true;
 			firstRun = false;
