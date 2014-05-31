@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -112,11 +113,21 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		
 		if (corner1 != null && corner2 != null) {
 			g.setColor(Color.YELLOW);
-			g.drawRect((int) corner1.x, (int) corner1.y, (int) corner2.x - (int) corner1.x,(int) corner2.y - (int) corner1.y);
+			drawZoomRectangle(g);
 		}
 
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
+	}
+
+	private void drawZoomRectangle(Graphics g) {
+		int x1 = (int) Math.min(corner1.x, corner2.x);
+		int y1 = (int) Math.min(corner1.y, corner2.y);
+		int x2 = (int) Math.max(corner1.x, corner2.x);
+		int y2 = (int) Math.max(corner1.y, corner2.y);
+		int dx = x2-x1;
+		int dy = y2-y1;
+		g.drawRect(x1, y1, dx, dy);
 	}
 
 	@Override
@@ -191,26 +202,15 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		corner2 = new Point2D.Double(e.getX(), e.getY());
 
 		// set new xmin, xmax, ymin, ymax
-		int x1, y1, x2, y2;
-		if (corner1.x < corner2.x) {
-			x1 = (int) corner1.x;
-			x2 = (int) corner2.x;
-		} else {
-			x1 = (int) corner2.x;
-			x2 = (int) corner1.x;
-		}
-		if (corner1.y < corner2.y) {
-			y2 = (int) corner1.y;
-			y1 = (int) corner2.y;
-		} else {
-			y2 = (int) corner2.y;
-			y1 = (int) corner1.y;
-		}
-
+		int x1 = (int) Math.min(corner1.x, corner2.x);
+		int y1 = (int) Math.min(corner1.y, corner2.y);
+		int x2 = (int) Math.max(corner1.x, corner2.x);
+		int y2 = (int) Math.max(corner1.y, corner2.y);
+		
 		double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
 		double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
-		double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
-		double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
+		double bMax = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
+		double bMin = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
 
 		xmin = aMin;
 		xmax = aMax;
