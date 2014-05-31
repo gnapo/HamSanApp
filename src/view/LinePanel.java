@@ -51,15 +51,15 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 	}
 
 	public void drawPoint(Graphics g, int x, int y) {
-		g.drawOval(x - 2, y - 2, 4, 4);
+		g.fillOval(x - 2, y - 2, 4, 4);
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		drawCross(g);
-		int xscale = this.getWidth() / (xmax - xmin);
-		int yscale = this.getHeight() / (ymax - ymin);
+		double xscale = this.getWidth() / (xmax - xmin);
+		double yscale = this.getHeight() / (ymax - ymin);
 
 		for (VisualPoint p : visualPoints) {
 			p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
@@ -72,8 +72,10 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 		 */
 		for (int i = 0; i < h.crossings.size(); ++i) {
 			if (h.crossings.get(i).atInf()) {
+				System.out.println("at infinity");
 				continue;
 			}
+			//System.out.println("A crossing");
 			double dx = ((h.crossings.get(i).crAt()) - xmin) * xscale;
 			double dy = ((-h.crossings.get(i).a.eval(h.crossings.get(i).crAt())) + ymax) * yscale;
 			drawPoint(g, (int) dx, (int) dy);
@@ -102,10 +104,7 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 				break;
 			}
 		}
-
-		this.revalidate();
 		this.repaint();
-		pointPanel.revalidate();
 		pointPanel.repaint();
 	}
 
