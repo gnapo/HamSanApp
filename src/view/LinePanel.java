@@ -84,6 +84,16 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 			
 			drawPoint(g, (int) asXY.x, (int) asXY.y);
 		}
+		
+		g.setColor(Color.magenta);
+		if (h.done) {
+			Point2D.Double cutAB = new Point2D.Double(h.solution.a, h.solution.b);
+			Point2D.Double cutXY = VisualPoint.toXY(cutAB, xmin, ymin, xmax, ymax, this.getSize());
+			int x = (int) cutXY.x;
+			int y = (int) cutXY.y;
+			
+			g.fillOval(x-4, y-4, 8, 8);
+		}
 
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
