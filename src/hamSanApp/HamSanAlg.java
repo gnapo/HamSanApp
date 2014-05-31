@@ -289,7 +289,7 @@ public class HamSanAlg {
 	 * Funktion, die errechnet, ob im unbeschr�nkten bereich links die blaue medianlinie �ber der Roten ist
 	 * @return true falls ja
 	 */
-	public boolean blueTopLeft() {
+	public boolean blueTopLeft() { //todo Testme
 		LineComparator2 c = new LineComparator2();
 		
 		List<Point> blueLoc = new ArrayList<Point>(lBlue);
@@ -299,6 +299,18 @@ public class HamSanAlg {
 		return 1 == c.compare(blueLoc.get(levelBlue-1), redLoc.get(levelRed-1));
 	}
 	
+	public double getslope(boolean blue, int level) { //TODO testme
+		LineComparator2 c = new LineComparator2();
+		List<Point> col;
+		if (blue) {
+			col = new ArrayList<Point>(lBlue);
+		}
+		else {
+			col = new ArrayList<Point>(lRed);
+		}
+		Collections.sort(col, c);
+		return col.get(level).a;
+	}
 	
 	/**
 	 * der eigentliche Algorithmus. ein ausf�hren dieses Algorithmus stellt einen
