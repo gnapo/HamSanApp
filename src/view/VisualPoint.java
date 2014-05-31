@@ -206,4 +206,16 @@ public class VisualPoint {
         	g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
 		}
 	}
+
+	public double getA() {
+		return this.a;
+	}
+	
+	public double getB() {
+		return this.b;
+	}
+
+	public boolean isBlue() {
+		return this.type == PointType.BLUE;
+	}
 }
