@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -22,6 +23,8 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	private boolean addingAllowed = true;
 	
 	private List<VisualPoint> visualPoints;
+	
+	private VisualPoint highlightedPoint = null;
 	
 	private LinePanel linePanel;
 	
@@ -88,9 +91,9 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			} else {
 				visualPoints.add(candidate);
 				if (type == PointType.BLUE) {
-					h.addLine(a, b, true);
+					candidate.setMyPoint(h.addLine(a, b, true));
 				} else {
-					h.addLine(a, b, false);
+					candidate.setMyPoint(h.addLine(a, b, false));
 				}
 				System.out.println(visualPoints.size());
 				this.refreshAll();
@@ -176,8 +179,14 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		this.addingAllowed = addingAllowed;
 	}
 
+
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void mouseDragged(MouseEvent e) {
+		if (highlightedPoint != null && addingAllowed) {
+			highlightedPoint.setXY(new Point2D.Double(e.getX(),  e.getY()), xmin, ymin, xmax, ymax, this.getSize());
+			repaint();
+		}
+		
 		// TODO Auto-generated method stub
 		
 	}
@@ -185,6 +194,8 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
+		highlightedPoint = null;
+		
 		for (VisualPoint v : visualPoints) {
 			v.highlighted = false;
 		}
@@ -192,6 +203,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		for (VisualPoint v : visualPoints) {
 			if (v.containsCursorPoint(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
 				v.highlighted = true;
+				highlightedPoint = v;
 				linePanel.setVisualPoints(visualPoints);
 			}
 		}

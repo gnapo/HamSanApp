@@ -76,15 +76,16 @@ public class HamSanAlg {
 	 * @param y zweite koordinate
 	 * @param blue ist es eine blaus linie?
 	 */
-	public boolean addLine(double x, double y, boolean blue){
-		if (!firstRun) {return false;}
+	public Point addLine(double x, double y, boolean blue){
+		if (!firstRun) {return null;}
+		Point p = new Point(x, y);
 		if (blue){
-			lBlue.add(new Point(x, y));
+			lBlue.add(p);
 		}
 		else {
-			lRed.add(new Point(x, y));
+			lRed.add(p);
 		}
-		return true;
+		return p;
 	}
 	
 	/**
@@ -485,40 +486,40 @@ public class HamSanAlg {
 		List<VisualPoint> result = new ArrayList<VisualPoint>();
 		for (Point p : lBlue) {
 			if (colorSwap) {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false, p);
 				result.add(newPoint);
 			} else {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false, p);
 				result.add(newPoint);
 			}
 		}
 		
 		for (Point p : lRed) {
 			if (colorSwap) {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, false, p);
 				result.add(newPoint);
 			} else {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, false, p);
 				result.add(newPoint);
 			}
 		}
 		
 		for (Point p : lBlueDel) {
 			if (colorSwap) {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true, p);
 				result.add(newPoint);
 			} else {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true, p);
 				result.add(newPoint);
 			}
 		}
 		
 		for (Point p : lRedDel) {
 			if (colorSwap) {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.BLUE, true, p);
 				result.add(newPoint);
 			} else {
-				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true);
+				VisualPoint newPoint = new VisualPoint(p.a, p.b, PointType.RED, true, p);
 				result.add(newPoint);
 			}
 		}

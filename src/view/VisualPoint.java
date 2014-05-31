@@ -15,12 +15,30 @@ public class VisualPoint {
 	private PointType type;
 	public boolean deleted; // points not used in the algorithm
 	public boolean highlighted;
+	private hamSanApp.Point myPoint;
 	
 	public VisualPoint(double a, double b, PointType type, boolean deleted) {
 		this.a = a;
 		this.b = b;
 		this.type = type;
 		this.deleted = deleted;
+		this.myPoint = null;
+	}
+	
+	public VisualPoint(double a, double b, PointType type, boolean deleted, hamSanApp.Point p) {
+		this.a = a;
+		this.b = b;
+		this.type = type;
+		this.deleted = deleted;
+		this.myPoint = p;
+	}
+	
+	public hamSanApp.Point getMyPoint() {
+		return myPoint;
+	}
+	
+	public void setMyPoint(hamSanApp.Point p) {
+		this.myPoint = p;
 	}
 	
 	/**
@@ -85,6 +103,12 @@ public class VisualPoint {
 		double b = ((double) -pointXY.y / yscale) - ymin;
 		Point2D.Double p = new Point2D.Double(a, b);
 		return p;
+	}
+	
+	public void setXY(Point2D.Double pointXY, double xmin, double ymin, double xmax, double ymax, Dimension componentSize) {
+		Point2D.Double pointAB = toAB(pointXY, xmin, ymin, xmax, ymax, componentSize);
+		this.a = pointAB.x;
+		this.b = pointAB.y;
 	}
 	
 	public double evaluate(double value) {
