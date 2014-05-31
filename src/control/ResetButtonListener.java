@@ -5,17 +5,20 @@ import hamSanApp.HamSanAlg;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import view.LinePanel;
 import view.PointPanel;
 import view.PointType;
 
 public class ResetButtonListener implements ActionListener {
 
 	private HamSanAlg hsa;
-	PointPanel pp;
+	private PointPanel pp;
+	private LinePanel lp;
 	
-	public ResetButtonListener(HamSanAlg hsa, PointPanel pp) {
+	public ResetButtonListener(HamSanAlg hsa, PointPanel pp, LinePanel lp) {
 		this.hsa = hsa;
 		this.pp = pp;
+		this.lp = lp;
 	}
 	
 	@Override
@@ -23,6 +26,7 @@ public class ResetButtonListener implements ActionListener {
 		hsa.init();
 		pp.setAddingAllowed(true);
 		pp.setVisualPoints(hsa.getVisualPoints());
+		lp.setZoomFactor(0);
 		pp.refreshAll();
 		pp.setCurrentType(PointType.BLUE);
 	}

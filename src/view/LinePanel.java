@@ -5,8 +5,11 @@ import hamSanApp.HamSanAlg;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 import java.util.List;
 
@@ -14,18 +17,19 @@ import javax.swing.JPanel;
 
 //import java.util.Date;
 
-public class LinePanel extends JPanel implements MouseMotionListener {
+public class LinePanel extends JPanel implements MouseMotionListener, MouseWheelListener {
 	/**
 	 * I have no Idea what this is or why i need it
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public HamSanAlg h;
-	public int xmin = -10;
-	public int xmax = 10;
-	public int ymin = -10;
-	public int ymax = 10;
-
+	private HamSanAlg h;
+	private int xmin = -10;
+	private int xmax = 10;
+	private int ymin = -10;
+	private int ymax = 10;
+	private double zoomFactor = 0;
+	
 	private boolean showCrossings = true;
 
 	private PointPanel pointPanel;
@@ -36,6 +40,7 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 		h = hsa;
 		visualPoints = hsa.getVisualPoints();
 		this.addMouseMotionListener(this);
+		this.addMouseWheelListener(this);
 	}
 
 	public void setPointPanel(PointPanel pp) {
@@ -62,17 +67,9 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		drawCross(g);
-		double xscale = this.getWidth() / (xmax - xmin);
-		double yscale = this.getHeight() / (ymax - ymin);
-
 		for (VisualPoint p : visualPoints) {
 			p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
 		}
-		
-		/*
-		 * Date d = new Date(); long upto = d.getSeconds() % h.crossings.size();
-		 * System.out.println(upto); System.out.println(h.crossings.size());//
-		 */
 
 		if (showCrossings) {
 			g.setColor(Color.GREEN);
@@ -107,7 +104,6 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
-
 	}
 
 	@Override
@@ -139,6 +135,36 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 
 	public void setShowCrossings(boolean showCrossings) {
 		this.showCrossings = showCrossings;
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		double zoom = zoomFactor + e.getPreciseWheelRotation();
+		this.setZoomFactor(zoom);
+		this.repaint();
+	}
+	
+	public void setZoomFactor(double zoomFactor) {
+		this.zoomFactor = zoomFactor;
+		System.out.println(zoomFactor);
+		if (zoomFactor == 0) {
+			xmin = -10;
+			xmax = 10;
+			ymin = -10;
+			ymax = 10;
+		} else if (zoomFactor > 0) {
+			xmin = (int) (zoomFactor * -10);
+			xmax = (int) (zoomFactor * 10);
+			ymin = (int) (zoomFactor * -10);
+			ymax = (int) (zoomFactor * 10);
+		} else {
+			double absZoom = Math.abs(zoomFactor);
+			xmin = (int) (1/absZoom * -10);
+			xmax = (int) (1/absZoom * 10);
+			ymin = (int) (1/absZoom * -10);
+			ymax = (int) (1/absZoom * 10);
+		}
+		this.repaint();
 	}
 	
 }

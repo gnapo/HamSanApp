@@ -23,24 +23,16 @@ public class HamSanApplet extends JApplet {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6118920217871814528L;
-	
-	PointPanel pp;
-	LinePanel lp;
-	
-	JButton startAlgButton;
-	JButton resetButton;
-	
-	HamSanAlg hsa;
-	
+	private static final long serialVersionUID = 6049999518358173580L;
+
 	public void init() {
 		this.setPreferredSize(new Dimension(1200,1000));
 		this.setLayout(new BorderLayout());
 		
 		// the dual panels
-		hsa = new HamSanAlg();
-		lp = new LinePanel(hsa);
-		pp = new PointPanel(hsa,lp);
+		HamSanAlg hsa = new HamSanAlg();
+		LinePanel lp = new LinePanel(hsa);
+		PointPanel pp = new PointPanel(hsa,lp);
 		lp.setPointPanel(pp);
 		pp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
 		lp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
@@ -50,21 +42,22 @@ public class HamSanApplet extends JApplet {
 		dualPanels.add(lp);
 		
 		// the buttons
-		startAlgButton = new JButton("Next Step");
+		JButton startAlgButton = new JButton("Next Step");
 		startAlgButton.setVisible(true);
 		startAlgButton.setBounds(20,320,90,40);
 	    startAlgButton.setFocusable(false);
 	    startAlgButton.addActionListener(new DoAlgButtonListener(hsa, pp, lp));
-		resetButton = new JButton("Reset");
+	    JButton resetButton = new JButton("Reset");
 		resetButton.setVisible(true);
 	    resetButton.setBounds(130,320,90,40);
 	    resetButton.setFocusable(false);
-	    resetButton.addActionListener(new ResetButtonListener(hsa, pp));
+	    resetButton.addActionListener(new ResetButtonListener(hsa, pp, lp));
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
 	    crossingBox.setSelected(true);
 	    crossingBox.setVisible(true);
-	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp, this));
+	    crossingBox.setFocusable(false);
+	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
 	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
@@ -86,8 +79,6 @@ public class HamSanApplet extends JApplet {
 	    this.addKeyListener(new ToggleListener(pp));
 	    setFocusable(true);
 	    this.requestFocus();
-		
-	    //this.pack();
 	}
 
 }
