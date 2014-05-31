@@ -44,7 +44,7 @@ public class HamSanAlg {
 	/**
 	 * Konstruktor, macht nichts besonderes.
 	 */
-	HamSanAlg(){
+	public HamSanAlg(){
 		init();
 	}
 	
