@@ -26,6 +26,8 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 	public int ymin = -10;
 	public int ymax = 10;
 
+	private boolean showCrossings = true;
+
 	private PointPanel pointPanel;
 
 	private List<VisualPoint> visualPoints;
@@ -72,27 +74,30 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 		 * Date d = new Date(); long upto = d.getSeconds() % h.crossings.size();
 		 * System.out.println(upto); System.out.println(h.crossings.size());//
 		 */
-		for (Crossing c : h.crossings) {
-			if (c.atInf()) {
-				continue;
+
+		if (showCrossings) {
+			for (Crossing c : h.crossings) {
+				if (c.atInf()) {
+					continue;
+				}
+				double crossingA = c.crAt();
+				double crossingB = c.a.a * crossingA + c.a.b;
+
+				Point2D.Double asAB = new Point2D.Double(crossingA, crossingB);
+				Point2D.Double asXY = VisualPoint.toXY(asAB, xmin, ymin, xmax, ymax, this.getSize());
+
+				drawPoint(g, (int) asXY.x, (int) asXY.y);
 			}
-			double crossingA = c.crAt();
-			double crossingB = c.a.a * crossingA + c.a.b;
-			
-			Point2D.Double asAB = new Point2D.Double(crossingA, crossingB);
-			Point2D.Double asXY = VisualPoint.toXY(asAB, xmin, ymin, xmax, ymax, this.getSize());
-			
-			drawPoint(g, (int) asXY.x, (int) asXY.y);
 		}
-		
+
 		g.setColor(Color.magenta);
 		if (h.done) {
 			Point2D.Double cutAB = new Point2D.Double(-h.solution.a, h.solution.b);
 			Point2D.Double cutXY = VisualPoint.toXY(cutAB, xmin, ymin, xmax, ymax, this.getSize());
 			int x = (int) cutXY.x;
 			int y = (int) cutXY.y;
-			
-			g.fillOval(x-4, y-4, 8, 8);
+
+			g.fillOval(x - 4, y - 4, 8, 8);
 		}
 
 		g.setColor(Color.black);
@@ -123,4 +128,12 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 		pointPanel.repaint();
 	}
 
+	public boolean isShowCrossings() {
+		return showCrossings;
+	}
+
+	public void setShowCrossings(boolean showCrossings) {
+		this.showCrossings = showCrossings;
+	}
+	
 }
