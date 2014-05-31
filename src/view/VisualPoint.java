@@ -89,10 +89,22 @@ public class VisualPoint {
 		return asX;
 	}
 	
+	public static double bToY(double value, double ymin, double ymax, Dimension componentSize) {
+		double yscale = componentSize.getHeight() / (ymax - ymin);
+		double asY = (-value + ymax) * yscale;
+		return asY;
+	}
+	
 	public static double xToA(double value, double xmin, double xmax, Dimension componentSize) {
 		double xscale = componentSize.getWidth() / (xmax - xmin);
 		double asA = ((double) value / xscale) + xmin;
 		return asA;
+	}
+	
+	public static double yToB(double value, double ymin, double ymax, Dimension componentSize) {
+		double yscale = componentSize.getHeight() / (ymax - ymin);
+		double asB = ((double) -value / yscale) - ymin;
+		return asB;
 	}
 	
 	public static Point2D.Double toAB(Point2D.Double pointXY, double xmin, double ymin, double xmax, double ymax, Dimension componentSize) {
