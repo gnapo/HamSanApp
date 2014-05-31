@@ -49,10 +49,8 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	}
 	
 	public void refreshAll() {
-		this.revalidate();
 		this.repaint();
 		linePanel.setVisualPoints(visualPoints);
-		linePanel.revalidate();
 		linePanel.repaint();
 	}
 	
@@ -95,7 +93,6 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 				} else {
 					candidate.setMyPoint(h.addLine(a, b, false));
 				}
-				System.out.println(visualPoints.size());
 				this.refreshAll();
 				return true;
 			}
