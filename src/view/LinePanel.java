@@ -60,10 +60,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		g.setColor(Color.gray);
-		
+
 		int x0 = (int) VisualPoint.aToX(0, xmin, xmax, this.getSize());
 		int y0 = (int) VisualPoint.bToY(0, ymin, ymax, this.getSize());
-		
+
 		g.drawLine(0, y0, this.getWidth(), y0);
 		g.drawLine(x0, 0, x0, this.getHeight());
 	}
@@ -110,7 +110,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 			g.fillOval(x - 4, y - 4, 8, 8);
 		}
-		
+
 		if (corner1 != null && corner2 != null) {
 			g.setColor(Color.YELLOW);
 			drawZoomRectangle(g);
@@ -125,8 +125,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		int y1 = (int) Math.min(corner1.y, corner2.y);
 		int x2 = (int) Math.max(corner1.x, corner2.x);
 		int y2 = (int) Math.max(corner1.y, corner2.y);
-		int dx = x2-x1;
-		int dy = y2-y1;
+		int dx = x2 - x1;
+		int dy = y2 - y1;
 		g.drawRect(x1, y1, dx, dy);
 	}
 
@@ -188,43 +188,47 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		corner1 = new Point2D.Double(e.getX(), e.getY());
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			corner1 = new Point2D.Double(e.getX(), e.getY());
+		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		corner2 = new Point2D.Double(e.getX(), e.getY());
-		this.repaint();
+			corner2 = new Point2D.Double(e.getX(), e.getY());
+			this.repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		corner2 = new Point2D.Double(e.getX(), e.getY());
-		
-		if (corner1.equals(corner2)) {
-			return;
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			corner2 = new Point2D.Double(e.getX(), e.getY());
+
+			if (corner1.equals(corner2)) {
+				return;
+			}
+
+			// set new xmin, xmax, ymin, ymax
+			int x1 = (int) Math.min(corner1.x, corner2.x);
+			int y1 = (int) Math.min(corner1.y, corner2.y);
+			int x2 = (int) Math.max(corner1.x, corner2.x);
+			int y2 = (int) Math.max(corner1.y, corner2.y);
+
+			double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
+			double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
+			double bMax = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
+			double bMin = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
+
+			xmin = aMin;
+			xmax = aMax;
+			ymin = bMin;
+			ymax = bMax;
+			zoomFactor = 0;
+
+			corner1 = null;
+			corner2 = null;
+			this.repaint();
 		}
-
-		// set new xmin, xmax, ymin, ymax
-		int x1 = (int) Math.min(corner1.x, corner2.x);
-		int y1 = (int) Math.min(corner1.y, corner2.y);
-		int x2 = (int) Math.max(corner1.x, corner2.x);
-		int y2 = (int) Math.max(corner1.y, corner2.y);
-		
-		double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
-		double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
-		double bMax = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
-		double bMin = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
-
-		xmin = aMin;
-		xmax = aMax;
-		ymin = bMin;
-		ymax = bMax;
-		zoomFactor = 0;
-
-		corner1 = null;
-		corner2 = null;
-		this.repaint();
 	}
 
 	@Override
@@ -238,7 +242,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void setMinAndMax(double xmin, double ymin, double xmax, double ymax) {
 		this.xmin = xmin;
 		this.xmax = xmax;
