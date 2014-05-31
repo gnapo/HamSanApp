@@ -37,7 +37,14 @@ public class HamSanAlg {
 								//konvention: borders[i] ist der linke rand von dem i-ten streifen und die streifen sind halboffen, linker punkt ist drin.
 	public List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
 	boolean DEBUG = true;
-	public Trapeze trapeze;
+	public Trapeze trapeze;	//das trapez (zum zeichnen)
+	int minband;		//
+	int maxband;		// zur binären suche auf den intervallen(bändern)
+	public int step;	//in welchem shritt sind wir?
+						// 0: Ausgangssituation
+						// 1: Intervalle Eingeteilt
+						// 2: Richtiges Intervall rausgesucht
+						// 3: Trapez konstruiert
 	
 	final double alpha = 1.0d/32.0d; 	//
 	final double eps = 1.0d/8.0d;		//Konstanten fï¿½r den Alg
@@ -69,6 +76,9 @@ public class HamSanAlg {
 		borders = new double[64];
 		crossings = new ArrayList<Crossing>();
 		trapeze = null;
+		step = 0;
+		maxband = 0;
+		minband = 0;
 	}
 	
 	/**
@@ -322,235 +332,247 @@ public class HamSanAlg {
 		if (lBlue.size() == 0 && lRed.size() == 0) {
 			return; //nix zu tun!
 		}
+		switch (step) {
 		
-		if (firstRun) {
-			//make sure that both sets are odd by deleting a point out of each set:
-			if (((lBlue.size()%2) == 0)&&lBlue.size()>0) {
-				hideLine(lBlue.get(0));
+		case 0:
+			
+			if (firstRun) {
+				// make sure that both sets are odd by deleting a point out of
+				// each set:
+				if (((lBlue.size() % 2) == 0) && lBlue.size() > 0) {
+					hideLine(lBlue.get(0));
+				}
+				if (((lRed.size() % 2) == 0) && lRed.size() > 0) {
+					hideLine(lRed.get(0));
+				}
+				// set the levelBlue and levelRed to the correct values:
+				levelBlue = ((lBlue.size() + 1) / 2);
+				levelRed = ((lRed.size() + 1) / 2);
+				firstRun = false; // so we don't change the points, and only do
+									// this once
 			}
-			if (((lRed.size()%2) == 0)&&lRed.size()>0) {
-				hideLine(lRed.get(0));
-			}
-			//set the levelBlue and levelRed to the correct values:
-			levelBlue = ((lBlue.size()+1)/2);
-			levelRed = ((lRed.size()+1)/2);
-			firstRun = false; //so we don't change the points, and only do this once
-		}
-		
-		if (lBlue.size() == 0) { //only red lines.
-			double rL = levelPos(0, false, (levelRed));
-			solution = new Point(0,rL);
-			done = true;
-			firstRun = false;
-			return;
-		}
-		if (lRed.size() == 0) { //only red lines.
-			double bL = levelPos(0, true, (levelBlue));
-			solution = new Point(0,bL);
-			done = true;
-			firstRun = false;
-			return;
-		}
-		
-		
-		
-		//check if trivial solution:
-		if (lBlue.size()==1 && lRed.size()==1) {
-			Point b = lBlue.get(0);
-			Point r = lRed.get(0);
-			//do we need a vertical line?
-			if (b.a == r.a) { //TODO das hier testen
+
+			if (lBlue.size() == 0) { // only red lines.
+				double rL = levelPos(0, false, (levelRed));
+				solution = new Point(0, rL);
 				done = true;
-				verticalSol = true;
-				verticalSolPos = b.a;
+				firstRun = false;
 				return;
 			}
-			done = true;
-			//find intersection point and return that. done!
-			//double sl = (b.b-r.b)/(b.a-r.a);
-			//solution = new Point(sl,r.b-r.a*sl);
-			//or should it be:
-			Crossing c = new Crossing(r, b);
-			solution = new Point(-c.crAt(),r.eval(c.crAt()));
-			return;
-		}
-		
-		// swap the lines if blue is smaller:
-		if (lBlue.size() < lRed.size()) {
-			colorSwap = !colorSwap;
-			List<Point> temp = lBlue;
-			lBlue = lRed;
-			lRed = temp;
-			temp = lBlueDel;
-			lBlueDel = lRedDel;
-			lRedDel = temp;
-			int tempint = levelBlue;
-			levelBlue = levelRed;
-			levelRed = tempint;
-		}
-		
-		//generate all the crossings:
-		crossings = new ArrayList<Crossing>();
-		for (int i = 0; i < lBlue.size();i++) {
-			for (int j = i+1; j < lBlue.size();j++){
-				Crossing c = new Crossing(lBlue.get(i),lBlue.get(j));
-				if (inBorders(c)) {
-					crossings.add(c);
-				}
+			if (lRed.size() == 0) { // only red lines.
+				double bL = levelPos(0, true, (levelBlue));
+				solution = new Point(0, bL);
+				done = true;
+				firstRun = false;
+				return;
 			}
-		}
-		for (int i = 0; i < lBlue.size();i++) {
-			for (int j = 0; j < lRed.size();j++){
-				Crossing c = new Crossing(lBlue.get(i),lRed.get(j));
-				if (inBorders(c)) {
-					crossings.add(c);
-				}
-			}
-		}
-		for (int i = 0; i < lRed.size();i++) {
-			for (int j = i+1; j < lRed.size();j++){
-				Crossing c = new Crossing(lRed.get(i),lRed.get(j));
-				if (inBorders(c)) {
-					crossings.add(c);
-				}
-			}
-		}
-		
-		
-		//sort them. crossings implements comparable.
-		
-		//make stripes with at most alpha*(n choose 2) crossings a piece.
-		Collections.sort(crossings);
-		//Collections.reverse(crossings);
-		
-		//might work?
-		if (DEBUG && false) {
-			//warning: cheating going on.
-			for (int i = 0; i < crossings.size(); i++) {
-				double pos = crossings.get(i).crAt();
-				if (levelPos(pos,true,levelBlue)==levelPos(pos,false,levelRed)) {
-					System.out.println("yayy!");
+
+			// check if trivial solution:
+			if (lBlue.size() == 1 && lRed.size() == 1) {
+				Point b = lBlue.get(0);
+				Point r = lRed.get(0);
+				// do we need a vertical line?
+				if (b.a == r.a) { // TODO das hier testen
 					done = true;
-					solution = new Point(-pos,levelPos(pos, true, levelBlue));
+					verticalSol = true;
+					verticalSolPos = b.a;
 					return;
 				}
-			}
-			System.out.println("aww :'(");
-		}
-		
-		
-		int minband = 0;
-		int maxband = 0; //wird ï¿½berschrieben.
-		int band = 1;
-		int bandsize = (int) (crossings.size()*alpha);
-		bandsize = Math.max(1, bandsize); 
-		//System.out.println(crossings.size());
-		//System.out.println(bandsize);
-		for (int i = bandsize; i < crossings.size();i+=bandsize){ //TODO many crossings at inf
-			/*
-			while (crossings.get(i).atInf() && crossings.get(i).atNegInf()) {i++;} // only need for ugly cases, test later
-			if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
-				while (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
-					i--;
-				}
-				borders[band] = crossings.get(i).crAt();
-				maxband = band;
-				break;
-			}*/
-			borders[band] = crossings.get(i).crAt();
-			band++;
-			maxband = band;
-		}
-		
-		//find strip with odd number of intersections by binary search:		
-		boolean bluetop = blueTopLeft();
-		while ((maxband-minband) > 1) { 
-			int testband = minband+(maxband-minband)/2;
-			int bluetesttop = blueTop(borders[testband]);
-			if (bluetop == (bluetesttop==1)) {
-				minband = testband;
-				leftborder = true;
-			}
-			else if (bluetop == (bluetesttop==-1)) {
-				maxband = testband;
-				rightborder = true;
-			}
-			else if (bluetesttop ==0) { //we have a winner!
-			System.out.println("schnittpunkt gefunden!");
 				done = true;
-				solution = new Point(-borders[testband],levelPos(borders[testband], true, levelBlue));
+				// find intersection point and return that. done!
+				// double sl = (b.b-r.b)/(b.a-r.a);
+				// solution = new Point(sl,r.b-r.a*sl);
+				// or should it be:
+				Crossing c = new Crossing(r, b);
+				solution = new Point(-c.crAt(), r.eval(c.crAt()));
 				return;
 			}
-		}
-		
 
-		//grenzen nur setzen, falls wir wissen, dass da welche sind. 
-		if (leftborder) {
-			leftb = borders[minband];
-		}
-		if (rightborder) {
-			rightb = borders[maxband];
-		}
-		
-		if (!leftborder && !rightborder) {
-			System.out.println("nope, this shouldn't ever happen. no bounds were set. do we even have crossings?");
-			return;
-		}
-		
-		
-		int topLvl = levelBlue - (int) (eps*lBlue.size());
-		int botLvl = levelBlue + (int) (eps*lBlue.size());		
-		if (!leftborder || !rightborder) {
-			
-			if (!leftborder){ //nach rechts offen
-				double tr = levelPos(rightb,true,topLvl);
-				double br = levelPos(rightb,true,botLvl);
-				double ts = getslope(true, topLvl);
-				double bs = getslope(true, botLvl);
-				trapeze = new Trapeze(true,rightb,tr,br,ts,bs);
-			}
-			else if (!rightborder) { //nach links offen
-				double tr = levelPos(rightb,true,topLvl);
-				double br = levelPos(rightb,true,botLvl);
-				double ts = getslope(true, topLvl);
-				double bs = getslope(true, botLvl);
-				trapeze = new Trapeze(true,rightb,tr,br,ts,bs);
+			// swap the lines if blue is smaller:
+			if (lBlue.size() < lRed.size()) {
+				colorSwap = !colorSwap;
+				List<Point> temp = lBlue;
+				lBlue = lRed;
+				lRed = temp;
+				temp = lBlueDel;
+				lBlueDel = lRedDel;
+				lRedDel = temp;
+				int tempint = levelBlue;
+				levelBlue = levelRed;
+				levelRed = tempint;
 			}
 
-		}
-		else {
-			double tl = levelPos(leftb,true,topLvl);
-			double tr = levelPos(rightb,true,topLvl);
-			double bl = levelPos(leftb,true,botLvl);
-			double br = levelPos(rightb,true,botLvl);
-			trapeze  = new Trapeze(leftb, tl, bl, rightb, tr, br);
-		}
-		//cut away lines, count and make sure levelB/R are correct:
-		for (int i = 0; i < lBlue.size();) {
-			int s = trapeze.intersects(lBlue.get(i));
-			if (s != 0) {
-				if (s > 0) {
-					levelBlue --;
-				} 
-				hideLine(lBlue.get(i));
-			}
-			else {
-				i++;
-			}
-		}
-		for (int i = 0; i < lRed.size();) {
-			int s = trapeze.intersects(lRed.get(i));
-			if (s != 0) {
-				if (s > 0) {
-					levelRed --;
+			// generate all the crossings:
+			crossings = new ArrayList<Crossing>();
+			for (int i = 0; i < lBlue.size(); i++) {
+				for (int j = i + 1; j < lBlue.size(); j++) {
+					Crossing c = new Crossing(lBlue.get(i), lBlue.get(j));
+					if (inBorders(c)) {
+						crossings.add(c);
+					}
 				}
-				hideLine(lRed.get(i));
 			}
-			else {
-				i++;
+			for (int i = 0; i < lBlue.size(); i++) {
+				for (int j = 0; j < lRed.size(); j++) {
+					Crossing c = new Crossing(lBlue.get(i), lRed.get(j));
+					if (inBorders(c)) {
+						crossings.add(c);
+					}
+				}
 			}
+			for (int i = 0; i < lRed.size(); i++) {
+				for (int j = i + 1; j < lRed.size(); j++) {
+					Crossing c = new Crossing(lRed.get(i), lRed.get(j));
+					if (inBorders(c)) {
+						crossings.add(c);
+					}
+				}
+			}
+
+			// sort them. crossings implements comparable.
+
+			// make stripes with at most alpha*(n choose 2) crossings a piece.
+			Collections.sort(crossings);
+			// Collections.reverse(crossings);
+
+			// might work?
+			if (DEBUG && false) {
+				// warning: cheating going on.
+				for (int i = 0; i < crossings.size(); i++) {
+					double pos = crossings.get(i).crAt();
+					if (levelPos(pos, true, levelBlue) == levelPos(pos, false,
+							levelRed)) {
+						System.out.println("yayy!");
+						done = true;
+						solution = new Point(-pos, levelPos(pos, true,
+								levelBlue));
+						return;
+					}
+				}
+				System.out.println("aww :'(");
+			}
+
+			minband = 0;
+			maxband = 0; // wird ï¿½berschrieben.
+			int band = 1;
+			int bandsize = (int) (crossings.size() * alpha);
+			bandsize = Math.max(1, bandsize);
+			// System.out.println(crossings.size());
+			// System.out.println(bandsize);
+			for (int i = bandsize; i < crossings.size(); i += bandsize) { // TODO many crossings at inf
+				/*
+				 * while (crossings.get(i).atInf() &&
+				 * crossings.get(i).atNegInf()) {i++;} // only need for ugly
+				 * cases, test later if (crossings.get(i).atInf() &&
+				 * !crossings.get(i).atNegInf()) { while
+				 * (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
+				 * i--; } borders[band] = crossings.get(i).crAt(); maxband =
+				 * band; break; }
+				 */
+				borders[band] = crossings.get(i).crAt();
+				band++;
+				maxband = band;
+			}
+			step ++;
+			if (DEBUG) System.out.println("Intervalle eingeteilt!");
+			break;
+		case 1:
+			// find strip with odd number of intersections by binary search:
+			boolean bluetop = blueTopLeft();
+			while ((maxband - minband) > 1) {
+				int testband = minband + (maxband - minband) / 2;
+				int bluetesttop = blueTop(borders[testband]);
+				if (bluetop == (bluetesttop == 1)) {
+					minband = testband;
+					leftborder = true;
+				} else if (bluetop == (bluetesttop == -1)) {
+					maxband = testband;
+					rightborder = true;
+				} else if (bluetesttop == 0) { // we have a winner!
+					System.out.println("schnittpunkt gefunden!");
+					done = true;
+					solution = new Point(-borders[testband], levelPos(
+							borders[testband], true, levelBlue));
+					return;
+				}
+
+			}
+			step ++;
+			if (DEBUG) System.out.println("Richtiges Intervall rausgesucht");
+			break;
+		case 2:
+
+			// grenzen nur setzen, falls wir wissen, dass da welche sind.
+			if (leftborder) {
+				leftb = borders[minband];
+			}
+			if (rightborder) {
+				rightb = borders[maxband];
+			}
+
+			if (!leftborder && !rightborder) {
+				System.out
+						.println("nope, this shouldn't ever happen. no bounds were set. do we even have crossings?");
+				return;
+			}
+
+			int topLvl = levelBlue - (int) (eps * lBlue.size());
+			int botLvl = levelBlue + (int) (eps * lBlue.size());
+			if (!leftborder || !rightborder) {
+
+				if (!leftborder) { // nach rechts offen
+					double tr = levelPos(rightb, true, topLvl);
+					double br = levelPos(rightb, true, botLvl);
+					double ts = getslope(true, topLvl);
+					double bs = getslope(true, botLvl);
+					trapeze = new Trapeze(true, rightb, tr, br, ts, bs);
+				} else if (!rightborder) { // nach links offen
+					double tr = levelPos(rightb, true, topLvl);
+					double br = levelPos(rightb, true, botLvl);
+					double ts = getslope(true, topLvl);
+					double bs = getslope(true, botLvl);
+					trapeze = new Trapeze(true, rightb, tr, br, ts, bs);
+				}
+
+			} else {
+				double tl = levelPos(leftb, true, topLvl);
+				double tr = levelPos(rightb, true, topLvl);
+				double bl = levelPos(leftb, true, botLvl);
+				double br = levelPos(rightb, true, botLvl);
+				trapeze = new Trapeze(leftb, tl, bl, rightb, tr, br);
+			}
+			step++;
+			if (DEBUG) System.out.println("Trapez konstruiert");
+			break;
+		case 3:
+			
+			// cut away lines, count and make sure levelB/R are correct:
+			for (int i = 0; i < lBlue.size();) {
+				int s = trapeze.intersects(lBlue.get(i));
+				if (s != 0) {
+					if (s > 0) {
+						levelBlue--;
+					}
+					hideLine(lBlue.get(i));
+				} else {
+					i++;
+				}
+			}
+			for (int i = 0; i < lRed.size();) {
+				int s = trapeze.intersects(lRed.get(i));
+				if (s != 0) {
+					if (s > 0) {
+						levelRed--;
+					}
+					hideLine(lRed.get(i));
+				} else {
+					i++;
+				}
+			}
+			step = 0;
+			if (DEBUG) System.out.println("Linien ausserhalb des intervalls entfernt.");
+			break;
 		}
-		
 	}	
 	
 	public List<VisualPoint> getVisualPoints() {
