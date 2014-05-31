@@ -46,8 +46,8 @@ public class HamSanApplet extends JApplet {
 		JPanel dualPanels = new JPanel(new GridLayout(1, 2));
 		
 		dualPanels.setPreferredSize(new Dimension(this.getWidth(), 800));
-		dualPanels.add(lp);
 		dualPanels.add(pp);
+		dualPanels.add(lp);
 		
 		// the buttons
 		startAlgButton = new JButton("Do Alg");
