@@ -135,8 +135,6 @@ public class Sandwich {
 		Insets insets = f.getInsets();
 		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
 		f.setVisible(true);
-	//	hsa.addLine(-2, 5, true);
-	//	hsa.addLine(-2,-2,false);
 		
 		//System.out.println("Sortierung stimmt mit compareto überein "+Test_wellordered());
 	}
