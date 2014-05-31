@@ -37,9 +37,6 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	private int xmax = 10;
 	private int ymin = -10;
 	private int ymax = 10;
-	
-	private int xscale = 300 / (xmax - xmin);
-	private int yscale = 300 / (ymax - ymin);
 
 	PointPanel(HamSanAlg hsa, LinePanel lp) {
 		super();
@@ -82,11 +79,14 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	
 	public boolean addPoint(int x, int y, PointType type) {
 		if (addingAllowed) {
+			double xscale = this.getWidth() / (xmax - xmin);
+			double yscale = this.getHeight() / (ymax - ymin);
 			double a = ((double) x / xscale) + xmin;
 			double b = ((double) -y / yscale) - ymin;
 			
 			VisualPoint candidate = new VisualPoint(a, b, type, false);
 			if (visualPoints.contains(candidate)) {
+				System.out.println("not allowed");
 				return false;
 			} else {
 				visualPoints.add(candidate);
@@ -106,10 +106,10 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 
 	public void drawCross(Graphics g) {
 		g.setColor(Color.white);
-		g.fillRect(0, 0, 300, 300);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		g.setColor(Color.gray);
-		g.drawLine(150, 1, 150, 300);
-		g.drawLine(1, 150, 300, 150);
+		g.drawLine(0, this.getHeight()/2, this.getWidth(), this.getHeight()/2);
+		g.drawLine(this.getWidth()/2, 0, this.getWidth()/2, this.getHeight());
 	}
 
 	@Override
@@ -117,6 +117,9 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		super.paint(g);
 		drawCross(g);
 
+		double xscale = this.getWidth() / (xmax - xmin);
+		double yscale = this.getHeight() / (ymax - ymin);
+		
 		g.setColor(Color.magenta);
 		if (h.done) {
 			if (h.verticalSol) {
@@ -133,7 +136,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			}
 		}
 		g.setColor(Color.black);
-		g.drawRect(0, 0, 300, 300);
+		g.drawRect(0, 0, this.getWidth(), this.getHeight());
 
 		for (VisualPoint v : visualPoints) {
 			v.drawAsPoint(g, xmin, xmax, ymin, ymax, this.getSize());
@@ -188,9 +191,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			highlightedPoint.setMyPoint(h.addLine(highlightedPoint.getA(), highlightedPoint.getB(), highlightedPoint.isBlue()));
 			refreshAll();
 		}
-		
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

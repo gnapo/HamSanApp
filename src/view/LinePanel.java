@@ -45,10 +45,10 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 
 	public void drawCross(Graphics g) {
 		g.setColor(Color.white);
-		g.fillRect(0, 0, 300, 300);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		g.setColor(Color.gray);
-		g.drawLine(150,1,150,300);
-		g.drawLine(1, 150, 300, 150);
+		g.drawLine(0, this.getHeight()/2, this.getWidth(), this.getHeight()/2);
+		g.drawLine(this.getWidth()/2, 0, this.getWidth()/2, this.getHeight());
 	}
 	
 	public void drawPoint(Graphics g,int x, int y) {
@@ -59,8 +59,8 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 	public void paint(Graphics g) {
         super.paint(g);
         drawCross(g);
-        int xscale = 300/(xmax-xmin); 
-        int yscale = 300/(ymax-ymin);
+        int xscale = this.getWidth()/(xmax-xmin); 
+        int yscale = this.getHeight()/(ymax-ymin);
         
         for (VisualPoint p : visualPoints) {
         	p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
@@ -80,7 +80,7 @@ public class LinePanel extends JPanel implements MouseMotionListener {
         	drawPoint(g,(int) dx, (int) dy);
         }
         g.setColor(Color.black);
-        g.drawRect(0,0,300,300);
+        g.drawRect(0, 0, this.getWidth(), this.getHeight());
 
      }
 
