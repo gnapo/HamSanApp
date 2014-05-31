@@ -48,7 +48,7 @@ public class HamSanApplet extends JApplet {
 		dualPanels.add(lp);
 		
 		// the buttons
-		startAlgButton = new JButton("Do Alg");
+		startAlgButton = new JButton("Next Step");
 		startAlgButton.setVisible(true);
 		startAlgButton.setBounds(20,320,90,40);
 	    startAlgButton.setFocusable(false);
@@ -64,7 +64,7 @@ public class HamSanApplet extends JApplet {
 	    buttonPanel.add(resetButton);
 	    
 	    // the step label
-	    JLabel infoLabel = new JLabel("Step 0: Please place the points. :-)");
+	    JLabel infoLabel = new JLabel("Step 0: Place the points! Yes! Now! Place them!");
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    
 	    JPanel buttonsAndLabel = new JPanel();

@@ -1,11 +1,13 @@
 package view;
 
+import hamSanApp.Crossing;
 import hamSanApp.HamSanAlg;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -70,16 +72,29 @@ public class LinePanel extends JPanel implements MouseMotionListener {
 		 * Date d = new Date(); long upto = d.getSeconds() % h.crossings.size();
 		 * System.out.println(upto); System.out.println(h.crossings.size());//
 		 */
-		for (int i = 0; i < h.crossings.size(); ++i) {
-			if (h.crossings.get(i).atInf()) {
-				System.out.println("at infinity");
+		for (Crossing c : h.crossings) {
+			if (c.atInf()) {
 				continue;
 			}
-			//System.out.println("A crossing");
-			double dx = ((h.crossings.get(i).crAt()) - xmin) * xscale;
-			double dy = ((-h.crossings.get(i).a.eval(h.crossings.get(i).crAt())) + ymax) * yscale;
-			drawPoint(g, (int) dx, (int) dy);
+			double crossingA = c.crAt();
+			double crossingB = c.a.a * crossingA + c.a.b;
+			
+			Point2D.Double asAB = new Point2D.Double(crossingA, crossingB);
+			Point2D.Double asXY = VisualPoint.toXY(asAB, xmin, ymin, xmax, ymax, this.getSize());
+			
+			drawPoint(g, (int) asXY.x, (int) asXY.y);
 		}
+		
+		g.setColor(Color.magenta);
+		if (h.done) {
+			Point2D.Double cutAB = new Point2D.Double(-h.solution.a, h.solution.b);
+			Point2D.Double cutXY = VisualPoint.toXY(cutAB, xmin, ymin, xmax, ymax, this.getSize());
+			int x = (int) cutXY.x;
+			int y = (int) cutXY.y;
+			
+			g.fillOval(x-4, y-4, 8, 8);
+		}
+
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
 

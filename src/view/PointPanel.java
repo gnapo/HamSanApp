@@ -117,15 +117,18 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		if (h.done) {
 			if (h.verticalSol) {
 				double dx = (h.verticalSolPos - xmin) * xscale;
-				g.drawLine((int) dx, 1, (int) dx, this.getHeight());
+				
+				double xVal = VisualPoint.aToX(h.verticalSolPos, xmin, xmax, this.getSize());
+				
+				g.drawLine((int) xVal, 0, (int) xVal, this.getHeight());
 			} else {
-				double y1 = h.solution.eval(xmin);
-				double y2 = h.solution.eval(xmax);
+				double bMin = h.solution.a * xmin + h.solution.b;
+				double bMax = h.solution.a * xmax + h.solution.b;
+				
+				double yMin = VisualPoint.bToY(bMin, ymin, ymax, this.getSize());
+				double yMax = VisualPoint.bToY(bMax, ymin, ymax, this.getSize());
 
-				double dy1 = ((-y1) + ymax) * yscale;
-				double dy2 = ((-y2) + ymax) * yscale;
-
-				g.drawLine(0, (int) dy1, this.getWidth(), (int) dy2);
+				g.drawLine(0, (int) yMin, this.getWidth(), (int) yMax);
 			}
 		}
 		g.setColor(Color.black);
@@ -140,6 +143,12 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			addPoint(e.getX(), e.getY(), currentType);
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			if (highlightedPoint != null && addingAllowed) {
+				h.removeLine(highlightedPoint.getMyPoint());
+				visualPoints.remove(highlightedPoint);
+				this.refreshAll();
+			}
 		}
 	}
 

@@ -16,14 +16,45 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 		topright = y_topright;
 		botleft = y_botleft;
 		botright = y_botright;
+		bounded = true;
+		openleft = false;
 	}
-	double left; 	//linker Rand
-	double right;	//rechter Rand
-	double topleft; //
-	double topright;//
-	double botleft; //
-	double botright;// die vier y-Werte zur Beschränkung
 	
+	/**
+	 * Konstruktor für ein unbeschränktes trapez
+	 * @param left ist das Trapez nach links unbeschränkt?
+	 * @param top der größere y-wert
+	 * @param bot der kleinere y-wert
+	 * @param topslope die Steigungsgrenze oben
+	 * @param botslope die Steigungsgrenze unten
+	 */
+	Trapeze(boolean oleft,double x, double top, double bot, double tslope, double bslope) {
+		openleft = oleft;
+		if (oleft) {
+			right = x;
+			topright = top;
+			botright = bot;
+		}
+		else {
+			left = x;
+			topleft = top;
+			botleft = bot;
+		}
+		topslope = tslope;
+		botslope = bslope;
+		
+	}
+	
+	double left; 		//linker Rand
+	double right;		//rechter Rand
+	double topleft; 	//
+	double topright;	//
+	double botleft; 	//
+	double botright;	// die vier y-Werte zur Beschränkung
+	boolean bounded;	//ist das Trapez beschränkt?
+	boolean openleft;	//ist das unbeschränkte Trapez nach links offen?
+	double topslope;	//
+	double botslope;	// die steigungsgrenzen des Trapezes oben und unten.
 	/**
 	 * Testet, ob eine Linie das Trapez schneidet
 	 * @param i die zu testende Linie
@@ -31,16 +62,53 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 	 */
 	public int intersects(Point i) { //TODO: testen
 		
-		double y1 = i.eval(left);
-		double y2 = i.eval(right);
-		if ((y1 < botleft) && ( y2 < botright)) {
-			return -1;
-		}
-		if ((y1 > topleft) && (y2 > topright))  {
-			return 1;
+		if (bounded) {
+			double y1 = i.eval(left);
+			double y2 = i.eval(right);
+			if ((y1 < botleft) && ( y2 < botright)) {
+				return -1;
+			}
+			if ((y1 > topleft) && (y2 > topright))  {
+				return 1;
+			}
+			else {
+				return 0;
+			}
 		}
 		else {
-			return 0;
+			if (openleft) {
+				double y = i.eval(right);
+				if (y>topright) {
+					if (i.a < topslope) {
+						return 1;
+					}
+					else return 0;
+				}
+				if (y< botright) {
+					if (i.a > topslope) {
+						return -1;
+					}
+					else return 0;
+				}
+				return 0;
+			}
+			else
+			{
+				double y = i.eval(left);
+				if (y>topleft) {
+					if (i.a < topslope) {
+						return 1;
+					}
+					else return 0;
+				}
+				if (y< botright) {
+					if (i.a > topslope) {
+						return -1;
+					}
+					else return 0;
+				}
+				return 0;
+			}
 		}
 	}
 }
