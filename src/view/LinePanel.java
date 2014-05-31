@@ -147,25 +147,20 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.repaint();
 	}
 
-	public void setZoomFactor(double zoomFactor) {
+	private void setZoomFactor(double zoomFactor) {
 		this.zoomFactor = zoomFactor;
 		System.out.println(zoomFactor);
-		if (zoomFactor == 0) {
-			xmin = -10;
-			xmax = 10;
-			ymin = -10;
-			ymax = 10;
-		} else if (zoomFactor > 0) {
-			xmin = (int) (zoomFactor * -10);
-			xmax = (int) (zoomFactor * 10);
-			ymin = (int) (zoomFactor * -10);
-			ymax = (int) (zoomFactor * 10);
-		} else {
+		if (zoomFactor > 0) {
+			xmin = (int) (zoomFactor * xmin);
+			xmax = (int) (zoomFactor * xmax);
+			ymin = (int) (zoomFactor * ymin);
+			ymax = (int) (zoomFactor * ymax);
+		} else if (zoomFactor < 0) {
 			double absZoom = Math.abs(zoomFactor);
-			xmin = (int) (1 / absZoom * -10);
-			xmax = (int) (1 / absZoom * 10);
-			ymin = (int) (1 / absZoom * -10);
-			ymax = (int) (1 / absZoom * 10);
+			xmin = (int) (1 / absZoom * xmin);
+			xmax = (int) (1 / absZoom * xmax);
+			ymin = (int) (1 / absZoom * ymin);
+			ymax = (int) (1 / absZoom * ymax);
 		}
 		this.repaint();
 	}
@@ -201,11 +196,11 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			x2 = (int) corner1.x;
 		}
 		if (corner1.y < corner2.y) {
-			y1 = (int) corner1.y;
-			y2 = (int) corner2.y;
-		} else {
-			y1 = (int) corner2.y;
 			y2 = (int) corner1.y;
+			y1 = (int) corner2.y;
+		} else {
+			y2 = (int) corner2.y;
+			y1 = (int) corner1.y;
 		}
 
 		double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
@@ -233,6 +228,14 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void setBounds(double xmin, double ymin, double xmax, double ymax) {
+		this.xmin = xmin;
+		this.xmax = xmax;
+		this.ymin = ymin;
+		this.ymax = ymax;
+		this.zoomFactor = 0;
 	}
 
 }

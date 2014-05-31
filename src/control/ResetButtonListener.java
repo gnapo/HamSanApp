@@ -26,7 +26,7 @@ public class ResetButtonListener implements ActionListener {
 		hsa.init();
 		pp.setAddingAllowed(true);
 		pp.setVisualPoints(hsa.getVisualPoints());
-		lp.setZoomFactor(0);
+		lp.setBounds(-10, -10, 10, 10);
 		pp.refreshAll();
 		pp.setCurrentType(PointType.BLUE);
 	}
