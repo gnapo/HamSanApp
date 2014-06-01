@@ -195,7 +195,7 @@ package hamSanApp;
 							if ((k.a>i.a)&&(i.a>j.a)) {return -1*s;}
 							else {return 1*s;}
 						}*/	
-						if ( (smallindex==j.i)&& (j.i==k.i) ){
+						/*if ( (smallindex==j.i)&& (j.i==k.i) ){
 							if ((diff1<0)&&(diff2<0)) {return -1*s;}
 							else {return 1*s;}
 						}
@@ -211,7 +211,16 @@ package hamSanApp;
 						if ( (smallindex==i.i)&& ((i.i==l.i)) ){
 							if ((k.a>i.a)&&(i.a>j.a)) {return 1*s;}
 							else {return -1*s;}
+						}*/
+						if (smallindex==i.i) 
+						   {return op2naive(j,i,k,l);}
+						if (smallindex==j.i&& (j.i!=k.i))
+						   {return op2naive(i,j,l,k);}
+						if ( (smallindex==j.i)&&  (j.i==k.i) ){
+							if ((diff1<0)&&(diff2<0) ||((diff1<0)&&(l.a-i.a<0)) ){return -1*s;}
+							else {return 1*s;}
 						}
+			
 						throw new Exception("no smallest index found, this shouldn't happen. :(, x values were "+x1+" and "+x2+" and our four lines were "+i+" "+j+" "+k+" "+l);
 					}
 				}
