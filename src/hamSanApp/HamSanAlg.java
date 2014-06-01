@@ -334,9 +334,10 @@ public class HamSanAlg {
 	 * funktion, die prueft, ob ein gegebener schnitt valide ist.
 	 * @return Ja falls valider Schnitt
 	 */
-	public boolean validSol() {
+	public boolean validSol(boolean verbose) { //todo make verbose if told
 		if (!done) return false; //haben noch keinen schnitt.
 		if (verticalSol) {//TODO handle
+			System.out.println("Vertical solutions not yet handled, dunno if valid");
 			return false;
 		}
 		int babove = 0; //blue above
