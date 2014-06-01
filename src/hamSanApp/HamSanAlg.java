@@ -310,7 +310,13 @@ public class HamSanAlg {
 		return 1 == c.compare(blueLoc.get(levelBlue-1), redLoc.get(levelRed-1));
 	}
 	
-	
+	/**
+	 * gibt die level-t groesste steigung der roten oder blauen geraden zurueck
+	 * wird fuer unbeschraenkte trapeze gebraucht.
+	 * @param blue die blauen geraden?
+	 * @param level wievielt-groesste steigung?
+	 * @return die steigung
+	 */
 	public double getslope(boolean blue, int level) { //TODO testme
 		LineComparator2 c = new LineComparator2();
 		List<Point> col;
@@ -324,7 +330,45 @@ public class HamSanAlg {
 		return col.get(level).a;
 	}
 	
-	
+	/**
+	 * funktion, die prueft, ob ein gegebener schnitt valide ist.
+	 * @return Ja falls valider Schnitt
+	 */
+	public boolean validSol() {
+		if (!done) return false; //haben noch keinen schnitt.
+		if (verticalSol) {//TODO handle
+			return false;
+		}
+		int babove = 0; //blue above
+		int bbelow = 0; //blue below
+		int rabove = 0; //red ..
+		int rbelow = 0;
+		
+		for (int i = 0; i< lBlue.size();i++) {
+			Point t = lBlue.get(i);
+			if (solution.eval(t.a) < t.b) babove ++;
+			if (solution.eval(t.a) > t.b) bbelow ++;
+		}
+		for (int i = 0; i< lBlueDel.size();i++) {
+			Point t = lBlueDel.get(i);
+			if (solution.eval(t.a) < t.b) babove ++;
+			if (solution.eval(t.a) > t.b) bbelow ++;
+		}
+		for (int i = 0; i< lRed.size();i++) {
+			Point t = lRed.get(i);
+			if (solution.eval(t.a) < t.b) rabove ++;
+			if (solution.eval(t.a) > t.b) rbelow ++;
+		}
+		for (int i = 0; i< lRedDel.size();i++) {
+			Point t = lRedDel.get(i);
+			if (solution.eval(t.a) < t.b) rabove ++;
+			if (solution.eval(t.a) > t.b) rbelow ++;
+		}
+		
+		if (Math.max(bbelow, babove) > (lBlue.size()+lBlueDel.size())/2) return false;
+		if (Math.max(rbelow, rabove) > (lRed.size()+lRedDel.size())/2) return false;
+		return true;
+	}
 	
 	/**
 	 * der eigentliche Algorithmus. ein ausf�hren dieses Algorithmus stellt einen
