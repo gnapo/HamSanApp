@@ -33,13 +33,13 @@ public class HamSanAlg {
 	public boolean verticalSol;	//ist die Lï¿½sung eine Vertikale Linie?
 	public double verticalSolPos;	//position der vertikalen Lï¿½sung
 	public Point solution;			//position der nicht-vertikalen Lï¿½sung
-	double [] borders;		//positionen der grenzen zwischen streifen.
+	public double [] borders;		//positionen der grenzen zwischen streifen.
 								//konvention: borders[i] ist der linke rand von dem i-ten streifen und die streifen sind halboffen, linker punkt ist drin.
 	public List<Crossing> crossings;// hier werden die Kreuzungen gespeichert;
 	boolean DEBUG = true;
 	public Trapeze trapeze;	//das trapez (zum zeichnen)
-	int minband;		//
-	int maxband;		// zur binären suche auf den intervallen(bändern)
+	public int minband;		//
+	public int maxband;		// zur binären suche auf den intervallen(bändern)
 	public int step;	//in welchem shritt sind wir?
 						// 0: Ausgangssituation
 						// 1: Intervalle Eingeteilt
@@ -281,7 +281,8 @@ public class HamSanAlg {
 	 * @param c die betreffende Kreuzung
 	 * @return true, falls wir die Kreuzung berï¿½cksichtigen mï¿½ssen.
 	 */
-	public boolean inBorders(Crossing c) {
+	public boolean inBorders(Crossing c) { //Don't know if commenting out this makes it work. huh
+		/*
 		if (c.atInf()) {
 			if (c.atNegInf() && leftborder) {
 				return false;
@@ -291,7 +292,7 @@ public class HamSanAlg {
 			}
 		}
 		if (leftborder && c.crAt() < leftb) { return false;}
-		if (rightborder && c.crAt() >= rightb) { return false;}
+		if (rightborder && c.crAt() >= rightb) { return false;}*/
 		return true;
 	}
 	
@@ -309,6 +310,13 @@ public class HamSanAlg {
 		return 1 == c.compare(blueLoc.get(levelBlue-1), redLoc.get(levelRed-1));
 	}
 	
+	/**
+	 * gibt die level-t groesste steigung der roten oder blauen geraden zurueck
+	 * wird fuer unbeschraenkte trapeze gebraucht.
+	 * @param blue die blauen geraden?
+	 * @param level wievielt-groesste steigung?
+	 * @return die steigung
+	 */
 	public double getslope(boolean blue, int level) { //TODO testme
 		LineComparator2 c = new LineComparator2();
 		List<Point> col;
@@ -320,6 +328,46 @@ public class HamSanAlg {
 		}
 		Collections.sort(col, c);
 		return col.get(level).a;
+	}
+	
+	/**
+	 * funktion, die prueft, ob ein gegebener schnitt valide ist.
+	 * @return Ja falls valider Schnitt
+	 */
+	public boolean validSol() {
+		if (!done) return false; //haben noch keinen schnitt.
+		if (verticalSol) {//TODO handle
+			return false;
+		}
+		int babove = 0; //blue above
+		int bbelow = 0; //blue below
+		int rabove = 0; //red ..
+		int rbelow = 0;
+		
+		for (int i = 0; i< lBlue.size();i++) {
+			Point t = lBlue.get(i);
+			if (solution.eval(t.a) < t.b) babove ++;
+			if (solution.eval(t.a) > t.b) bbelow ++;
+		}
+		for (int i = 0; i< lBlueDel.size();i++) {
+			Point t = lBlueDel.get(i);
+			if (solution.eval(t.a) < t.b) babove ++;
+			if (solution.eval(t.a) > t.b) bbelow ++;
+		}
+		for (int i = 0; i< lRed.size();i++) {
+			Point t = lRed.get(i);
+			if (solution.eval(t.a) < t.b) rabove ++;
+			if (solution.eval(t.a) > t.b) rbelow ++;
+		}
+		for (int i = 0; i< lRedDel.size();i++) {
+			Point t = lRedDel.get(i);
+			if (solution.eval(t.a) < t.b) rabove ++;
+			if (solution.eval(t.a) > t.b) rbelow ++;
+		}
+		
+		if (Math.max(bbelow, babove) > (lBlue.size()+lBlueDel.size())/2) return false;
+		if (Math.max(rbelow, rabove) > (lRed.size()+lRedDel.size())/2) return false;
+		return true;
 	}
 	
 	/**
@@ -335,7 +383,7 @@ public class HamSanAlg {
 		switch (step) {
 		
 		case 0:
-			
+			trapeze = null;
 			if (firstRun) {
 				// make sure that both sets are odd by deleting a point out of
 				// each set:
@@ -436,6 +484,7 @@ public class HamSanAlg {
 			// Collections.reverse(crossings);
 
 			// might work?
+			/*
 			if (DEBUG && false) {
 				// warning: cheating going on.
 				for (int i = 0; i < crossings.size(); i++) {
@@ -450,7 +499,7 @@ public class HamSanAlg {
 					}
 				}
 				System.out.println("aww :'(");
-			}
+			}*/
 
 			minband = 0;
 			maxband = 0; // wird ï¿½berschrieben.
@@ -516,8 +565,10 @@ public class HamSanAlg {
 				return;
 			}
 
-			int topLvl = levelBlue - (int) (eps * lBlue.size());
-			int botLvl = levelBlue + (int) (eps * lBlue.size());
+			int delta = (int) Math.round(eps * lBlue.size());
+			//int delta = (int) (eps * lBlue.size()+1);
+			int topLvl = levelBlue - delta;
+			int botLvl = levelBlue + delta;
 			if (!leftborder || !rightborder) {
 
 				if (!leftborder) { // nach rechts offen
@@ -539,10 +590,16 @@ public class HamSanAlg {
 				double tr = levelPos(rightb, true, topLvl);
 				double bl = levelPos(leftb, true, botLvl);
 				double br = levelPos(rightb, true, botLvl);
+				if (DEBUG) {
+					System.out.println("lefftb:"+leftb+" rightb:"+rightb+" tl:"+tl+" bl:"+bl+" tr:"+tr+" br:"+br);			
+				}
 				trapeze = new Trapeze(leftb, tl, bl, rightb, tr, br);
 			}
 			step++;
 			if (DEBUG) System.out.println("Trapez konstruiert");
+			borders = new double[64];
+			minband = 0;
+			maxband = 0;
 			break;
 		case 3:
 			

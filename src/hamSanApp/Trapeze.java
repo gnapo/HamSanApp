@@ -45,16 +45,16 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 		
 	}
 	
-	double left; 		//linker Rand
-	double right;		//rechter Rand
-	double topleft; 	//
-	double topright;	//
-	double botleft; 	//
-	double botright;	// die vier y-Werte zur Beschränkung
-	boolean bounded;	//ist das Trapez beschränkt?
-	boolean openleft;	//ist das unbeschränkte Trapez nach links offen?
-	double topslope;	//
-	double botslope;	// die steigungsgrenzen des Trapezes oben und unten.
+	public double left; 		//linker Rand
+	public double right;		//rechter Rand
+	public double topleft; 	//
+	public double topright;	//
+	public double botleft; 	//
+	public double botright;	// die vier y-Werte zur Beschränkung
+	public boolean bounded;	//ist das Trapez beschränkt?
+	public boolean openleft;	//ist das unbeschränkte Trapez nach links offen?
+	public double topslope;	//
+	public double botslope;	// die steigungsgrenzen des Trapezes oben und unten.
 	/**
 	 * Testet, ob eine Linie das Trapez schneidet
 	 * @param i die zu testende Linie
