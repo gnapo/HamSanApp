@@ -281,7 +281,8 @@ public class HamSanAlg {
 	 * @param c die betreffende Kreuzung
 	 * @return true, falls wir die Kreuzung ber�cksichtigen m�ssen.
 	 */
-	public boolean inBorders(Crossing c) {
+	public boolean inBorders(Crossing c) { //Don't know if commenting out this makes it work. huh
+		/*
 		if (c.atInf()) {
 			if (c.atNegInf() && leftborder) {
 				return false;
@@ -291,7 +292,7 @@ public class HamSanAlg {
 			}
 		}
 		if (leftborder && c.crAt() < leftb) { return false;}
-		if (rightborder && c.crAt() >= rightb) { return false;}
+		if (rightborder && c.crAt() >= rightb) { return false;}*/
 		return true;
 	}
 	
@@ -309,6 +310,7 @@ public class HamSanAlg {
 		return 1 == c.compare(blueLoc.get(levelBlue-1), redLoc.get(levelRed-1));
 	}
 	
+	
 	public double getslope(boolean blue, int level) { //TODO testme
 		LineComparator2 c = new LineComparator2();
 		List<Point> col;
@@ -321,6 +323,8 @@ public class HamSanAlg {
 		Collections.sort(col, c);
 		return col.get(level).a;
 	}
+	
+	
 	
 	/**
 	 * der eigentliche Algorithmus. ein ausf�hren dieses Algorithmus stellt einen
@@ -335,7 +339,7 @@ public class HamSanAlg {
 		switch (step) {
 		
 		case 0:
-			
+			trapeze = null;
 			if (firstRun) {
 				// make sure that both sets are odd by deleting a point out of
 				// each set:
@@ -517,8 +521,10 @@ public class HamSanAlg {
 				return;
 			}
 
-			int topLvl = levelBlue - (int) (eps * lBlue.size());
-			int botLvl = levelBlue + (int) (eps * lBlue.size());
+			int delta = (int) Math.round(eps * lBlue.size());
+			//int delta = (int) (eps * lBlue.size()+1);
+			int topLvl = levelBlue - delta;
+			int botLvl = levelBlue + delta;
 			if (!leftborder || !rightborder) {
 
 				if (!leftborder) { // nach rechts offen
@@ -540,6 +546,9 @@ public class HamSanAlg {
 				double tr = levelPos(rightb, true, topLvl);
 				double bl = levelPos(leftb, true, botLvl);
 				double br = levelPos(rightb, true, botLvl);
+				if (DEBUG) {
+					System.out.println("lefftb:"+leftb+" rightb:"+rightb+" tl:"+tl+" bl:"+bl+" tr:"+tr+" br:"+br);			
+				}
 				trapeze = new Trapeze(leftb, tl, bl, rightb, tr, br);
 			}
 			step++;

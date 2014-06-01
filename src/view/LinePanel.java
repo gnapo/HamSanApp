@@ -3,8 +3,10 @@ package view;
 import hamSanApp.Crossing;
 import hamSanApp.HamSanAlg;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
@@ -117,11 +119,26 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		
 		g.setColor(Color.gray.brighter()); //draw vertical lines to distinguish intervals
 		
-		for (int i = Math.max(1, h.minband); i < h.maxband; i++) {
+		for (int i = Math.max(1, h.minband); i <= h.maxband; i++) {
 			int x0 = (int) VisualPoint.aToX(h.borders[i], xmin, xmax, this.getSize());
 			g.drawLine(x0, 0, x0, this.getHeight());
 		}  
-		 
+		g.setColor(Color.black);
+		if (h.trapeze != null && h.trapeze.bounded) {
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setStroke(new BasicStroke(2.5f));
+			int x1 = (int) VisualPoint.aToX(h.trapeze.left, xmin, xmax, this.getSize());
+			int x2 = (int) VisualPoint.aToX(h.trapeze.right, xmin, xmax, this.getSize());
+			int ytl = (int) VisualPoint.bToY(h.trapeze.topleft, ymin, ymax, this.getSize());
+			int ybl = (int) VisualPoint.bToY(h.trapeze.botleft, ymin, ymax, this.getSize());
+			int ybr = (int) VisualPoint.bToY(h.trapeze.botright, ymin, ymax, this.getSize());
+			int ytr = (int) VisualPoint.bToY(h.trapeze.topright, ymin, ymax, this.getSize());
+			g2d.drawLine(x1,ytl,x1,ybl);
+			g2d.drawLine(x1,ybl,x2,ybr);
+			g2d.drawLine(x2,ybr,x2,ytr);
+			g2d.drawLine(x2,ytr,x1,ytl);
+			g2d.setStroke(new BasicStroke());
+		}
 
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);

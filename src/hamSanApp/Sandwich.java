@@ -147,7 +147,7 @@ public class Sandwich {
 		//Point.value = 1;
 		//System.out.println(b.compareTo(a));
 		//Testlevelpos();
-		
+
 		HamSanAlg hsa = new HamSanAlg();
 		MyFrame f = new MyFrame(hsa);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
