@@ -16,9 +16,11 @@ import javax.swing.JPanel;
 
 import control.CrossingsListener;
 import control.DoAlgButtonListener;
+import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
 import control.ToggleListener;
+import control.VerifyButtonListener;
 
 public class HamSanApplet extends JApplet {
 
@@ -68,13 +70,22 @@ public class HamSanApplet extends JApplet {
 	    resetZoomButton.setFocusable(false);
 	    resetZoomButton.addActionListener(new ResetZoomListener(lp));
 	    
+	    JButton verifyButton = new JButton("Verify solution");
+	    verifyButton.addActionListener(new VerifyButtonListener(hsa));
+	    verifyButton.setFocusable(false); 
+	    
+	    JButton randomButton = new JButton("Add some points");
+	    randomButton.addActionListener(new RandomButtonListener(hsa,lp,pp));
+	    randomButton.setFocusable(false);
+	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
 	    buttonPanel.add(startAlgButton);
 	    buttonPanel.add(resetButton);
 	    buttonPanel.add(crossingBox);
 	    buttonPanel.add(resetZoomButton);
-	    
+	    buttonPanel.add(randomButton);
+	    buttonPanel.add(verifyButton);
 	    // the step label
 	    JLabel infoLabel = new JLabel("Step 0: Place the points! Yes! Now! Place them!");
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
