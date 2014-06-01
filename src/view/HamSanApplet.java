@@ -71,7 +71,7 @@ public class HamSanApplet extends JApplet {
 	    
 	    JButton verifyButton = new JButton("Verify solution");
 	    verifyButton.addActionListener(new VerifyButtonListener(hsa));
-	    //dunno what setfocusable does 
+	    verifyButton.setFocusable(false); 
 	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());

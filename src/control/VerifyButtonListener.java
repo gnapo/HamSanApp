@@ -15,7 +15,7 @@ public class VerifyButtonListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if (hsa.validSol(false)) {
+		if (hsa.validSol(true)) {
 			System.out.println("solution is valid! hooray");
 		}
 		else {

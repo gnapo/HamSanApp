@@ -334,12 +334,46 @@ public class HamSanAlg {
 	 * funktion, die prueft, ob ein gegebener schnitt valide ist.
 	 * @return Ja falls valider Schnitt
 	 */
-	public boolean validSol(boolean verbose) { //todo make verbose if told
+	public boolean validSol(boolean verbose) {
 		if (!done) return false; //haben noch keinen schnitt.
-		if (verticalSol) {//TODO handle
-			System.out.println("Vertical solutions not yet handled, dunno if valid");
-			return false;
+		double tol = 0.0000001; //tolerance
+		if (verticalSol) {
+			int bleft = 0;
+			int bright = 0;
+			int rleft = 0;
+			int rright = 0;
+			
+			for (int i = 0; i< lBlue.size();i++) {
+				Point t = lBlue.get(i);
+				if (verticalSolPos +tol < t.a) bright ++;
+				if (verticalSolPos -tol > t.a) bleft ++;
+			}
+			for (int i = 0; i< lBlueDel.size();i++) {
+				Point t = lBlueDel.get(i);
+				if (verticalSolPos +tol < t.a) bright ++;
+				if (verticalSolPos -tol > t.a) bleft ++;
+			}
+			for (int i = 0; i< lRed.size();i++) {
+				Point t = lRed.get(i);
+				if (verticalSolPos +tol < t.a) rright ++;
+				if (verticalSolPos -tol > t.a) rleft ++;
+			}
+			for (int i = 0; i< lRedDel.size();i++) {
+				Point t = lRedDel.get(i);
+				if (verticalSolPos +tol < t.a) rright ++;
+				if (verticalSolPos -tol > t.a) rleft ++;
+			}
+			if (verbose) {
+				System.out.println("There are "+bleft+" blue points left, "+bright+" right of a total of "+(lBlue.size()+lBlueDel.size()));
+				System.out.println("There are "+rleft+" red points left, "+rright+" right of a total of "+(lRed.size()+lRedDel.size()));
+			}
+			
+			if (Math.max(bleft, bright) > (lBlue.size()+lBlueDel.size())/2) return false;
+			if (Math.max(rleft, rright) > (lRed.size()+lRedDel.size())/2) return false;
+			
+			return true;
 		}
+		
 		int babove = 0; //blue above
 		int bbelow = 0; //blue below
 		int rabove = 0; //red ..
@@ -347,23 +381,27 @@ public class HamSanAlg {
 		
 		for (int i = 0; i< lBlue.size();i++) {
 			Point t = lBlue.get(i);
-			if (solution.eval(t.a) < t.b) babove ++;
-			if (solution.eval(t.a) > t.b) bbelow ++;
+			if (solution.eval(t.a) +tol < t.b) babove ++;
+			if (solution.eval(t.a) -tol > t.b) bbelow ++;
 		}
 		for (int i = 0; i< lBlueDel.size();i++) {
 			Point t = lBlueDel.get(i);
-			if (solution.eval(t.a) < t.b) babove ++;
-			if (solution.eval(t.a) > t.b) bbelow ++;
+			if (solution.eval(t.a) +tol < t.b) babove ++;
+			if (solution.eval(t.a) -tol > t.b) bbelow ++;
 		}
 		for (int i = 0; i< lRed.size();i++) {
 			Point t = lRed.get(i);
-			if (solution.eval(t.a) < t.b) rabove ++;
-			if (solution.eval(t.a) > t.b) rbelow ++;
+			if (solution.eval(t.a) +tol < t.b) rabove ++;
+			if (solution.eval(t.a) -tol > t.b) rbelow ++;
 		}
 		for (int i = 0; i< lRedDel.size();i++) {
 			Point t = lRedDel.get(i);
-			if (solution.eval(t.a) < t.b) rabove ++;
-			if (solution.eval(t.a) > t.b) rbelow ++;
+			if (solution.eval(t.a) +tol < t.b) rabove ++;
+			if (solution.eval(t.a) -tol > t.b) rbelow ++;
+		}
+		if (verbose) {
+			System.out.println("There are "+bbelow+" blue points below, "+babove+" above of a total of "+(lBlue.size()+lBlueDel.size()));
+			System.out.println("There are "+rbelow+" red points below, "+rabove+" above of a total of "+(lRed.size()+lRedDel.size()));
 		}
 		
 		if (Math.max(bbelow, babove) > (lBlue.size()+lBlueDel.size())/2) return false;
