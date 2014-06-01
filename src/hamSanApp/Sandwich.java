@@ -131,7 +131,7 @@ public class Sandwich {
 		a=hsa.addLine(1,0,true);
 		b=hsa.addLine(0,1,true);
 		c=hsa.addLine(-1,2,true);
-		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(a,b,a,c));
+		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(a,c,a,b));
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -148,12 +148,14 @@ public class Sandwich {
 		//System.out.println(b.compareTo(a));
 		//Testlevelpos();
 		
-		HamSanAlg hsa = new HamSanAlg();
+		/*HamSanAlg hsa = new HamSanAlg();
 		MyFrame f = new MyFrame(hsa);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Insets insets = f.getInsets();
 		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
-		f.setVisible(true);
+		f.setVisible(true);*/
+		Testopt2();
+		
 	}
 
 }
