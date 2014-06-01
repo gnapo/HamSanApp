@@ -282,7 +282,7 @@ public class HamSanAlg {
 	 * @return true, falls wir die Kreuzung ber�cksichtigen m�ssen.
 	 */
 	public boolean inBorders(Crossing c) { //Don't know if commenting out this makes it work. huh
-		/*
+		/*double tolerance = 0.0000001;
 		if (c.atInf()) {
 			if (c.atNegInf() && leftborder) {
 				return false;
@@ -291,8 +291,8 @@ public class HamSanAlg {
 				return false;
 			}
 		}
-		if (leftborder && c.crAt() < leftb) { return false;}
-		if (rightborder && c.crAt() >= rightb) { return false;}*/
+		if (leftborder && c.crAt() < leftb+tolerance) { return false;}
+		if (rightborder && c.crAt() >= rightb-tolerance) { return false;}*/
 		return true;
 	}
 	
@@ -477,7 +477,7 @@ public class HamSanAlg {
 
 			// swap the lines if blue is smaller:
 			if (lBlue.size() < lRed.size()) {
-				colorSwap = !colorSwap;
+				//colorSwap = !colorSwap;
 				List<Point> temp = lBlue;
 				lBlue = lRed;
 				lRed = temp;
@@ -566,7 +566,7 @@ public class HamSanAlg {
 			break;
 		case 1:
 			// find strip with odd number of intersections by binary search:
-			boolean bluetop = blueTopLeft();
+			boolean bluetop = blueTopLeft(); //TODO why? this is not always what we need
 			while ((maxband - minband) > 1) {
 				int testband = minband + (maxband - minband) / 2;
 				int bluetesttop = blueTop(borders[testband]);
