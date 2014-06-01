@@ -131,7 +131,7 @@ public class Sandwich {
 		b=hsa.addLine(0,1,true);
 		a=hsa.addLine(1,0,true);
 		c=hsa.addLine(-1,2,true);
-		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(c,b,a,b));
+		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(b,c,a,b));
 	}
 	
 	public static void main(String[] args) throws Exception {

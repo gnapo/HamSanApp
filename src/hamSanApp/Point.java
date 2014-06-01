@@ -155,7 +155,7 @@ package hamSanApp;
 					}
 					else { 
 						//find the smallest index of the four
-						//TODO: ROBUSTNES, not all points need to be different also make sure this fix does what we want? 
+						//TODO: evtl Test, ob Behantdlung für nur 3 verschiedene Geraden als Eingebe passt 
 						int s = (int) Math.signum(x1);
 						if ( ((i.i < j.i) && (i.i < k.i) && (i.i < l.i)) ||
 							 (smallindex==i.i)&& (i.i!=k.i)&& (i.i!=l.i) ){
@@ -176,42 +176,7 @@ package hamSanApp;
 							(smallindex==l.i)&& (l.i!=i.i)&& (l.i!=j.i) ){
 							if (diff2 > 0) {return -1*s;}
 							else {return 1*s;}
-						}//Fall, dass es nur drei Geraden gibt
-						//kleinster Index ist j und j kommt doppelt vor
-						/*if ( (smallindex==j.i)&& (j.i==k.i) ){
-							if ((l.a>j.a)&&(j.a>i.a)) {return -1*s;}
-							else {return 1*s;}
 						}
-						if ( (smallindex==j.i)&& (j.i==l.i) ){
-							if ((k.a>j.a)&&(j.a>i.a)) {return -1*s;}
-							else {return 1*s;}
-						}
-						//kleinster Index ist i und i kommt doppelt vor
-						if ( (smallindex==i.i)&& ((i.i==k.i)) ){
-							if ((l.a>i.a)&&(i.a>j.a)) {return -1*s;}
-							else {return 1*s;}
-						}						
-						if ( (smallindex==i.i)&& ((i.i==l.i)) ){
-							if ((k.a>i.a)&&(i.a>j.a)) {return -1*s;}
-							else {return 1*s;}
-						}*/	
-						/*if ( (smallindex==j.i)&& (j.i==k.i) ){
-							if ((diff1<0)&&(diff2<0)) {return -1*s;}
-							else {return 1*s;}
-						}
-						if ( (smallindex==j.i)&& (j.i==l.i) ){
-							if ((diff1<0)&&(diff2>0)) {return -1*s;}
-							else {return 1*s;}
-						}
-						//kleinster Index ist i und i kommt doppelt vor, inverse Ergebnisse zum obigen Fall
-						if ( (smallindex==i.i)&& ((i.i==k.i)) ){
-							if ((diff1<0)&&(diff2<0)) {return 1*s;}
-							else {return -1*s;}
-						}						
-						if ( (smallindex==i.i)&& ((i.i==l.i)) ){
-							if ((k.a>i.a)&&(i.a>j.a)) {return 1*s;}
-							else {return -1*s;}
-						}*/
 						if (smallindex==i.i) 
 						   {return op2naive(j,i,k,l);}
 						if (smallindex==j.i&& (j.i!=k.i))
