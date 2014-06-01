@@ -292,7 +292,7 @@ public class HamSanAlg {
 			}
 		}
 		if (leftborder && c.crAt() < leftb+tolerance) { return false;}
-		if (rightborder && c.crAt() >= rightb-tolerance) { return false;}*/
+		if (rightborder && c.crAt() >= rightb-tolerance) { return false;}//*/
 		return true;
 	}
 	
@@ -477,7 +477,7 @@ public class HamSanAlg {
 
 			// swap the lines if blue is smaller:
 			if (lBlue.size() < lRed.size()) {
-				//colorSwap = !colorSwap;
+				colorSwap = !colorSwap;
 				List<Point> temp = lBlue;
 				lBlue = lRed;
 				lRed = temp;
@@ -566,7 +566,25 @@ public class HamSanAlg {
 			break;
 		case 1:
 			// find strip with odd number of intersections by binary search:
-			boolean bluetop = blueTopLeft(); //TODO why? this is not always what we need
+			boolean bluetop;  //TODO i think this is how bluetop should be initialized, someone review?
+			/*if (leftborder) {
+				int res = blueTop(leftb);
+				if (res == 0) {
+					System.out.println("schnittpunkt gefunden!");
+					done = true;
+					solution = new Point(-leftb, levelPos(leftb, true, levelBlue));
+					return;
+				}
+				if (res == 1){
+					bluetop = true;
+				}
+				else
+					bluetop = false;
+			}
+			else{*/
+				bluetop = blueTopLeft();
+			//}
+				
 			while ((maxband - minband) > 1) {
 				int testband = minband + (maxband - minband) / 2;
 				int bluetesttop = blueTop(borders[testband]);
@@ -643,6 +661,7 @@ public class HamSanAlg {
 		case 3:
 			
 			// cut away lines, count and make sure levelB/R are correct:
+			int deleted = 0;
 			for (int i = 0; i < lBlue.size();) {
 				int s = trapeze.intersects(lBlue.get(i));
 				if (s != 0) {
@@ -650,6 +669,7 @@ public class HamSanAlg {
 						levelBlue--;
 					}
 					hideLine(lBlue.get(i));
+					deleted ++;
 				} else {
 					i++;
 				}
@@ -661,12 +681,13 @@ public class HamSanAlg {
 						levelRed--;
 					}
 					hideLine(lRed.get(i));
+					deleted ++;
 				} else {
 					i++;
 				}
 			}
 			step = 0;
-			if (DEBUG) System.out.println("Linien ausserhalb des intervalls entfernt.");
+			if (DEBUG) System.out.println(deleted +" Linien ausserhalb des intervalls entfernt.");
 			break;
 		}
 	}	
