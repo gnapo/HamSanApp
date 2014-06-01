@@ -282,7 +282,7 @@ public class HamSanAlg {
 	 * @return true, falls wir die Kreuzung ber�cksichtigen m�ssen.
 	 */
 	public boolean inBorders(Crossing c) { //Don't know if commenting out this makes it work. huh
-		/*double tolerance = 0.0000001;
+		/*double tolerance = 0.000001;
 		if (c.atInf()) {
 			if (c.atNegInf() && leftborder) {
 				return false;
@@ -292,7 +292,9 @@ public class HamSanAlg {
 			}
 		}
 		if (leftborder && c.crAt() < leftb+tolerance) { return false;}
-		if (rightborder && c.crAt() >= rightb-tolerance) { return false;}//*/
+		if (rightborder && c.crAt() >= rightb-tolerance) { return false;}
+		//if (leftborder && c.crAt() < leftb) { return false;}
+		//if (rightborder && c.crAt() >= rightb) { return false;}//*/
 		return true;
 	}
 	
