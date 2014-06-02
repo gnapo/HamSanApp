@@ -45,6 +45,9 @@ public class HamSanAlg {
 						// 1: Intervalle Eingeteilt
 						// 2: Richtiges Intervall rausgesucht
 						// 3: Trapez konstruiert
+
+	boolean leftsetthistime = false;	//
+	boolean rightsetthistime = false;	// used for going from step 2 to 3.
 	
 	final double alpha = 1.0d/32.0d; 	//
 	final double eps = 1.0d/8.0d;		//Konstanten f�r den Alg
@@ -282,7 +285,7 @@ public class HamSanAlg {
 	 * @return true, falls wir die Kreuzung ber�cksichtigen m�ssen.
 	 */
 	public boolean inBorders(Crossing c) { //Don't know if commenting out this makes it work. huh
-		/*double tolerance = 0.000001;
+		double tolerance = 0.000001;
 		if (c.atInf()) {
 			if (c.atNegInf() && leftborder) {
 				return false;
@@ -294,7 +297,7 @@ public class HamSanAlg {
 		if (leftborder && c.crAt() < leftb+tolerance) { return false;}
 		if (rightborder && c.crAt() >= rightb-tolerance) { return false;}
 		//if (leftborder && c.crAt() < leftb) { return false;}
-		//if (rightborder && c.crAt() >= rightb) { return false;}//*/
+		//if (rightborder && c.crAt() >= rightb) { return false;}//
 		return true;
 	}
 	
@@ -569,7 +572,7 @@ public class HamSanAlg {
 		case 1:
 			// find strip with odd number of intersections by binary search:
 			boolean bluetop;  //TODO i think this is how bluetop should be initialized, someone review?
-			/*if (leftborder) {
+			if (leftborder) {
 				int res = blueTop(leftb);
 				if (res == 0) {
 					System.out.println("schnittpunkt gefunden!");
@@ -583,9 +586,12 @@ public class HamSanAlg {
 				else
 					bluetop = false;
 			}
-			else{*/
+			else{
 				bluetop = blueTopLeft();
-			//}
+			}
+			
+			leftsetthistime = false;
+			rightsetthistime = false;
 				
 			while ((maxband - minband) > 1) {
 				int testband = minband + (maxband - minband) / 2;
@@ -593,11 +599,13 @@ public class HamSanAlg {
 				if (bluetop == (bluetesttop == 1)) {
 					minband = testband;
 					leftborder = true;
+					leftsetthistime = true;
 				} else if (bluetop == (bluetesttop == -1)) {
 					maxband = testband;
 					rightborder = true;
+					rightsetthistime = true;
 				} else if (bluetesttop == 0) { // we have a winner!
-					System.out.println("schnittpunkt gefunden!");
+					if (DEBUG) System.out.println("schnittpunkt gefunden!");
 					done = true;
 					solution = new Point(-borders[testband], levelPos(
 							borders[testband], true, levelBlue));
@@ -611,10 +619,10 @@ public class HamSanAlg {
 		case 2:
 
 			// grenzen nur setzen, falls wir wissen, dass da welche sind.
-			if (leftborder) {
-				leftb = borders[minband];
+			if (leftborder && leftsetthistime) {
+				leftb = borders[minband]; //this could get messy, if they were not set! TODO think about this some more
 			}
-			if (rightborder) {
+			if (rightborder && rightsetthistime) {
 				rightb = borders[maxband];
 			}
 
@@ -626,6 +634,7 @@ public class HamSanAlg {
 
 			int delta = (int) Math.round(eps * lBlue.size());
 			//int delta = (int) (eps * lBlue.size()+1);
+			//TODO think about: can this delta cause us to go out of bounds on the arrays?
 			int topLvl = levelBlue - delta;
 			int botLvl = levelBlue + delta;
 			if (!leftborder || !rightborder) {
