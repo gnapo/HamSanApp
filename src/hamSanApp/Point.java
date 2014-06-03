@@ -176,7 +176,7 @@ package hamSanApp;
 							(smallindex==l.i)&& (l.i!=i.i)&& (l.i!=j.i) ){
 							if (diff2 > 0) {return -1*s;}
 							else {return 1*s;}
-						}
+						}//Fall, dass sich nur drei Geraden schneiden und kleinster Index doppelt vorkommt
 						if (smallindex==i.i) 
 						   {return op2naive(j,i,k,l);}
 						if (smallindex==j.i&& (j.i!=k.i))

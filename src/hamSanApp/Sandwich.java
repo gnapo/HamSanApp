@@ -128,10 +128,15 @@ public class Sandwich {
 		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
 		f.setVisible(true);
 		Point a,b,c;
+		/*a=hsa.addLine(1,0,true);
 		b=hsa.addLine(0,1,true);
-		a=hsa.addLine(1,0,true);
 		c=hsa.addLine(-1,2,true);
-		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(b,c,a,b));
+		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(b,c,a,b));*/
+		a=hsa.addLine(1,2,true);
+		b=hsa.addLine(0,1,true);
+		c=hsa.addLine(-1,0,true);
+		System.out.println("Im Fall -1 liegt kreuzung ij links neben kl "+Point.op2naive(b,a,b,c));
+		//Fehler!!!Genau falsch herum! Beim  Nicht-Sonder-Fall!!!
 	}
 	
 	public static void main(String[] args) throws Exception {
