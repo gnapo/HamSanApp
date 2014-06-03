@@ -285,7 +285,7 @@ public class HamSanAlg {
 	 * @return true, falls wir die Kreuzung ber�cksichtigen m�ssen.
 	 */
 	public boolean inBorders(Crossing c) { //Don't know if commenting out this makes it work. huh
-		double tolerance = 0.000001;
+		//double tolerance = 0.000001;
 		if (c.atInf()) {
 			if (c.atNegInf() && leftborder) {
 				return false;
@@ -294,10 +294,10 @@ public class HamSanAlg {
 				return false;
 			}
 		}
-		if (leftborder && c.crAt() < leftb+tolerance) { return false;}
-		if (rightborder && c.crAt() >= rightb-tolerance) { return false;}
-		//if (leftborder && c.crAt() < leftb) { return false;}
-		//if (rightborder && c.crAt() >= rightb) { return false;}//
+		//if (leftborder && c.crAt() < leftb-tolerance) { return false;}
+		//if (rightborder && c.crAt() >= rightb+tolerance) { return false;}
+		if (leftborder && c.crAt() < leftb) { return false;}
+		if (rightborder && c.crAt() >= rightb) { return false;}//
 		return true;
 	}
 	
@@ -371,7 +371,7 @@ public class HamSanAlg {
 			if (verbose) {
 				System.out.println("There are "+bleft+" blue points left, "+bright+" right of a total of "+(lBlue.size()+lBlueDel.size()));
 				System.out.println("There are "+rleft+" red points left, "+rright+" right of a total of "+(lRed.size()+lRedDel.size()));
-			}
+			}	
 			
 			if (Math.max(bleft, bright) > (lBlue.size()+lBlueDel.size())/2) return false;
 			if (Math.max(rleft, rright) > (lRed.size()+lRedDel.size())/2) return false;
@@ -420,7 +420,10 @@ public class HamSanAlg {
 	 * kleinere Schritte aufteilen.
 	 */
 	public void doAlg() { //sets done to true iff it has found a solution
-		if (done) {return;}
+		if (done) {
+			if (validSol(true)) System.out.println("Yay it worked");
+			return;
+		}
 		if (lBlue.size() == 0 && lRed.size() == 0) {
 			return; //nix zu tun!
 		}
@@ -620,7 +623,7 @@ public class HamSanAlg {
 
 			// grenzen nur setzen, falls wir wissen, dass da welche sind.
 			if (leftborder && leftsetthistime) {
-				leftb = borders[minband]; //this could get messy, if they were not set! TODO think about this some more
+				leftb = borders[minband];
 			}
 			if (rightborder && rightsetthistime) {
 				rightb = borders[maxband];
@@ -634,7 +637,6 @@ public class HamSanAlg {
 
 			int delta = (int) Math.round(eps * lBlue.size());
 			//int delta = (int) (eps * lBlue.size()+1);
-			//TODO think about: can this delta cause us to go out of bounds on the arrays?
 			int topLvl = levelBlue - delta;
 			int botLvl = levelBlue + delta;
 			if (!leftborder || !rightborder) {
