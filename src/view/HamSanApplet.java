@@ -61,7 +61,7 @@ public class HamSanApplet extends JApplet {
 	    resetButton.addActionListener(new ResetButtonListener(hsa, pp, lp));
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
-	    crossingBox.setSelected(true);
+	    crossingBox.setSelected(true); 
 	    crossingBox.setVisible(true);
 	    crossingBox.setFocusable(false);
 	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
