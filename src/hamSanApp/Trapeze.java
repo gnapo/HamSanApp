@@ -85,7 +85,7 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 					else return 0;
 				}
 				if (y< botright) {
-					if (i.a > topslope) {
+					if (i.a > botslope) {
 						return -1;
 					}
 					else return 0;
@@ -96,13 +96,13 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 			{
 				double y = i.eval(left);
 				if (y>topleft) {
-					if (i.a < topslope) {
+					if (i.a > topslope) {
 						return 1;
 					}
 					else return 0;
 				}
 				if (y< botright) {
-					if (i.a > topslope) {
+					if (i.a < botslope) {
 						return -1;
 					}
 					else return 0;

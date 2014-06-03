@@ -82,6 +82,7 @@ public class HamSanAlg {
 		step = 0;
 		maxband = 0;
 		minband = 0;
+			
 	}
 	
 	/**
@@ -647,12 +648,17 @@ public class HamSanAlg {
 					double ts = getslope(true, topLvl);
 					double bs = getslope(true, botLvl);
 					trapeze = new Trapeze(true, rightb, tr, br, ts, bs);
+					if (DEBUG) System.out.println("making a trapeze open to the left:");
+					if (DEBUG) System.out.println("rightb: "+rightb+" tr: "+tr+" br: "+br+" ts: "+ts+" bs: "+bs);
+					
 				} else if (!rightborder) { // nach links offen
-					double tr = levelPos(rightb, true, topLvl);
-					double br = levelPos(rightb, true, botLvl);
-					double ts = getslope(true, topLvl);
-					double bs = getslope(true, botLvl);
-					trapeze = new Trapeze(true, rightb, tr, br, ts, bs);
+					double tl = levelPos(leftb, true, topLvl);
+					double bl = levelPos(leftb, true, botLvl);
+					double ts = getslope(true, lBlue.size()-topLvl);
+					double bs = getslope(true, lBlue.size()-botLvl);
+					trapeze = new Trapeze(false, leftb, tl, bl, ts, bs);
+					if (DEBUG) System.out.println("making a trapeze open to the right");
+					if (DEBUG) System.out.println("rightb: "+rightb+" tl: "+tl+" bl: "+bl+" ts: "+ts+" bs: "+bs);
 				}
 
 			} else {
@@ -666,6 +672,7 @@ public class HamSanAlg {
 				trapeze = new Trapeze(leftb, tl, bl, rightb, tr, br);
 			}
 			step++;
+			//trapeze = new Trapeze(true, -7, 1, -1, -3,3); debug gründe, ich glaube trapeze tun nicht ganz wie sie sollen
 			if (DEBUG) System.out.println("Trapez konstruiert");
 			borders = new double[64];
 			minband = 0;

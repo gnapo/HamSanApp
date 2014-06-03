@@ -139,6 +139,40 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			g2d.drawLine(x2,ytr,x1,ytl);
 			g2d.setStroke(new BasicStroke());
 		}
+		if (h.trapeze != null && !h.trapeze.bounded) {
+			if (h.trapeze.openleft){
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setStroke(new BasicStroke(2.5f));
+				int x2 = (int) VisualPoint.aToX(h.trapeze.right, xmin, xmax, this.getSize());
+				int ybr = (int) VisualPoint.bToY(h.trapeze.botright, ymin, ymax, this.getSize());
+				int ytr = (int) VisualPoint.bToY(h.trapeze.topright, ymin, ymax, this.getSize());
+				double dx1 = VisualPoint.xToA(0, xmin, xmax, this.getSize());
+				int x1 = (int) VisualPoint.aToX(dx1, xmin, xmax, this.getSize());
+				int ytl = (int) VisualPoint.bToY(h.trapeze.topright+(dx1-h.trapeze.right)*h.trapeze.topslope, ymin, ymax, this.getSize());
+				int ybl = (int) VisualPoint.bToY(h.trapeze.botright+(dx1-h.trapeze.right)*h.trapeze.botslope, ymin, ymax, this.getSize());
+				
+				g2d.drawLine(x1,ybl,x2,ybr);
+				g2d.drawLine(x2,ybr,x2,ytr);
+				g2d.drawLine(x2,ytr,x1,ytl);
+				g2d.setStroke(new BasicStroke());
+			}
+			else{
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setStroke(new BasicStroke(2.5f));
+				int x1 = (int) VisualPoint.aToX(h.trapeze.left, xmin, xmax, this.getSize());
+				int ybl = (int) VisualPoint.bToY(h.trapeze.botleft, ymin, ymax, this.getSize());
+				int ytl = (int) VisualPoint.bToY(h.trapeze.topleft, ymin, ymax, this.getSize());
+				double dx2 = VisualPoint.xToA(this.getSize().width, xmin, xmax, this.getSize());
+				int x2 = (int) VisualPoint.aToX(dx2, xmin, xmax, this.getSize());
+				int ytr = (int) VisualPoint.bToY(h.trapeze.topleft+(dx2-h.trapeze.left)*h.trapeze.topslope, ymin, ymax, this.getSize());
+				int ybr = (int) VisualPoint.bToY(h.trapeze.botleft+(dx2-h.trapeze.left)*h.trapeze.botslope, ymin, ymax, this.getSize());
+				g2d.drawLine(x1,ytl,x1,ybl);
+				g2d.drawLine(x1,ybl,x2,ybr);
+				
+				g2d.drawLine(x2,ytr,x1,ytl);
+				g2d.setStroke(new BasicStroke());
+			}
+		}
 
 		g.setColor(Color.black);
 		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
