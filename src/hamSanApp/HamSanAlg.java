@@ -721,7 +721,12 @@ public class HamSanAlg {
 				}
 			}
 			step = 0;
+			
 			if (DEBUG) System.out.println(deleted +" Linien ausserhalb des intervalls entfernt.");
+			if (deleted == 0) { //ya done goof'd
+				done = true;
+				return;
+			}
 			break;
 		}
 	}	

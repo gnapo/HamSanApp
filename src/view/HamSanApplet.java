@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import control.CrossingsListener;
 import control.DoAlgButtonListener;
+import control.DoAllgButtonListener;
 import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
@@ -65,6 +66,10 @@ public class HamSanApplet extends JApplet {
 	    crossingBox.setVisible(true);
 	    crossingBox.setFocusable(false);
 	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
+	    JButton doAllgButton = new JButton("all steps");
+	    doAllgButton.setVisible(true);
+	    doAllgButton.setFocusable(false);
+	    doAllgButton.addActionListener(new DoAllgButtonListener(hsa, pp, lp));
 	    
 	    JButton resetZoomButton = new JButton("Reset Zoom");
 	    resetZoomButton.setFocusable(false);
@@ -81,6 +86,7 @@ public class HamSanApplet extends JApplet {
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
 	    buttonPanel.add(startAlgButton);
+	    buttonPanel.add(doAllgButton);
 	    buttonPanel.add(resetButton);
 	    buttonPanel.add(crossingBox);
 	    buttonPanel.add(resetZoomButton);
