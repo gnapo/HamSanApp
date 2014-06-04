@@ -160,6 +160,7 @@ public class Sandwich {
 		f.setSize(680 + insets.left + insets.right, 400 + insets.top + insets.bottom);
 		f.setVisible(true);*/
 		Testopt2();
+		Test_wellordered();
 		
 	}
 

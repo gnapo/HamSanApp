@@ -70,7 +70,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			currentType = PointType.BLUE;
 		}
 	}
-
+		
 	public boolean addPoint(int x, int y, PointType type) {
 		if (addingAllowed) {
 			double xscale = this.getWidth() / (xmax - xmin);
@@ -96,6 +96,34 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			return false;
 		}
 	}
+	
+	
+	public boolean adddoublePoint(double x, double y) {
+		if (addingAllowed) {
+			double a = x + xmin +(xmax-xmin)/2;
+			double b =y + ymin +(ymax-ymin)/2;
+
+			VisualPoint candidate = new VisualPoint(a, b, currentType, false);
+			if (visualPoints.contains(candidate)) {
+				System.out.println("not allowed, hier, obwohl ich nicht hier sein will");
+				return false;
+			} else {
+				visualPoints.add(candidate);
+				if (currentType == PointType.BLUE) {
+					System.out.println("currentTyp ist Blau, Punkt wird Blau");
+					candidate.setMyPoint(h.addLine(a, b, true));
+				} else {
+					System.out.println("currentTyp ist Rot, Punkt wird Rot");
+					candidate.setMyPoint(h.addLine(a, b, false));
+				}
+				this.refreshAll();
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+	
 
 	public void drawCross(Graphics g) {
 		g.setColor(Color.white);

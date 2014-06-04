@@ -39,7 +39,7 @@ public class HamSanAlg {
 	boolean DEBUG = true;
 	public Trapeze trapeze;	//das trapez (zum zeichnen)
 	public int minband;		//
-	public int maxband;		// zur binären suche auf den intervallen(bändern)
+	public int maxband;		// zur binï¿½ren suche auf den intervallen(bï¿½ndern)
 	public int step;	//in welchem shritt sind wir?
 						// 0: Ausgangssituation
 						// 1: Intervalle Eingeteilt
@@ -199,14 +199,6 @@ public class HamSanAlg {
 		}
 	}
 	
-	/**
-	 * gibt die y-Koordinate der level'ten linie von Oben an der stelle x aus
-	 * Dabei nimmt Level Werte zwischen 1 und lBlue.size()+1 bzw l.size()+1 an! 
-	 * @param x die x-Koordinate
-	 * @param blue von den Blauen oder Roten linien?
-	 * @param level wievielte linie von oben?
-	 * @return der y-Wert
-	 */
 	public boolean TestLineSort(double x, boolean blue){
 		boolean r=true;
 		LineComparator x_evaluation = new LineComparator(x);
@@ -247,6 +239,16 @@ public class HamSanAlg {
 		return locList;
 	}
 
+	
+	/**
+	 * gibt die y-Koordinate der level'ten linie von Oben an der stelle x aus
+	 * Dabei nimmt Level Werte zwischen 1 und lBlue.size()+1 bzw l.size()+1 an! 
+	 * @param x die x-Koordinate
+	 * @param blue von den Blauen oder Roten linien?
+	 * @param level wievielte linie von oben?
+	 * @return der y-Wert
+	 */
+	
 	public double levelPos(double x, boolean blue, int level) {
 		LineComparator x_evaluation = new LineComparator(x);
 		List<Point> locList;
@@ -419,6 +421,13 @@ public class HamSanAlg {
 	 * Iterationsschritt dar. wir wollen das warscheinlich noch weiter in 
 	 * kleinere Schritte aufteilen.
 	 */
+	
+	//Im Fall, dass LÃ¶sung eine Kreuzung im Unendlichen ist, ist die LÃ¶sung eine vertikale Gerade. 
+	//Gehe alle Kreuzungen vor index oder ab index durch und finde den Cut!
+	public Point verticalcut(int index){
+		return new Point(0, 0);
+	}
+
 	public void doAlg() { //sets done to true iff it has found a solution
 		if (done) {
 			if (validSol(true)) System.out.println("Yay it worked");
@@ -547,7 +556,25 @@ public class HamSanAlg {
 				}
 				System.out.println("aww :'(");
 			}*/
-
+			
+			//Find the first and the last crossing, which are not at -infinity and + infinity
+			int first=0;
+			int last=0;
+			for (int i = 0; i < crossings.size(); i ++) {
+				if (crossings.get(i).atNegInf()==false){
+					System.out.println("Erste reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
+							+ crossings.get(i).crAt());
+					first=i;break;
+				}
+			}
+			for (int i = crossings.size()-1;i>=0 ; i --) {
+				if (crossings.get(i).atInf()==false){
+					System.out.println("letzte reellwertige Kreuzung bei"+i+"ter Stelle und bei x-Koordinate "
+							+ crossings.get(i).crAt());
+					last=i;break;
+				}
+			}
+			
 			minband = 0;
 			maxband = 0; // wird ï¿½berschrieben.
 			int band = 1;
@@ -555,7 +582,7 @@ public class HamSanAlg {
 			bandsize = Math.max(1, bandsize);
 			// System.out.println(crossings.size());
 			// System.out.println(bandsize);
-			for (int i = bandsize; i < crossings.size(); i += bandsize) { // TODO many crossings at inf
+			for (int i = bandsize+first; i < last; i += bandsize) { // TODO many crossings at inf
 				/*
 				 * while (crossings.get(i).atInf() &&
 				 * crossings.get(i).atNegInf()) {i++;} // only need for ugly

@@ -13,7 +13,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import control.CoordsListener;
 import control.CrossingsListener;
 import control.DoAlgButtonListener;
 import control.RandomButtonListener;
@@ -50,6 +52,7 @@ public class HamSanApplet extends JApplet {
 		dualPanels.add(pp);
 		dualPanels.add(lp);
 		
+ 
 		// the buttons
 		JButton startAlgButton = new JButton("Next Step");
 		startAlgButton.setVisible(true);
@@ -78,6 +81,14 @@ public class HamSanApplet extends JApplet {
 	    randomButton.addActionListener(new RandomButtonListener(hsa,lp,pp));
 	    randomButton.setFocusable(false);
 	    
+	    //coordinates of points
+	    JTextField coord1 = new JTextField(3);
+	    JTextField coord2 = new JTextField(3);
+	    JButton setPoint = new JButton("Setze Punkt an Koordinaten");
+		setPoint.setVisible(true);
+	    setPoint.setFocusable(false);
+	    setPoint.addActionListener(new CoordsListener(this,pp,coord1, coord2));
+	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
 	    buttonPanel.add(startAlgButton);
@@ -86,6 +97,9 @@ public class HamSanApplet extends JApplet {
 	    buttonPanel.add(resetZoomButton);
 	    buttonPanel.add(randomButton);
 	    buttonPanel.add(verifyButton);
+	    buttonPanel.add(setPoint);//Koordinateneingabe
+	    buttonPanel.add(coord1);
+	    buttonPanel.add(coord2);
 	    // the step label
 	    JLabel infoLabel = new JLabel("Step 0: Place the points! Yes! Now! Place them!");
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
