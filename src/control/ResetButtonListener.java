@@ -23,6 +23,10 @@ public class ResetButtonListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		doStuff();
+	}
+
+	public void doStuff() {
 		hsa.init();
 		pp.setAddingAllowed(true);
 		pp.setVisualPoints(hsa.getVisualPoints());
@@ -30,5 +34,4 @@ public class ResetButtonListener implements ActionListener {
 		pp.refreshAll();
 		pp.setCurrentType(PointType.BLUE);
 	}
-
 }

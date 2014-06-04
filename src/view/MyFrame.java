@@ -2,13 +2,17 @@ package view;
 
 import hamSanApp.HamSanAlg;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import control.DoAlgButtonListener;
 import control.ResetButtonListener;
-import control.ToggleListener;
 
 public class MyFrame extends JFrame {
 
@@ -60,7 +64,7 @@ public class MyFrame extends JFrame {
 		
 		this.add(dualPanels, BorderLayout.CENTER);
 	    this.add(buttonPanel, BorderLayout.SOUTH);
-	    this.addKeyListener(new ToggleListener(pp));
+	//    this.addKeyListener(new ToggleListener(pp));
 	    setFocusable(true);
 	    
 	    this.pack();

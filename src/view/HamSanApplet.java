@@ -58,11 +58,13 @@ public class HamSanApplet extends JApplet {
 		JButton startAlgButton = new JButton("Next Step");
 		startAlgButton.setVisible(true);
 	    startAlgButton.setFocusable(false);
-	    startAlgButton.addActionListener(new DoAlgButtonListener(hsa, pp, lp));
+	    DoAlgButtonListener doAlgButtonListener = new DoAlgButtonListener(hsa, pp, lp); 
+	    startAlgButton.addActionListener(doAlgButtonListener);
 	    JButton resetButton = new JButton("Reset");
 		resetButton.setVisible(true);
 	    resetButton.setFocusable(false);
-	    resetButton.addActionListener(new ResetButtonListener(hsa, pp, lp));
+	    ResetButtonListener resetButtonListener = new ResetButtonListener(hsa, pp, lp); 
+	    resetButton.addActionListener(resetButtonListener);
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
 	    crossingBox.setSelected(true); 
@@ -72,7 +74,8 @@ public class HamSanApplet extends JApplet {
 	    JButton doAllgButton = new JButton("all steps");
 	    doAllgButton.setVisible(true);
 	    doAllgButton.setFocusable(false);
-	    doAllgButton.addActionListener(new DoAllgButtonListener(hsa, pp, lp));
+	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp); 
+	    doAllgButton.addActionListener(doAllgButtonListener);
 	    
 	    JButton resetZoomButton = new JButton("Reset Zoom");
 	    resetZoomButton.setFocusable(false);
@@ -83,7 +86,8 @@ public class HamSanApplet extends JApplet {
 	    verifyButton.setFocusable(false); 
 	    
 	    JButton randomButton = new JButton("Add some points");
-	    randomButton.addActionListener(new RandomButtonListener(hsa,lp,pp));
+	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp); 
+	    randomButton.addActionListener(randomButtonListener);
 	    randomButton.setFocusable(false);
 	    
 	    //coordinates of points
@@ -117,7 +121,7 @@ public class HamSanApplet extends JApplet {
 		
 		this.add(dualPanels, BorderLayout.CENTER);
 	    this.add(buttonsAndLabel, BorderLayout.SOUTH);
-	    this.addKeyListener(new ToggleListener(pp));
+	    this.addKeyListener(new ToggleListener(pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener));
 	    setFocusable(true);
 	    this.requestFocusInWindow();
 	    this.requestFocus();

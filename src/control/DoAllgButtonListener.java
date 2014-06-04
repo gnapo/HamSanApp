@@ -23,6 +23,10 @@ public class DoAllgButtonListener implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		doStuff();
+	}
+	
+	public void doStuff(){
 		if (h.lBlue.size()==0 || h.lRed.size() ==0) {
 			return;
 		}

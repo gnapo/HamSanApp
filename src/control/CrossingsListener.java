@@ -19,8 +19,11 @@ public class CrossingsListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		doStuff();
+	}
+
+	public void doStuff() {
 		lp.setShowCrossings(myCheckBox.isSelected());
 		lp.repaint();
 	}
-
 }

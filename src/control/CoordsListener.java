@@ -23,10 +23,13 @@ public class CoordsListener implements ActionListener  {
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0){
-		 Double xvalue = new Double(x.getText());//muss noch Fehlerabfrage haben!
-		 Double yvalue = new Double(y.getText());
-		 pp.adddoublePoint(xvalue,yvalue);
-		System.out.println("ja, ich bin hier gelandet");
+		 doStuff();
+	}
+	
+	public void doStuff() {
+		double xvalue = new Double(x.getText());//TODO muss noch Fehlerabfrage haben!
+		double yvalue = new Double(y.getText());
+		pp.adddoublePoint(xvalue,yvalue);
 		ha.requestFocus();
 	}
 

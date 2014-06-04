@@ -24,6 +24,10 @@ public class DoAlgButtonListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		doStuff();
+	}
+	
+	public void doStuff() {
 		hsa.doAlg();
 		pp.setAddingAllowed(false);
 		List<VisualPoint> vpoints = hsa.getVisualPoints();

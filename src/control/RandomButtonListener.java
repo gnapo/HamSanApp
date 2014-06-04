@@ -25,6 +25,10 @@ public class RandomButtonListener implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		doStuff();
+	}
+	
+	public void doStuff() {
 		if (circular) {
 			for (int i = 0; i < 10 + Math.random()*20;i++){
 				double phi = Math.random()*Math.PI*2;

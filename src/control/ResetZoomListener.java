@@ -15,6 +15,10 @@ public class ResetZoomListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		doStuff();
+	}
+	
+	public void doStuff(){
 		lp.setMinAndMax(-10, -10, 10, 10);
 		lp.repaint();
 	}
