@@ -21,12 +21,25 @@ public class CoordsListener implements ActionListener  {
 		this.ha = ha;
 		
 	}
+	
+	public boolean isDouble(String string) {
+	    try {
+	        Double.valueOf(string);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
 	@Override
 	public void actionPerformed(ActionEvent arg0){
+		if ((isDouble(x.getText())==false)||(isDouble(y.getText())==false)){
+			System.out.println("Bitte Zahlen ins Textfeld eingeben");
+		}else{
 		 Double xvalue = new Double(x.getText());//muss noch Fehlerabfrage haben!
 		 Double yvalue = new Double(y.getText());
 		 pp.adddoublePoint(xvalue,yvalue);
 		System.out.println("ja, ich bin hier gelandet");
+		}
 		ha.requestFocus();
 	}
 
