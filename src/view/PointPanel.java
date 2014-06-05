@@ -139,7 +139,8 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		drawCross(g);
 
 		g.setColor(Color.magenta);
-		if (h.done) {
+		if (h.done && (h.verticalSol || h.solution != null)) {
+			
 			if (h.verticalSol) {
 				double xVal = VisualPoint.aToX(h.verticalSolPos, xmin, xmax, this.getSize());
 				
@@ -155,7 +156,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			}
 		}
 		g.setColor(Color.black);
-		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
+		g.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 
 		for (VisualPoint v : visualPoints) {
 			v.drawAsPoint(g, xmin, xmax, ymin, ymax, this.getSize());

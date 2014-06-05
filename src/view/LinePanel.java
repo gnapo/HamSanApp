@@ -103,7 +103,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		}
 
 		g.setColor(Color.magenta);
-		if (h.done) {
+		if (h.done && (h.verticalSol || h.solution != null)) {
 			Point2D.Double cutAB = new Point2D.Double(-h.solution.a, h.solution.b);
 			Point2D.Double cutXY = VisualPoint.toXY(cutAB, xmin, ymin, xmax, ymax, this.getSize());
 			int x = (int) cutXY.x;

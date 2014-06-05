@@ -345,6 +345,7 @@ public class HamSanAlg {
 	 */
 	public boolean validSol(boolean verbose) {
 		if (!done) return false; //haben noch keinen schnitt.
+		if (!verticalSol || solution == null) return false; //wtf? had a trapeze not kill any lines.
 		double tol = 0.0000001; //tolerance
 		if (verticalSol) {
 			int bleft = 0;
