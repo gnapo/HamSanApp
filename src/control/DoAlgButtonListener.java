@@ -29,6 +29,7 @@ public class DoAlgButtonListener implements ActionListener {
 	
 	public void doStuff() {
 		hsa.doAlg();
+		lp.followTrapeze();
 		pp.setAddingAllowed(false);
 		List<VisualPoint> vpoints = hsa.getVisualPoints();
 		pp.setVisualPoints(vpoints);

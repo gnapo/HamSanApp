@@ -175,7 +175,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		}
 
 		g.setColor(Color.black);
-		g.drawRect(1, 1, this.getWidth() - 1, this.getHeight() - 1);
+		g.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 	}
 
 	private void drawZoomRectangle(Graphics g) {
@@ -188,6 +188,15 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		g.drawRect(x1, y1, dx, dy);
 	}
 
+	public void followTrapeze(){
+		if (h.trapeze == null) return;
+		if (!h.trapeze.bounded) return; //TODO add this feature
+		double w = h.trapeze.right - h.trapeze.left;
+		setMinAndMax(h.trapeze.left-w, ymin, h.trapeze.right+w, ymax);
+		this.repaint();
+	}
+	
+	
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		for (VisualPoint v : visualPoints) {
