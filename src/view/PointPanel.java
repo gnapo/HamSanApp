@@ -20,7 +20,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	private static final long serialVersionUID = 5611393992807346242L;
 
 	private PointType currentType = PointType.BLUE;
-	private boolean addingAllowed = true;
+	public boolean addingAllowed = true;
 
 	private List<VisualPoint> visualPoints;
 
@@ -237,6 +237,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 				v.highlighted = true;
 				highlightedPoint = v;
 				linePanel.setVisualPoints(visualPoints);
+				break;
 			}
 		}
 

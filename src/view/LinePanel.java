@@ -37,6 +37,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	private boolean showCrossings = true;
 
+	private VisualPoint highlightedPoint = null;
+	
 	private PointPanel pointPanel;
 
 	private List<VisualPoint> visualPoints;
@@ -199,6 +201,9 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		
+		highlightedPoint = null;
+		
 		for (VisualPoint v : visualPoints) {
 			v.highlighted = false;
 		}
@@ -206,6 +211,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		for (VisualPoint v : visualPoints) {
 			if (v.containsCursorLine(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
 				v.highlighted = true;
+				highlightedPoint = v;
 				pointPanel.setVisualPoints(visualPoints);
 				break;
 			}
@@ -249,7 +255,11 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if (e.getButton()==MouseEvent.BUTTON3 && pointPanel.addingAllowed && highlightedPoint != null) {
+			h.removeLine(highlightedPoint.getMyPoint());
+			visualPoints.remove(highlightedPoint);
+			pointPanel.refreshAll();
+		}
 
 	}
 
