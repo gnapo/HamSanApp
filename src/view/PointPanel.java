@@ -73,10 +73,14 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		
 	public boolean addPoint(int x, int y, PointType type) {
 		if (addingAllowed) {
+			
+			double a = VisualPoint.xToA(x, xmin, xmax, this.getSize());
+			double b = VisualPoint.yToB(y, ymin, ymax, this.getSize());
+			/* old code, didn't work for some reason
 			double xscale = this.getWidth() / (xmax - xmin);
 			double yscale = this.getHeight() / (ymax - ymin);
 			double a = ((double) x / xscale) + xmin;
-			double b = ((double) -y / yscale) - ymin;
+			double b = ((double) -y / yscale) - ymin;*/
 
 			VisualPoint candidate = new VisualPoint(a, b, type, false);
 			if (visualPoints.contains(candidate)) {
@@ -217,12 +221,11 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 					highlightedPoint.isBlue()));
 			refreshAll();
 		}
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		highlightedPoint = null;
 
 		for (VisualPoint v : visualPoints) {
