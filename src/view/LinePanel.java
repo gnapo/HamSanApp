@@ -33,8 +33,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private double ymin = -10;
 	private double ymax = 10;
 	private double referenceLength = 20;
+	private double referenceHeight = 20;
 	
 	private double zoomLength = 20;
+	private double zoomHeight = 20;
 	private Point2D.Double zoomCenterAB = new Point2D.Double(0, 0);
 
 	private double zoomFactor = 1;
@@ -205,6 +207,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		if (!h.trapeze.bounded)
 			return; // TODO add this feature
 		double w = h.trapeze.right - h.trapeze.left;
+		
 		setMinAndMax(h.trapeze.left - w, ymin, h.trapeze.right + w, ymax);
 		this.repaint();
 	}
@@ -243,21 +246,21 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		double zoom = zoomFactor + e.getPreciseWheelRotation() / 100;
 		if (zoom < 0)
 			zoom = 0.0000000000001;
-		if (zoom > 10)
-			zoom = 10;
+		/*if (zoom > 10)
+			zoom = 10;*/
 		this.setZoomFactor(zoom, zoomCenterAB);
 		this.repaint();
 	}
 
 	private void setZoomFactor(double zoomFactor, Point2D.Double zoomCenterAB) {
 		this.zoomFactor = zoomFactor;
-		System.out.println(zoomFactor);
-
+		
 		zoomLength = zoomFactor * referenceLength;
+		zoomHeight = zoomFactor * referenceHeight;
 		xmin = zoomCenterAB.x - zoomLength / 2;
 		xmax = zoomCenterAB.x + zoomLength / 2;
-		ymin = zoomCenterAB.y - zoomLength / 2;
-		ymax = zoomCenterAB.y + zoomLength / 2;
+		ymin = zoomCenterAB.y - zoomHeight / 2;
+		ymax = zoomCenterAB.y + zoomHeight / 2;
 		this.repaint();
 	}
 
@@ -298,22 +301,18 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			int y1 = (int) Math.min(corner1.y, corner2.y);
 			int x2 = (int) Math.max(corner1.x, corner2.x);
 			int y2 = (int) Math.max(corner1.y, corner2.y);
+			
+			System.out.println("x1: "+x1+", x2: "+x2+", y1:"+y1+", y2: "+y2);
 
 			double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
 			double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
-			double bMax = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
-			double bMin = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
+			double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
+			double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
+			
+			this.setMinAndMax(aMin, bMax, aMax, bMin);
 
-			xmin = aMin;
-			xmax = aMax;
-			ymin = bMin;
-			ymax = bMax;
-			zoomFactor = 1;
-
-			zoomCenterAB = new Point2D.Double((xmax - xmin) / 2, (ymax - ymin) / 2);
-			referenceLength = (xmax-xmin)/2;
-			setZoomFactor(1, zoomCenterAB);
-
+			System.out.println("xMin: " + xmin + ", xMax: "+xmax+", yMin: " + ymin + ", yMax:" + ymax);
+			
 			corner1 = null;
 			corner2 = null;
 			this.repaint();
@@ -338,8 +337,9 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.ymin = ymin;
 		this.ymax = ymax;
 		this.zoomFactor = 1;
-		this.referenceLength = (xmax-xmin)/2;
-		this.zoomCenterAB = new Point2D.Double(0, 0);
+		this.referenceLength = (xmax-xmin);
+		this.referenceHeight = (ymax-ymin);
+		this.zoomCenterAB = new Point2D.Double((xmax+xmin)/2, (ymax+ymin)/2);
 	}
 
 }
