@@ -194,15 +194,31 @@ public class VisualPoint {
 		
 		if (this.type == PointType.BLUE) {
 			if (this.highlighted) {
-				g.setColor(Color.cyan);
+				if (this.deleted) {
+					g.setColor(new Color(200, 255, 255));
+				} else {
+					g.setColor(Color.cyan);
+				}
 			} else {
-				g.setColor(Color.blue);
+				if (this.deleted) {
+					g.setColor(new Color(200, 200, 255));
+				} else {
+					g.setColor(Color.blue);
+				}
 			}
 		} else if (this.type == PointType.RED) {
 			if (this.highlighted) {
-				g.setColor(Color.orange);
+				if (this.deleted) {
+					g.setColor(new Color(255, 255, 200));
+				} else {
+					g.setColor(Color.orange);
+				}
 			} else {
-				g.setColor(Color.red);
+				if (this.deleted) {
+					g.setColor(new Color(255, 200, 200));
+				} else {
+					g.setColor(Color.red);
+				}
 			}
 		} else {
 			throw new IllegalStateException("Invalid point type.");
@@ -210,7 +226,6 @@ public class VisualPoint {
 		
 		if (this.deleted) {
 			g.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3}, 0));
-			g.setColor(g.getColor().brighter());
 			
 			g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
 			g.setStroke(new BasicStroke(2));
