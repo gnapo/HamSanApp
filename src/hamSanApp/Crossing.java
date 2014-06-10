@@ -65,6 +65,7 @@ public class Crossing implements Comparable<Crossing> {
 	 * @return true wenn bei -unendl
 	 */
 	public boolean atNegInf() {
+		if (!atInf()) {return false;}
 		if (a.i<b.i){
 			if (a.b < b.b) {return false;}
 			else {return true;}

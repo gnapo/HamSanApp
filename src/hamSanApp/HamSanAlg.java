@@ -344,8 +344,14 @@ public class HamSanAlg {
 	 * @return Ja falls valider Schnitt
 	 */
 	public boolean validSol(boolean verbose) {
-		if (!done) return false; //haben noch keinen schnitt.
-		if (!verticalSol || solution == null) return false; //wtf? had a trapeze not kill any lines.
+		if (!done){
+			if (DEBUG && verbose) {
+				System.out.println("algo is not done!");
+			}
+			return false; //haben noch keinen schnitt.
+		}
+			
+		if (!verticalSol && solution == null) return false; //wtf? had a trapeze not kill any lines.
 		double tol = 0.0000001; //tolerance
 		if (verticalSol) {
 			int bleft = 0;
@@ -578,7 +584,7 @@ public class HamSanAlg {
 			int first=0;
 			int last=0;
 			for (int i = 0; i < crossings.size(); i ++) {
-				if (crossings.get(i).atNegInf()==false){
+				if (crossings.get(i).atInf() && crossings.get(i).atNegInf()==false){
 					System.out.println("Erste reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
 							+ crossings.get(i).crAt());
 					first=i;break;
@@ -586,7 +592,7 @@ public class HamSanAlg {
 			}
 			for (int i = crossings.size()-1;i>=0 ; i --) {
 				if (crossings.get(i).atInf()==false){
-					System.out.println("letzte reellwertige Kreuzung bei"+i+"ter Stelle und bei x-Koordinate "
+					System.out.println("letzte reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
 							+ crossings.get(i).crAt());
 					last=i;break;
 				}
@@ -597,9 +603,10 @@ public class HamSanAlg {
 			int band = 1;
 			int bandsize = (int) (crossings.size() * alpha);
 			bandsize = Math.max(1, bandsize);
-			// System.out.println(crossings.size());
-			// System.out.println(bandsize);
-			for (int i = bandsize+first; i < last; i += bandsize) { // TODO many crossings at inf
+			// here's how things are meant to be: all crossings at negInf are left of borders[band] 
+			// all crossings at posInf are to the right of borders[maxband], so that all crossings at real values
+			// are geq borders[i] and less than borders[i+1] for 1<=i<maxborders
+			for (int i = first; i < last; i += bandsize) { // TODO many crossings at inf
 				/*
 				 * while (crossings.get(i).atInf() &&
 				 * crossings.get(i).atNegInf()) {i++;} // only need for ugly
