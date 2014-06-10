@@ -48,6 +48,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private PointPanel pointPanel;
 
 	private List<VisualPoint> visualPoints;
+	
+	private boolean drawDeleted = true;
 
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;
@@ -85,8 +87,17 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	public void paint(Graphics g) {
 		super.paint(g);
 		drawCross(g);
-		for (VisualPoint p : visualPoints) {
-			p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
+		
+		if (drawDeleted) {
+			for (VisualPoint p : visualPoints) {
+				p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
+			}
+		} else {
+			for (VisualPoint p : visualPoints) {
+				if (!p.deleted) {
+					p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
+				}
+			}
 		}
 
 		if (showCrossings) {
@@ -339,6 +350,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.referenceLength = (xmax-xmin);
 		this.referenceHeight = (ymax-ymin);
 		this.zoomCenterAB = new Point2D.Double((xmax+xmin)/2, (ymax+ymin)/2);
+	}
+
+	public void setDrawDeleted(boolean selected) {
+		this.drawDeleted = selected;
 	}
 
 }

@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import control.CoordsListener;
 import control.CrossingsListener;
+import control.DeletedListener;
 import control.DoAlgButtonListener;
 import control.DoAllgButtonListener;
 import control.RandomButtonListener;
@@ -39,7 +40,7 @@ public class HamSanApplet extends JApplet {
 	}
 
 	public void init() {
-		this.setPreferredSize(new Dimension(1200,1000));
+		this.setPreferredSize(new Dimension(1024,600));
 		this.setLayout(new BorderLayout());
 		
 		// the dual panels
@@ -50,7 +51,7 @@ public class HamSanApplet extends JApplet {
 		pp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
 		lp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
 		JPanel dualPanels = new JPanel(new GridLayout(1, 2));
-		dualPanels.setPreferredSize(new Dimension(this.getWidth(), 800));
+		dualPanels.setPreferredSize(new Dimension(this.getWidth(), 500));
 		dualPanels.add(pp);
 		dualPanels.add(lp);
 		
@@ -77,6 +78,14 @@ public class HamSanApplet extends JApplet {
 	    crossingBox.setVisible(true);
 	    crossingBox.setFocusable(false);
 	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
+	    
+	    JCheckBox deletedBox = new JCheckBox("Show deleted lines?");
+	    deletedBox.setEnabled(true);
+	    deletedBox.setSelected(true); 
+	    deletedBox.setVisible(true);
+	    deletedBox.setFocusable(false);
+	    deletedBox.addActionListener(new DeletedListener(deletedBox, lp));
+	    
 	    JButton doAllgButton = new JButton("All steps");
 	    doAllgButton.setMnemonic(KeyEvent.VK_A);
 	    doAllgButton.setVisible(true);
@@ -112,6 +121,7 @@ public class HamSanApplet extends JApplet {
 	    buttonPanel.add(doAllgButton);
 	    buttonPanel.add(resetButton);
 	    buttonPanel.add(crossingBox);
+	    buttonPanel.add(deletedBox);
 	    buttonPanel.add(resetZoomButton);
 	    buttonPanel.add(randomButton);
 	    buttonPanel.add(verifyButton);
