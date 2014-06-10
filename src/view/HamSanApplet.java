@@ -25,7 +25,6 @@ import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
 import control.ToggleListener;
-import control.VerifyButtonListener;
 
 public class HamSanApplet extends JApplet {
 
@@ -38,6 +37,8 @@ public class HamSanApplet extends JApplet {
 	private JTextField coord1,coord2;
 	private JButton setPoint;
 	private JComboBox<String> presetList;
+	private JButton startAlgButton;
+	private JButton doAllgButton;
 	
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -70,7 +71,7 @@ public class HamSanApplet extends JApplet {
 	    presetList.setFocusable(false);
 	    
 		// the buttons
-		JButton startAlgButton = new JButton("Next Step");
+		startAlgButton = new JButton("Next Step");
 		startAlgButton.setMnemonic(KeyEvent.VK_N);
 		startAlgButton.setVisible(true);
 	    startAlgButton.setFocusable(false);
@@ -97,20 +98,16 @@ public class HamSanApplet extends JApplet {
 	    deletedBox.setFocusable(false);
 	    deletedBox.addActionListener(new DeletedListener(deletedBox, lp));
 	    
-	    JButton doAllgButton = new JButton("All steps");
+	    doAllgButton = new JButton("All steps");
 	    doAllgButton.setMnemonic(KeyEvent.VK_A);
 	    doAllgButton.setVisible(true);
 	    doAllgButton.setFocusable(false);
-	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp, infoLabel); 
+	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp, infoLabel, this); 
 	    doAllgButton.addActionListener(doAllgButtonListener);
 	    
 	    JButton resetZoomButton = new JButton("Reset Zoom");
 	    resetZoomButton.setFocusable(false);
 	    resetZoomButton.addActionListener(new ResetZoomListener(lp));
-	    
-	    JButton verifyButton = new JButton("Verify solution");
-	    verifyButton.addActionListener(new VerifyButtonListener(hsa));
-	    verifyButton.setFocusable(false); 
 	    
 	    randomButton = new JButton("Add Points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
@@ -136,7 +133,6 @@ public class HamSanApplet extends JApplet {
 	    buttonPanel.add(deletedBox);
 	    buttonPanel.add(resetZoomButton);
 	    buttonPanel.add(randomButton);
-	    buttonPanel.add(verifyButton);
 	    buttonPanel.add(setPoint);//Koordinateneingabe
 	    buttonPanel.add(coord1);
 	    buttonPanel.add(coord2);
@@ -161,6 +157,11 @@ public class HamSanApplet extends JApplet {
 		coord2.setEnabled(enabled);
 		setPoint.setEnabled(enabled);
 		presetList.setEnabled(enabled);
+	}
+
+	public void setStepsEnabled(boolean enabled) {
+		startAlgButton.setEnabled(enabled);
+		doAllgButton.setEnabled(enabled);
 	}
 
 }

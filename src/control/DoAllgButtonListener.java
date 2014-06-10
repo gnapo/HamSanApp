@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
+import view.HamSanApplet;
 import view.LinePanel;
 import view.PointPanel;
 import view.VisualPoint;
@@ -18,12 +19,14 @@ public class DoAllgButtonListener implements ActionListener {
 	private PointPanel pp;
 	private LinePanel lp;
 	private JLabel l;
+	private HamSanApplet applet;
 	
-	public DoAllgButtonListener(HamSanAlg hsa, PointPanel pp, LinePanel lp, JLabel label) {
+	public DoAllgButtonListener(HamSanAlg hsa, PointPanel pp, LinePanel lp, JLabel label, HamSanApplet hamSanApplet) {
 		this.h = hsa;
 		this.pp = pp;
 		this.lp = lp;
 		this.l = label;
+		this.applet = hamSanApplet;
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -33,6 +36,9 @@ public class DoAllgButtonListener implements ActionListener {
 	public void doStuff(){
 		if (h.lBlue.size()==0 && h.lRed.size() ==0) {
 			return;
+		} else {
+			applet.setPlacingEnabled(false);
+			applet.setStepsEnabled(false);
 		}
 		while (!h.done) {
 			h.doAlg();
