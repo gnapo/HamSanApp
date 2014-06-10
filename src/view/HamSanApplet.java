@@ -52,7 +52,7 @@ public class HamSanApplet extends JApplet {
 		// the dual panels
 		HamSanAlg hsa = new HamSanAlg();
 		LinePanel lp = new LinePanel(hsa);
-		PointPanel pp = new PointPanel(hsa,lp);
+		PointPanel pp = new PointPanel(hsa,lp, this);
 		lp.setPointPanel(pp);
 		pp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
 		lp.setPreferredSize(new Dimension(this.getWidth()/2, 400));
@@ -75,6 +75,7 @@ public class HamSanApplet extends JApplet {
 		startAlgButton.setMnemonic(KeyEvent.VK_N);
 		startAlgButton.setVisible(true);
 	    startAlgButton.setFocusable(false);
+	    startAlgButton.setEnabled(false);
 	    DoAlgButtonListener doAlgButtonListener = new DoAlgButtonListener(hsa, pp, lp, infoLabel, this); 
 	    startAlgButton.addActionListener(doAlgButtonListener);
 	    JButton resetButton = new JButton("Reset");
@@ -101,6 +102,7 @@ public class HamSanApplet extends JApplet {
 	    doAllgButton = new JButton("All steps");
 	    doAllgButton.setMnemonic(KeyEvent.VK_A);
 	    doAllgButton.setVisible(true);
+	    doAllgButton.setEnabled(false);
 	    doAllgButton.setFocusable(false);
 	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp, infoLabel, this); 
 	    doAllgButton.addActionListener(doAllgButtonListener);
@@ -111,7 +113,7 @@ public class HamSanApplet extends JApplet {
 	    
 	    randomButton = new JButton("Add Points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
-	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp,presetList); 
+	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp,presetList, this); 
 	    randomButton.addActionListener(randomButtonListener);
 	    randomButton.setFocusable(false);
 	    

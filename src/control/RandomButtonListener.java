@@ -9,6 +9,7 @@ import java.util.Random;
 
 import javax.swing.JComboBox;
 
+import view.HamSanApplet;
 import view.LinePanel;
 import view.PointPanel;
 import view.VisualPoint;
@@ -22,14 +23,16 @@ public class RandomButtonListener implements ActionListener {
 	private PointPanel pp;
 	private Random r;
 	private JComboBox<String> c;
+	private HamSanApplet applet;
 	
-	public RandomButtonListener(HamSanAlg hsa,LinePanel lp, PointPanel pp, JComboBox<String> c) {
+	public RandomButtonListener(HamSanAlg hsa,LinePanel lp, PointPanel pp, JComboBox<String> c, HamSanApplet applet) {
 		r = new Random();
 		r.setSeed(1);
 		this.hsa = hsa;
 		this.lp = lp;
 		this.pp = pp;
 		this.c = c;
+		this.applet = applet;
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -64,5 +67,6 @@ public class RandomButtonListener implements ActionListener {
 		pp.repaint();
 		lp.revalidate();
 		lp.repaint();
+		applet.setStepsEnabled(true);
 	}
 }

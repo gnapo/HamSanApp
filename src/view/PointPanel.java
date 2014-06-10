@@ -29,6 +29,8 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	private LinePanel linePanel;
 
 	private HamSanAlg h;
+	
+	private HamSanApplet applet;
 
 	public int getXmin() {
 		return xmin;
@@ -39,11 +41,12 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	private int ymin = -10;
 	private int ymax = 10;
 
-	PointPanel(HamSanAlg hsa, LinePanel lp) {
+	PointPanel(HamSanAlg hsa, LinePanel lp, HamSanApplet applet) {
 		super();
 		h = hsa;
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+		this.applet = applet;
 
 		visualPoints = h.getVisualPoints();
 		this.linePanel = lp;
@@ -94,6 +97,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 					candidate.setMyPoint(h.addLine(a, b, false));
 				}
 				this.refreshAll();
+				applet.setStepsEnabled(true);
 				return true;
 			}
 		} else {

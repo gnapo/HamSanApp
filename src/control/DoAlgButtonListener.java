@@ -57,6 +57,7 @@ public class DoAlgButtonListener implements ActionListener {
 			applet.setPlacingEnabled(false);
 		}
 		if (hsa.done) {
+			applet.setStepsEnabled(false);
 			if (hsa.validSol(false)){
 				l.setText("found valid solution!");
 			}

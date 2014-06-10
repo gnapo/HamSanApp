@@ -35,7 +35,7 @@ public class ResetButtonListener implements ActionListener {
 
 	public void doStuff() {
 		applet.setPlacingEnabled(true);
-		applet.setStepsEnabled(true);
+		applet.setStepsEnabled(false);
 		hsa.init();
 		l.setText("step 0: place points");
 		pp.setAddingAllowed(true);
