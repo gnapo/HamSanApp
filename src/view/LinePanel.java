@@ -49,7 +49,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	private List<VisualPoint> visualPoints;
 	
-	private boolean drawDeleted = false;
+	private boolean drawDeleted = true;
 
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;
@@ -90,15 +90,18 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		
 		if (drawDeleted) {
 			for (VisualPoint p : visualPoints) {
-				p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
-			}
-		} else {
-			for (VisualPoint p : visualPoints) {
-				if (!p.deleted) {
+				if (p.deleted) {
 					p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
 				}
 			}
 		}
+		
+		for (VisualPoint p : visualPoints) {
+			if (!p.deleted) {
+				p.drawAsLine(g, xmin, xmax, ymin, ymax, this.getSize());
+			}
+		}
+		
 
 		if (showCrossings) {
 			g.setColor(Color.GREEN);

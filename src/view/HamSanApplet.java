@@ -94,7 +94,7 @@ public class HamSanApplet extends JApplet {
 	    
 	    JCheckBox deletedBox = new JCheckBox("Show deleted lines?");
 	    deletedBox.setEnabled(true);
-	    deletedBox.setSelected(false); 
+	    deletedBox.setSelected(true); 
 	    deletedBox.setVisible(true);
 	    deletedBox.setFocusable(false);
 	    deletedBox.addActionListener(new DeletedListener(deletedBox, lp));

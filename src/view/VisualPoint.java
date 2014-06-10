@@ -228,7 +228,7 @@ public class VisualPoint {
 			g.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3}, 0));
 			
 			g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
-			g.setStroke(new BasicStroke(2));
+			g.setStroke(new BasicStroke(1));
 		} else {
         	g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
 		}
