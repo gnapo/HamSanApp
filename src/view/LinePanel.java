@@ -338,6 +338,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.ymin = ymin;
 		this.ymax = ymax;
 		this.zoomFactor = 1;
+		this.referenceLength = (xmax-xmin)/2;
 	}
 
 }
