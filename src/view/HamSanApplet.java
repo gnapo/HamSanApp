@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -59,11 +60,13 @@ public class HamSanApplet extends JApplet {
  
 		// the buttons
 		JButton startAlgButton = new JButton("Next Step");
+		startAlgButton.setMnemonic(KeyEvent.VK_N);
 		startAlgButton.setVisible(true);
 	    startAlgButton.setFocusable(false);
 	    DoAlgButtonListener doAlgButtonListener = new DoAlgButtonListener(hsa, pp, lp, infoLabel); 
 	    startAlgButton.addActionListener(doAlgButtonListener);
 	    JButton resetButton = new JButton("Reset");
+	    resetButton.setMnemonic(KeyEvent.VK_R);
 		resetButton.setVisible(true);
 	    resetButton.setFocusable(false);
 	    ResetButtonListener resetButtonListener = new ResetButtonListener(hsa, pp, lp, infoLabel); 
@@ -74,7 +77,8 @@ public class HamSanApplet extends JApplet {
 	    crossingBox.setVisible(true);
 	    crossingBox.setFocusable(false);
 	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
-	    JButton doAllgButton = new JButton("all steps");
+	    JButton doAllgButton = new JButton("All steps");
+	    doAllgButton.setMnemonic(KeyEvent.VK_A);
 	    doAllgButton.setVisible(true);
 	    doAllgButton.setFocusable(false);
 	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp, infoLabel); 
@@ -88,7 +92,8 @@ public class HamSanApplet extends JApplet {
 	    verifyButton.addActionListener(new VerifyButtonListener(hsa));
 	    verifyButton.setFocusable(false); 
 	    
-	    JButton randomButton = new JButton("Add some points");
+	    JButton randomButton = new JButton("Add Points");
+	    randomButton.setMnemonic(KeyEvent.VK_P);
 	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp); 
 	    randomButton.addActionListener(randomButtonListener);
 	    randomButton.setFocusable(false);
