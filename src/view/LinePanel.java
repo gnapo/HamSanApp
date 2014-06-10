@@ -12,6 +12,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -32,13 +33,16 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private double ymin = -10;
 	private double ymax = 10;
 
-	private double zoomFactor = 0;
+	private double zoomLength = 20;
+	private Point2D.Double zoomCenterAB = new Point2D.Double(0, 0);
+
+	private double zoomFactor = 1;
 	private Point2D.Double corner1, corner2;
 
 	private boolean showCrossings = true;
 
 	private VisualPoint highlightedPoint = null;
-	
+
 	private PointPanel pointPanel;
 
 	private List<VisualPoint> visualPoints;
@@ -118,13 +122,14 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			g.setColor(Color.YELLOW);
 			drawZoomRectangle(g);
 		}
-		
-		g.setColor(Color.gray.brighter()); //draw vertical lines to distinguish intervals
-		
+
+		g.setColor(Color.gray.brighter()); // draw vertical lines to distinguish
+											// intervals
+
 		for (int i = Math.max(1, h.minband); i <= h.maxband; i++) {
 			int x0 = (int) VisualPoint.aToX(h.borders[i], xmin, xmax, this.getSize());
 			g.drawLine(x0, 0, x0, this.getHeight());
-		}  
+		}
 		g.setColor(Color.black);
 		if (h.trapeze != null && h.trapeze.bounded) {
 			Graphics2D g2d = (Graphics2D) g;
@@ -135,14 +140,14 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			int ybl = (int) VisualPoint.bToY(h.trapeze.botleft, ymin, ymax, this.getSize());
 			int ybr = (int) VisualPoint.bToY(h.trapeze.botright, ymin, ymax, this.getSize());
 			int ytr = (int) VisualPoint.bToY(h.trapeze.topright, ymin, ymax, this.getSize());
-			g2d.drawLine(x1,ytl,x1,ybl);
-			g2d.drawLine(x1,ybl,x2,ybr);
-			g2d.drawLine(x2,ybr,x2,ytr);
-			g2d.drawLine(x2,ytr,x1,ytl);
+			g2d.drawLine(x1, ytl, x1, ybl);
+			g2d.drawLine(x1, ybl, x2, ybr);
+			g2d.drawLine(x2, ybr, x2, ytr);
+			g2d.drawLine(x2, ytr, x1, ytl);
 			g2d.setStroke(new BasicStroke());
 		}
 		if (h.trapeze != null && !h.trapeze.bounded) {
-			if (h.trapeze.openleft){
+			if (h.trapeze.openleft) {
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setStroke(new BasicStroke(2.5f));
 				int x2 = (int) VisualPoint.aToX(h.trapeze.right, xmin, xmax, this.getSize());
@@ -150,15 +155,16 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				int ytr = (int) VisualPoint.bToY(h.trapeze.topright, ymin, ymax, this.getSize());
 				double dx1 = VisualPoint.xToA(0, xmin, xmax, this.getSize());
 				int x1 = (int) VisualPoint.aToX(dx1, xmin, xmax, this.getSize());
-				int ytl = (int) VisualPoint.bToY(h.trapeze.topright+(dx1-h.trapeze.right)*h.trapeze.topslope, ymin, ymax, this.getSize());
-				int ybl = (int) VisualPoint.bToY(h.trapeze.botright+(dx1-h.trapeze.right)*h.trapeze.botslope, ymin, ymax, this.getSize());
-				
-				g2d.drawLine(x1,ybl,x2,ybr);
-				g2d.drawLine(x2,ybr,x2,ytr);
-				g2d.drawLine(x2,ytr,x1,ytl);
+				int ytl = (int) VisualPoint.bToY(h.trapeze.topright + (dx1 - h.trapeze.right) * h.trapeze.topslope,
+						ymin, ymax, this.getSize());
+				int ybl = (int) VisualPoint.bToY(h.trapeze.botright + (dx1 - h.trapeze.right) * h.trapeze.botslope,
+						ymin, ymax, this.getSize());
+
+				g2d.drawLine(x1, ybl, x2, ybr);
+				g2d.drawLine(x2, ybr, x2, ytr);
+				g2d.drawLine(x2, ytr, x1, ytl);
 				g2d.setStroke(new BasicStroke());
-			}
-			else{
+			} else {
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setStroke(new BasicStroke(2.5f));
 				int x1 = (int) VisualPoint.aToX(h.trapeze.left, xmin, xmax, this.getSize());
@@ -166,12 +172,14 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				int ytl = (int) VisualPoint.bToY(h.trapeze.topleft, ymin, ymax, this.getSize());
 				double dx2 = VisualPoint.xToA(this.getSize().width, xmin, xmax, this.getSize());
 				int x2 = (int) VisualPoint.aToX(dx2, xmin, xmax, this.getSize());
-				int ytr = (int) VisualPoint.bToY(h.trapeze.topleft+(dx2-h.trapeze.left)*h.trapeze.topslope, ymin, ymax, this.getSize());
-				int ybr = (int) VisualPoint.bToY(h.trapeze.botleft+(dx2-h.trapeze.left)*h.trapeze.botslope, ymin, ymax, this.getSize());
-				g2d.drawLine(x1,ytl,x1,ybl);
-				g2d.drawLine(x1,ybl,x2,ybr);
-				
-				g2d.drawLine(x2,ytr,x1,ytl);
+				int ytr = (int) VisualPoint.bToY(h.trapeze.topleft + (dx2 - h.trapeze.left) * h.trapeze.topslope, ymin,
+						ymax, this.getSize());
+				int ybr = (int) VisualPoint.bToY(h.trapeze.botleft + (dx2 - h.trapeze.left) * h.trapeze.botslope, ymin,
+						ymax, this.getSize());
+				g2d.drawLine(x1, ytl, x1, ybl);
+				g2d.drawLine(x1, ybl, x2, ybr);
+
+				g2d.drawLine(x2, ytr, x1, ytl);
 				g2d.setStroke(new BasicStroke());
 			}
 		}
@@ -190,20 +198,21 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		g.drawRect(x1, y1, dx, dy);
 	}
 
-	public void followTrapeze(){
-		if (h.trapeze == null) return;
-		if (!h.trapeze.bounded) return; //TODO add this feature
+	public void followTrapeze() {
+		if (h.trapeze == null)
+			return;
+		if (!h.trapeze.bounded)
+			return; // TODO add this feature
 		double w = h.trapeze.right - h.trapeze.left;
-		setMinAndMax(h.trapeze.left-w, ymin, h.trapeze.right+w, ymax);
+		setMinAndMax(h.trapeze.left - w, ymin, h.trapeze.right + w, ymax);
 		this.repaint();
 	}
-	
-	
+
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		
+
 		highlightedPoint = null;
-		
+
 		for (VisualPoint v : visualPoints) {
 			v.highlighted = false;
 		}
@@ -230,32 +239,30 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		double zoom = zoomFactor + e.getPreciseWheelRotation();
-		this.setZoomFactor(zoom);
+		double zoom = zoomFactor + e.getPreciseWheelRotation() / 100;
+		if (zoom < 0)
+			zoom = 0.0000000000001;
+		if (zoom > 10)
+			zoom = 10;
+		this.setZoomFactor(zoom, zoomCenterAB);
 		this.repaint();
 	}
 
-	private void setZoomFactor(double zoomFactor) {
+	private void setZoomFactor(double zoomFactor, Point2D.Double zoomCenterAB) {
 		this.zoomFactor = zoomFactor;
 		System.out.println(zoomFactor);
-		if (zoomFactor > 0) {
-			xmin = (int) (zoomFactor * xmin);
-			xmax = (int) (zoomFactor * xmax);
-			ymin = (int) (zoomFactor * ymin);
-			ymax = (int) (zoomFactor * ymax);
-		} else if (zoomFactor < 0) {
-			double absZoom = Math.abs(zoomFactor);
-			xmin = (int) (1 / absZoom * xmin);
-			xmax = (int) (1 / absZoom * xmax);
-			ymin = (int) (1 / absZoom * ymin);
-			ymax = (int) (1 / absZoom * ymax);
-		}
+
+		zoomLength = zoomFactor * 20;
+		xmin = zoomCenterAB.x - zoomLength / 2;
+		xmax = zoomCenterAB.x + zoomLength / 2;
+		ymin = zoomCenterAB.y - zoomLength / 2;
+		ymax = zoomCenterAB.y + zoomLength / 2;
 		this.repaint();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getButton()==MouseEvent.BUTTON3 && pointPanel.addingAllowed && highlightedPoint != null) {
+		if (e.getButton() == MouseEvent.BUTTON3 && pointPanel.addingAllowed && highlightedPoint != null) {
 			h.removeLine(highlightedPoint.getMyPoint());
 			visualPoints.remove(highlightedPoint);
 			pointPanel.refreshAll();
@@ -272,8 +279,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-			corner2 = new Point2D.Double(e.getX(), e.getY());
-			this.repaint();
+		corner2 = new Point2D.Double(e.getX(), e.getY());
+		this.repaint();
 	}
 
 	@Override
@@ -300,7 +307,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			xmax = aMax;
 			ymin = bMin;
 			ymax = bMax;
-			zoomFactor = 0;
+			zoomFactor = 1;
+
+			zoomCenterAB = new Point2D.Double((xmax - xmin) / 2, (ymax - ymin) / 2);
+			setZoomFactor(1, zoomCenterAB);
 
 			corner1 = null;
 			corner2 = null;
@@ -325,7 +335,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.xmax = xmax;
 		this.ymin = ymin;
 		this.ymax = ymax;
-		this.zoomFactor = 0;
+		this.zoomFactor = 1;
 	}
 
 }
