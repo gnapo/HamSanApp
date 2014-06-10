@@ -32,7 +32,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private double xmax = 10;
 	private double ymin = -10;
 	private double ymax = 10;
-
+	private double referenceLength = 20;
+	
 	private double zoomLength = 20;
 	private Point2D.Double zoomCenterAB = new Point2D.Double(0, 0);
 
@@ -252,7 +253,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.zoomFactor = zoomFactor;
 		System.out.println(zoomFactor);
 
-		zoomLength = zoomFactor * 20;
+		zoomLength = zoomFactor * referenceLength;
 		xmin = zoomCenterAB.x - zoomLength / 2;
 		xmax = zoomCenterAB.x + zoomLength / 2;
 		ymin = zoomCenterAB.y - zoomLength / 2;
@@ -310,6 +311,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			zoomFactor = 1;
 
 			zoomCenterAB = new Point2D.Double((xmax - xmin) / 2, (ymax - ymin) / 2);
+			referenceLength = (xmax-xmin)/2;
 			setZoomFactor(1, zoomCenterAB);
 
 			corner1 = null;
