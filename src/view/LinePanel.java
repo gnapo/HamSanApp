@@ -12,7 +12,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.List;
 
 import javax.swing.JPanel;

@@ -53,17 +53,20 @@ public class HamSanApplet extends JApplet {
 		dualPanels.add(pp);
 		dualPanels.add(lp);
 		
+		// the step label
+	    JLabel infoLabel = new JLabel("step 0: place points");
+	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
  
 		// the buttons
 		JButton startAlgButton = new JButton("Next Step");
 		startAlgButton.setVisible(true);
 	    startAlgButton.setFocusable(false);
-	    DoAlgButtonListener doAlgButtonListener = new DoAlgButtonListener(hsa, pp, lp); 
+	    DoAlgButtonListener doAlgButtonListener = new DoAlgButtonListener(hsa, pp, lp, infoLabel); 
 	    startAlgButton.addActionListener(doAlgButtonListener);
 	    JButton resetButton = new JButton("Reset");
 		resetButton.setVisible(true);
 	    resetButton.setFocusable(false);
-	    ResetButtonListener resetButtonListener = new ResetButtonListener(hsa, pp, lp); 
+	    ResetButtonListener resetButtonListener = new ResetButtonListener(hsa, pp, lp, infoLabel); 
 	    resetButton.addActionListener(resetButtonListener);
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
@@ -74,7 +77,7 @@ public class HamSanApplet extends JApplet {
 	    JButton doAllgButton = new JButton("all steps");
 	    doAllgButton.setVisible(true);
 	    doAllgButton.setFocusable(false);
-	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp); 
+	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp, infoLabel); 
 	    doAllgButton.addActionListener(doAllgButtonListener);
 	    
 	    JButton resetZoomButton = new JButton("Reset Zoom");
@@ -110,9 +113,7 @@ public class HamSanApplet extends JApplet {
 	    buttonPanel.add(setPoint);//Koordinateneingabe
 	    buttonPanel.add(coord1);
 	    buttonPanel.add(coord2);
-	    // the step label
-	    JLabel infoLabel = new JLabel("Step 0: Place the points! Yes! Now! Place them!");
-	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    
 	    
 	    JPanel buttonsAndLabel = new JPanel();
 	    buttonsAndLabel.setLayout(new GridLayout(2,1));
