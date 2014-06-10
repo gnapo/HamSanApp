@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JComboBox;
+
 import view.LinePanel;
 import view.PointPanel;
 import view.VisualPoint;
@@ -18,16 +20,16 @@ public class RandomButtonListener implements ActionListener {
 	private HamSanAlg hsa;
 	private LinePanel lp;
 	private PointPanel pp;
-	private boolean circular = false;
 	private Random r;
+	private JComboBox<String> c;
 	
-	public RandomButtonListener(HamSanAlg hsa,LinePanel lp, PointPanel pp) {
+	public RandomButtonListener(HamSanAlg hsa,LinePanel lp, PointPanel pp, JComboBox<String> c) {
 		r = new Random();
 		r.setSeed(1);
 		this.hsa = hsa;
 		this.lp = lp;
 		this.pp = pp;
-		if (r.nextDouble()<0.5) circular = true;
+		this.c = c;
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -35,7 +37,7 @@ public class RandomButtonListener implements ActionListener {
 	}
 	
 	public void doStuff() {
-		if (circular) {
+		if (c.getSelectedItem()=="random points (circle)") {
 			for (int i = 0; i < 10 + r.nextDouble()*20;i++){
 				double phi = r.nextDouble()*Math.PI*2;
 				double rad = r.nextDouble()*5;

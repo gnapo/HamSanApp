@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -55,10 +56,15 @@ public class HamSanApplet extends JApplet {
 		dualPanels.add(pp);
 		dualPanels.add(lp);
 		
-		// the step label
+		// the label
 	    JLabel infoLabel = new JLabel("step 0: place points");
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
  
+	    //Preset ComboBox
+	    String[] presets = {"random points (square)", "random points (circle)"};
+	    JComboBox<String> presetList = new JComboBox<String>(presets);
+	    presetList.setFocusable(false);
+	    
 		// the buttons
 		JButton startAlgButton = new JButton("Next Step");
 		startAlgButton.setMnemonic(KeyEvent.VK_N);
@@ -103,7 +109,7 @@ public class HamSanApplet extends JApplet {
 	    
 	    JButton randomButton = new JButton("Add Points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
-	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp); 
+	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp,presetList); 
 	    randomButton.addActionListener(randomButtonListener);
 	    randomButton.setFocusable(false);
 	    
@@ -114,6 +120,9 @@ public class HamSanApplet extends JApplet {
 		setPoint.setVisible(true);
 	    setPoint.setFocusable(false);
 	    setPoint.addActionListener(new CoordsListener(this,pp,coord1, coord2));
+	    
+	    
+	    
 	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new FlowLayout());
@@ -128,7 +137,7 @@ public class HamSanApplet extends JApplet {
 	    buttonPanel.add(setPoint);//Koordinateneingabe
 	    buttonPanel.add(coord1);
 	    buttonPanel.add(coord2);
-	    
+	    buttonPanel.add(presetList);
 	    
 	    JPanel buttonsAndLabel = new JPanel();
 	    buttonsAndLabel.setLayout(new GridLayout(2,1));
