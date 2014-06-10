@@ -272,7 +272,7 @@ public class HamSanAlg {
 	 * @return true, falls wir die Kreuzung ber�cksichtigen m�ssen.
 	 */
 	public boolean inBorders(Crossing c) { //Don't know if commenting out this makes it work. huh
-		//double tolerance = 0.000001;
+		double tolerance = 0.00001;
 		if (c.atInf()) {
 			if (c.atNegInf() && leftborder) {
 				return false;
@@ -281,10 +281,10 @@ public class HamSanAlg {
 				return false;
 			}
 		}
-		//if (leftborder && c.crAt() < leftb-tolerance) { return false;}
-		//if (rightborder && c.crAt() >= rightb+tolerance) { return false;}
-		if (leftborder && c.crAt() < leftb) { return false;}
-		if (rightborder && c.crAt() >= rightb) { return false;}//
+		if (leftborder && c.crAt() < leftb-tolerance) { return false;}
+		if (rightborder && c.crAt() >= rightb+tolerance) { return false;}
+		//if (leftborder && c.crAt() < leftb) { return false;}
+		//if (rightborder && c.crAt() >= rightb) { return false;}//
 		return true;
 	}
 	
@@ -706,7 +706,8 @@ public class HamSanAlg {
 				double bl = levelPos(leftb, true, botLvl);
 				double br = levelPos(rightb, true, botLvl);
 				if (DEBUG) {
-					System.out.println("lefftb:"+leftb+" rightb:"+rightb+" tl:"+tl+" bl:"+bl+" tr:"+tr+" br:"+br);			
+					System.out.println("lefftb:"+leftb+" rightb:"+rightb+" tl:"+tl+" bl:"+bl+" tr:"+tr+" br:"+br);
+					System.out.println("blue top at leftb: "+blueTop(leftb)+" blue top at rightb: "+blueTop(rightb));
 				}
 				trapeze = new Trapeze(leftb, tl, bl, rightb, tr, br);
 			}
