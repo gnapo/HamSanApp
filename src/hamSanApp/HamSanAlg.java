@@ -183,23 +183,7 @@ public class HamSanAlg {
 		return best;
 	}
 	
-	/**
-	 * gib die lï¿½sung aus. warscheinlich nicht so wichtig, da das spï¿½ter anders gemacht wird,
-	 * aber ohne graphikinterface so in ordnung
-	 */
-	public void presentSolution() {
-		if (!done) {
-			System.out.println("algorithm not done yet :(");
-		}
-		if (verticalSol) {
-			System.out.println("the solution is a vertical line with x = "+verticalSolPos);
-		}
-		else {
-			System.out.print("the solution is the ");
-			solution.repr_line();
-		}
-	}
-	
+
 	public boolean TestLineSort(double x, boolean blue){
 		boolean r=true;
 		LineComparator x_evaluation = new LineComparator(x);
@@ -344,8 +328,14 @@ public class HamSanAlg {
 	 * @return Ja falls valider Schnitt
 	 */
 	public boolean validSol(boolean verbose) {
-		if (!done) return false; //haben noch keinen schnitt.
-		if (!verticalSol || solution == null) return false; //wtf? had a trapeze not kill any lines.
+		if (!done){
+			if (DEBUG && verbose) {
+				System.out.println("algo is not done!");
+			}
+			return false; //haben noch keinen schnitt.
+		}
+			
+		if (!verticalSol && solution == null) return false; //wtf? had a trapeze not kill any lines.
 		double tol = 0.0000001; //tolerance
 		if (verticalSol) {
 			int bleft = 0;
@@ -521,11 +511,11 @@ public class HamSanAlg {
 				}
 			}
 			
-			if (crossings.size() == 1) { //beseitigt glaub ich einige fehlerfälle?
+			if (crossings.size() == 1) { //beseitigt glaub ich einige fehlerfälle? ja, das ist aber schlecht. :<
 				
 				Crossing c = crossings.get(0);
 				solution = new Point(-c.crAt(), c.a.eval(c.crAt()));
-				if (DEBUG) System.out.println("es gibt nur eine Kreuzung im Betrachteten Bereich zwischen roten und blauen Linien. es muss die Loesung sein");
+				if (DEBUG) { System.out.println("es gibt nur eine Kreuzung im Betrachteten Bereich zwischen roten und blauen Linien. es muss die Loesung sein");}
 				done = true;
 				return;
 			}
@@ -578,16 +568,18 @@ public class HamSanAlg {
 			int first=0;
 			int last=0;
 			for (int i = 0; i < crossings.size(); i ++) {
-				if (crossings.get(i).atNegInf()==false){
+				if (crossings.get(i).atInf()==false && crossings.get(i).atNegInf()==false){
+					if (DEBUG) {
 					System.out.println("Erste reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
-							+ crossings.get(i).crAt());
+							+ crossings.get(i).crAt());}
 					first=i;break;
 				}
 			}
 			for (int i = crossings.size()-1;i>=0 ; i --) {
 				if (crossings.get(i).atInf()==false){
-					System.out.println("letzte reellwertige Kreuzung bei"+i+"ter Stelle und bei x-Koordinate "
-							+ crossings.get(i).crAt());
+					if (DEBUG){
+					System.out.println("letzte reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
+							+ crossings.get(i).crAt());}
 					last=i;break;
 				}
 			}
@@ -597,9 +589,10 @@ public class HamSanAlg {
 			int band = 1;
 			int bandsize = (int) (crossings.size() * alpha);
 			bandsize = Math.max(1, bandsize);
-			// System.out.println(crossings.size());
-			// System.out.println(bandsize);
-			for (int i = bandsize+first; i < last; i += bandsize) { // TODO many crossings at inf
+			// here's how things are meant to be: all crossings at negInf are left of borders[band] 
+			// all crossings at posInf are to the right of borders[maxband], so that all crossings at real values
+			// are geq borders[i] and less than borders[i+1] for 1<=i<maxborders
+			for (int i = first; i < last; i += bandsize) { // TODO many crossings at inf
 				/*
 				 * while (crossings.get(i).atInf() &&
 				 * crossings.get(i).atNegInf()) {i++;} // only need for ugly
@@ -614,7 +607,7 @@ public class HamSanAlg {
 				maxband = band;
 			}
 			step ++;
-			if (DEBUG) System.out.println("Intervalle eingeteilt!");
+			if (DEBUG) {System.out.println("Intervalle eingeteilt!");}
 			break;
 		case 1:
 			// find strip with odd number of intersections by binary search:
@@ -622,7 +615,9 @@ public class HamSanAlg {
 			if (leftborder) {
 				int res = blueTop(leftb);
 				if (res == 0) {
-					System.out.println("schnittpunkt zufaellig bei binaerer Suche gefunden!");
+					if (DEBUG) {
+						System.out.println("schnittpunkt zufaellig bei binaerer Suche gefunden!");
+					}
 					done = true;
 					solution = new Point(-leftb, levelPos(leftb, true, levelBlue));
 					return;
@@ -652,7 +647,7 @@ public class HamSanAlg {
 					rightborder = true;
 					rightsetthistime = true;
 				} else if (bluetesttop == 0) { // we have a winner!
-					if (DEBUG) System.out.println("schnittpunkt zufaellig bei binaerer Suche gefunden!");
+					if (DEBUG) {System.out.println("schnittpunkt zufaellig bei binaerer Suche gefunden!");}
 					done = true;
 					solution = new Point(-borders[testband], levelPos(
 							borders[testband], true, levelBlue));
@@ -661,7 +656,7 @@ public class HamSanAlg {
 
 			}
 			step ++;
-			if (DEBUG) System.out.println("Richtiges Intervall rausgesucht");
+			if (DEBUG) {System.out.println("Richtiges Intervall rausgesucht");}
 			break;
 		case 2:
 
@@ -674,7 +669,9 @@ public class HamSanAlg {
 			}
 
 			if (!leftborder && !rightborder) {
-				System.out.println("nope, this shouldn't ever happen. no bounds were set. do we even have crossings?");
+				if (DEBUG) {
+					System.out.println("nope, this shouldn't ever happen. no bounds were set. do we even have crossings?");
+				}
 				return;
 			}
 
@@ -690,8 +687,8 @@ public class HamSanAlg {
 					double ts = getslope(true, topLvl);
 					double bs = getslope(true, botLvl);
 					trapeze = new Trapeze(true, rightb, tr, br, ts, bs);
-					if (DEBUG) System.out.println("making a trapeze open to the left:");
-					if (DEBUG) System.out.println("rightb: "+rightb+" tr: "+tr+" br: "+br+" ts: "+ts+" bs: "+bs);
+					if (DEBUG) { System.out.println("making a trapeze open to the left:");}
+					if (DEBUG) {System.out.println("rightb: "+rightb+" tr: "+tr+" br: "+br+" ts: "+ts+" bs: "+bs);}
 					
 				} else if (!rightborder) { // nach links offen
 					double tl = levelPos(leftb, true, topLvl);
@@ -699,8 +696,8 @@ public class HamSanAlg {
 					double ts = getslope(true, lBlue.size()-topLvl);
 					double bs = getslope(true, lBlue.size()-botLvl);
 					trapeze = new Trapeze(false, leftb, tl, bl, ts, bs);
-					if (DEBUG) System.out.println("making a trapeze open to the right");
-					if (DEBUG) System.out.println("rightb: "+rightb+" tl: "+tl+" bl: "+bl+" ts: "+ts+" bs: "+bs);
+					if (DEBUG) {System.out.println("making a trapeze open to the right");}
+					if (DEBUG) {System.out.println("rightb: "+rightb+" tl: "+tl+" bl: "+bl+" ts: "+ts+" bs: "+bs);}
 				}
 
 			} else {
@@ -715,7 +712,7 @@ public class HamSanAlg {
 			}
 			step++;
 			//trapeze = new Trapeze(true, -7, 1, -1, -3,3); debug gründe, ich glaube trapeze tun nicht ganz wie sie sollen
-			if (DEBUG) System.out.println("Trapez konstruiert");
+			if (DEBUG) {System.out.println("Trapez konstruiert");}
 			borders = new double[64];
 			minband = 0;
 			maxband = 0;
@@ -750,7 +747,7 @@ public class HamSanAlg {
 			}
 			step = 0;
 			
-			if (DEBUG) System.out.println(deleted +" Linien ausserhalb des intervalls entfernt.");
+			if (DEBUG) {System.out.println(deleted +" Linien ausserhalb des intervalls entfernt.");}
 			if (deleted == 0) { //ya done goof'd
 				done = true;
 				return;
