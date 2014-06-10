@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 
+import view.HamSanApplet;
 import view.LinePanel;
 import view.PointPanel;
 import view.PointType;
@@ -17,12 +18,14 @@ public class ResetButtonListener implements ActionListener {
 	private PointPanel pp;
 	private LinePanel lp;
 	private JLabel l;
+	private HamSanApplet applet;
 	
-	public ResetButtonListener(HamSanAlg hsa, PointPanel pp, LinePanel lp, JLabel label) {
+	public ResetButtonListener(HamSanAlg hsa, PointPanel pp, LinePanel lp, JLabel label, HamSanApplet hamSanApplet) {
 		this.hsa = hsa;
 		this.pp = pp;
 		this.lp = lp;
 		this.l = label;
+		this.applet = hamSanApplet;
 	}
 	
 	@Override
@@ -31,6 +34,7 @@ public class ResetButtonListener implements ActionListener {
 	}
 
 	public void doStuff() {
+		applet.setPlacingEnabled(true);
 		hsa.init();
 		l.setText("step 0: place points");
 		pp.setAddingAllowed(true);

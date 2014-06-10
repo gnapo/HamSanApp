@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
+import view.HamSanApplet;
 import view.LinePanel;
 import view.PointPanel;
 import view.VisualPoint;
@@ -18,12 +19,14 @@ public class DoAlgButtonListener implements ActionListener {
 	private PointPanel pp;
 	private LinePanel lp;
 	private JLabel l;
+	private HamSanApplet applet;
 	
-	public DoAlgButtonListener(HamSanAlg h, PointPanel pp, LinePanel lp, JLabel label) {
+	public DoAlgButtonListener(HamSanAlg h, PointPanel pp, LinePanel lp, JLabel label, HamSanApplet hamSanApplet) {
 		this.hsa = h;
 		this.pp = pp;
 		this.lp = lp;
 		this.l = label;
+		this.applet = hamSanApplet;
 	}
 	
 	@Override
@@ -50,6 +53,8 @@ public class DoAlgButtonListener implements ActionListener {
 		}
 		if (hsa.getVisualPoints().size()==0) {
 			l.setText("step 0: place points");
+		} else {
+			applet.setPlacingEnabled(false);
 		}
 		if (hsa.done) {
 			if (hsa.validSol(false)){

@@ -34,6 +34,11 @@ public class HamSanApplet extends JApplet {
 	 */
 	private static final long serialVersionUID = 6049999518358173580L;
 	
+	private JButton randomButton;
+	private JTextField coord1,coord2;
+	private JButton setPoint;
+	private JComboBox<String> presetList;
+	
 	public void paint(Graphics g) {
 		super.paint(g);
 		this.requestFocus();
@@ -61,7 +66,7 @@ public class HamSanApplet extends JApplet {
  
 	    //Preset ComboBox
 	    String[] presets = {"random points (square)", "random points (circle)"};
-	    JComboBox<String> presetList = new JComboBox<String>(presets);
+	    presetList = new JComboBox<String>(presets);
 	    presetList.setFocusable(false);
 	    
 		// the buttons
@@ -69,14 +74,15 @@ public class HamSanApplet extends JApplet {
 		startAlgButton.setMnemonic(KeyEvent.VK_N);
 		startAlgButton.setVisible(true);
 	    startAlgButton.setFocusable(false);
-	    DoAlgButtonListener doAlgButtonListener = new DoAlgButtonListener(hsa, pp, lp, infoLabel); 
+	    DoAlgButtonListener doAlgButtonListener = new DoAlgButtonListener(hsa, pp, lp, infoLabel, this); 
 	    startAlgButton.addActionListener(doAlgButtonListener);
 	    JButton resetButton = new JButton("Reset");
 	    resetButton.setMnemonic(KeyEvent.VK_R);
 		resetButton.setVisible(true);
 	    resetButton.setFocusable(false);
-	    ResetButtonListener resetButtonListener = new ResetButtonListener(hsa, pp, lp, infoLabel); 
+	    ResetButtonListener resetButtonListener = new ResetButtonListener(hsa, pp, lp, infoLabel, this); 
 	    resetButton.addActionListener(resetButtonListener);
+	    
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
 	    crossingBox.setSelected(false); 
@@ -106,16 +112,16 @@ public class HamSanApplet extends JApplet {
 	    verifyButton.addActionListener(new VerifyButtonListener(hsa));
 	    verifyButton.setFocusable(false); 
 	    
-	    JButton randomButton = new JButton("Add Points");
+	    randomButton = new JButton("Add Points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
 	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp,presetList); 
 	    randomButton.addActionListener(randomButtonListener);
 	    randomButton.setFocusable(false);
 	    
 	    //coordinates of points
-	    JTextField coord1 = new JTextField(3);
-	    JTextField coord2 = new JTextField(3);
-	    JButton setPoint = new JButton("Setze Punkt an Koordinaten");
+	    coord1 = new JTextField(3);
+	    coord2 = new JTextField(3);
+	    setPoint = new JButton("Setze Punkt an Koordinaten");
 		setPoint.setVisible(true);
 	    setPoint.setFocusable(false);
 	    setPoint.addActionListener(new CoordsListener(this,pp,coord1, coord2));
@@ -147,6 +153,14 @@ public class HamSanApplet extends JApplet {
 	    setFocusable(true);
 	    this.requestFocusInWindow();
 	    this.requestFocus();
+	}
+	
+	public void setPlacingEnabled(boolean enabled) {
+		randomButton.setEnabled(enabled);
+		coord1.setEnabled(enabled);
+		coord2.setEnabled(enabled);
+		setPoint.setEnabled(enabled);
+		presetList.setEnabled(enabled);
 	}
 
 }
