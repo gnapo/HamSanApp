@@ -4,7 +4,6 @@ import hamSanApp.HamSanAlg;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
@@ -80,14 +79,14 @@ public class HamSanApplet extends JApplet {
 	    resetButton.addActionListener(resetButtonListener);
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
-	    crossingBox.setSelected(true); 
+	    crossingBox.setSelected(false); 
 	    crossingBox.setVisible(true);
 	    crossingBox.setFocusable(false);
 	    crossingBox.addActionListener(new CrossingsListener(crossingBox, lp));
 	    
 	    JCheckBox deletedBox = new JCheckBox("Show deleted lines?");
 	    deletedBox.setEnabled(true);
-	    deletedBox.setSelected(true); 
+	    deletedBox.setSelected(false); 
 	    deletedBox.setVisible(true);
 	    deletedBox.setFocusable(false);
 	    deletedBox.addActionListener(new DeletedListener(deletedBox, lp));
@@ -121,11 +120,9 @@ public class HamSanApplet extends JApplet {
 	    setPoint.setFocusable(false);
 	    setPoint.addActionListener(new CoordsListener(this,pp,coord1, coord2));
 	    
-	    
-	    
-	    
 	    JPanel buttonPanel = new JPanel();
-	    buttonPanel.setLayout(new FlowLayout());
+	    buttonPanel.setLayout(new GridLayout(2, 1));
+	    
 	    buttonPanel.add(startAlgButton);
 	    buttonPanel.add(doAllgButton);
 	    buttonPanel.add(resetButton);

@@ -41,7 +41,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private double zoomFactor = 1;
 	private Point2D.Double corner1, corner2;
 
-	private boolean showCrossings = true;
+	private boolean showCrossings = false;
 
 	private VisualPoint highlightedPoint = null;
 
@@ -49,7 +49,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	private List<VisualPoint> visualPoints;
 	
-	private boolean drawDeleted = true;
+	private boolean drawDeleted = false;
 
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;
