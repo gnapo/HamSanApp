@@ -231,7 +231,7 @@ public class HamSanAlg {
 	 * @param x die x-Koordinate
 	 * @param blue von den Blauen oder Roten linien?
 	 * @param level wievielte linie von oben?
-	 * @return der y-Wert
+	 * @return der y-Wert 
 	 */
 	
 	public double levelPos(double x, boolean blue, int level) {
@@ -576,7 +576,7 @@ public class HamSanAlg {
 				}
 			}
 			for (int i = crossings.size()-1;i>=0 ; i --) {
-				if (crossings.get(i).atInf()==false){
+				if (crossings.get(i).atInf()==false){//TODO nich auch noch fragen, dass nicht bei neginf?
 					if (DEBUG){
 					System.out.println("letzte reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
 							+ crossings.get(i).crAt());}
@@ -636,7 +636,7 @@ public class HamSanAlg {
 			rightsetthistime = false;
 				
 			while ((maxband - minband) > 1) {
-				int testband = minband + (maxband - minband) / 2;
+				int testband = minband + (maxband - minband) / 2; 
 				int bluetesttop = blueTop(borders[testband]);
 				if (bluetop == (bluetesttop == 1)) {
 					minband = testband;
@@ -677,8 +677,26 @@ public class HamSanAlg {
 
 			int delta = (int) Math.round(eps * lBlue.size());
 			//int delta = (int) (eps * lBlue.size()+1);
+			if (DEBUG) { //sanity check
+				if (levelBlue < 0 || levelBlue >= lBlue.size()) {
+					System.out.println("REALLY BAD ERROR: yeah, levelBlue is fubar. go home and try again.");
+				}
+			}
 			int topLvl = levelBlue - delta;
 			int botLvl = levelBlue + delta;
+			if (DEBUG) { //sanity check
+				if (levelBlue < 1 || levelBlue >= lBlue.size()) {
+					System.out.println("REALLY BAD ERROR: yeah, levelBlue is fubar. go home and try again.");
+				}
+				if (topLvl < 1) {
+					System.out.println("toplvl to small: fixing");
+					topLvl = 1;
+				}
+				if (botLvl >= lBlue.size()) {
+					System.out.println("botlvl to big: fixing");
+					botLvl = lBlue.size();
+				}
+			}
 			if (!leftborder || !rightborder) {
 
 				if (!leftborder) { // nach rechts offen
