@@ -578,7 +578,7 @@ public class HamSanAlg {
 			// all crossings at posInf are to the right of borders[maxband], so that all crossings at real values
 			// are geq borders[i] and less than borders[i+1] for 1<=i<maxborders
 			for (int i = bandsize; i < crossings.size(); i += bandsize) { // TODO many crossings at inf
-				System.out.println("will Intervalle Einteilen!!!");
+				System.out.println("Intervalle werden eingeteilt");
 				 while (crossings.get(i).atInf() && crossings.get(i).atNegInf()){// only need for ugly
 					 System.out.println("haben viele kreuzungen im negativ-Unendlichen");
 					 leftmannyC=true;
@@ -608,8 +608,8 @@ public class HamSanAlg {
 						 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
 					 System.out.println("haben nun index verschoben und sind bei i="+i);
 					 }
-					 //if (borders[band-1]!=crossings.get(i).crAt()){
-					 borders[band] = crossings.get(i).crAt(); band++; maxband = band;//}
+					 if ((band>1)&&borders[band-1]!=crossings.get(i).crAt()){
+					 borders[band] = crossings.get(i).crAt(); band++; maxband = band;}
 					 break; //band++ hinzugefügt 
 				 }
 				borders[band] = crossings.get(i).crAt();

@@ -1,6 +1,7 @@
 package control;
 
 import hamSanApp.HamSanAlg;
+import view.PointType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +14,6 @@ import view.HamSanApplet;
 import view.LinePanel;
 import view.PointPanel;
 import view.VisualPoint;
-
 
 
 public class RandomButtonListener implements ActionListener {
@@ -52,13 +52,26 @@ public class RandomButtonListener implements ActionListener {
 				hsa.addLine(Math.sin(phi)*rad,Math.cos(phi)*rad , true);
 			}
 		}
-		else {
+		else if (c.getSelectedItem()=="random points (square)"){
 			for (int i = 0; i < 10 + r.nextDouble()*20;i++){
 				hsa.addLine((r.nextDouble()*10)-5, (r.nextDouble()*15)-7.5 , false);
 			}
 			for (int i = 0; i < 10 + r.nextDouble()*20;i++){
 				hsa.addLine((r.nextDouble()*10)-5, (r.nextDouble()*15)-7.5 , true);
 			}
+		}
+		else if (c.getSelectedItem()=="random paralel lines"){
+			double neg=Math.random();double x=0;
+			if (neg <=0.5){x=(r.nextDouble()*10)-5;}
+			else {x=(r.nextDouble()*10)-5;}
+			PointType type=pp.getCurrentType();
+			for (int i = 0; i < 10 + r.nextDouble()*20;i++){
+				double neg2=Math.random();
+				if (neg2 <=0.5){pp.setCurrentType(PointType.BLUE);}
+				else {pp.setCurrentType(PointType.RED);}
+				 pp.adddoublePoint(x,(r.nextDouble()*15)-7.5);
+			}
+		pp.setCurrentType(type);
 		}
 		List<VisualPoint> vpoints = hsa.getVisualPoints();
 		pp.setVisualPoints(vpoints);

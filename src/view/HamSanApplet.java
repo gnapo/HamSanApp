@@ -66,7 +66,7 @@ public class HamSanApplet extends JApplet {
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
  
 	    //Preset ComboBox
-	    String[] presets = {"random points (square)", "random points (circle)"};
+	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines"};
 	    presetList = new JComboBox<String>(presets);
 	    presetList.setFocusable(false);
 	    
