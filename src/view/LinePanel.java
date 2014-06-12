@@ -146,7 +146,17 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			int x0 = (int) VisualPoint.aToX(h.borders[i], xmin, xmax, this.getSize());
 			g.drawLine(x0, 0, x0, this.getHeight());
 		}
-		g.setColor(Color.black);
+		g.setColor(Color.black); //draw leftB and rightb
+		if (h.leftborder) {
+			int x0 = (int) VisualPoint.aToX(h.leftb, xmin, xmax, this.getSize());
+			g.drawLine(x0, 0, x0, this.getHeight());
+		}
+		if (h.rightborder) {
+			int x0 = (int) VisualPoint.aToX(h.rightb, xmin, xmax, this.getSize());
+			g.drawLine(x0, 0, x0, this.getHeight());
+		}
+		
+		
 		if (h.trapeze != null && h.trapeze.bounded) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setStroke(new BasicStroke(2.5f));
@@ -217,11 +227,29 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	public void followTrapeze() {
 		if (h.trapeze == null)
 			return;
-		if (!h.trapeze.bounded)
-			return; // TODO add this feature
-		double w = h.trapeze.right - h.trapeze.left;
+		if (!h.trapeze.bounded) {
+			if (h.trapeze.openleft) {
+				double top = h.trapeze.topright;
+				double bot = h.trapeze.botright;
+				double he = top-bot;
+				setMinAndMax(h.trapeze.right-5,top+he,h.trapeze.right+1,bot-he);
+			}
+			else {
+				double top = h.trapeze.topleft;
+				double bot = h.trapeze.botleft;
+				double he = top-bot;
+				setMinAndMax(h.trapeze.left-1,top+he,h.trapeze.left+5,bot-he);
+			}
+		}
+		else {
+			double w = h.trapeze.right - h.trapeze.left;
 		
-		setMinAndMax(h.trapeze.left - w, ymin, h.trapeze.right + w, ymax);
+			double top = Math.max(h.trapeze.topleft, h.trapeze.topright);
+			double bot = Math.min(h.trapeze.botleft, h.trapeze.botright);
+			double he = (top-bot)/2;
+		
+			setMinAndMax(h.trapeze.left - w, top+he, h.trapeze.right + w, bot-he);
+		}
 		this.repaint();
 	}
 
