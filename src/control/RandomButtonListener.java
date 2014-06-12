@@ -60,18 +60,40 @@ public class RandomButtonListener implements ActionListener {
 				hsa.addLine((r.nextDouble()*10)-5, (r.nextDouble()*15)-7.5 , true);
 			}
 		}
+		else if (c.getSelectedItem()=="single random points"){
+			double neg=Math.random(); double steigung=Math.random(); double abschnitt =Math.random();double x=0;
+			if (neg <=0.5){x=(steigung*10)-5;}
+			else {x=-(steigung*10)-5;}
+			PointType type=pp.getCurrentType();
+			double neg2=Math.random();
+			if (neg2 <=0.5){pp.setCurrentType(PointType.BLUE);}
+			else {pp.setCurrentType(PointType.RED);}
+			pp.adddoublePoint(x,(abschnitt*15)-7.5);
+			pp.setCurrentType(type);
+		}
 		else if (c.getSelectedItem()=="random paralel lines"){
-			double neg=Math.random();double x=0;
+		/*	double neg=Math.random();double x=0;
 			if (neg <=0.5){x=(r.nextDouble()*10)-5;}
-			else {x=(r.nextDouble()*10)-5;}
+			else {x=-((r.nextDouble()*10)-5);}
 			PointType type=pp.getCurrentType();
 			for (int i = 0; i < 10 + r.nextDouble()*20;i++){
 				double neg2=Math.random();
 				if (neg2 <=0.5){pp.setCurrentType(PointType.BLUE);}
 				else {pp.setCurrentType(PointType.RED);}
-				 pp.adddoublePoint(x,(r.nextDouble()*15)-7.5);
-			}
-		pp.setCurrentType(type);
+				 pp.adddoublePoint(x,(r.nextDouble()*15)-7.5);*/
+			double neg=Math.random(); double steigung=Math.random();
+			double x=0;
+			if (neg <=0.5){x=(steigung*10)-5;}
+			else {x=-((steigung*10)-5);}
+			PointType type=pp.getCurrentType();
+			for (int i = 0; i < 10;i++){
+				double neg2=Math.random();
+				double abschnitt =Math.random();
+				if (neg2 <=0.5){pp.setCurrentType(PointType.BLUE);}
+				else {pp.setCurrentType(PointType.RED);}
+				 pp.adddoublePoint(x,(abschnitt*15)-7.5);
+			}		
+			pp.setCurrentType(type);
 		}
 		List<VisualPoint> vpoints = hsa.getVisualPoints();
 		pp.setVisualPoints(vpoints);

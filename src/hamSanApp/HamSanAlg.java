@@ -568,7 +568,8 @@ public class HamSanAlg {
 				}
 				System.out.println("aww :'(");
 			}*/
-			System.out.println("haben folgende kreuzungen: "+crossings);
+			int a=crossings.size()/2;int b=crossings.size()-1;
+			System.out.println("haben folgende kreuzungen: "+"bei 0 "+crossings.get(0)+"in der Mitte : "+crossings.get(a)+";am Ende"+crossings.get(b));
 			minband = 0;
 			maxband = 0; // wird �berschrieben.
 			int band = 1;
@@ -589,25 +590,25 @@ public class HamSanAlg {
 					 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch");
 							done = true;
 							verticalSol = true;
-							verticalSolPos = crossings.get(0).crAt();
+							verticalSolPos = lBlue.get(0).a;
 							return;
 				 }
 				 if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()){ 
 					 System.out.println("haben viele kreuzungen im Positiv Unendlichen");
 					 rightmannyC=true;
-					 if (i==1){
-						 System.out.println("Da alle Eingegebenen Punkte gleiche x-Koordinate haben, ist "
-							 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch");
-									done = true;
-									verticalSol = true;
-									verticalSolPos = crossings.get(0).crAt();
-									return;
-						 }
 					 while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()&& i>1) {
 						 i--; 
 						 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
 					 System.out.println("haben nun index verschoben und sind bei i="+i);
 					 }
+					 if (i==1){
+						 System.out.println("Da alle Eingegebenen Punkte gleiche x-Koordinate haben, ist "
+							 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch");
+									done = true;
+									verticalSol = true;
+									verticalSolPos = lBlue.get(0).a;
+									return;
+						 }
 					 if ((band>1)&&borders[band-1]!=crossings.get(i).crAt()){
 					 borders[band] = crossings.get(i).crAt(); band++; maxband = band;}
 					 break; //band++ hinzugefügt 
