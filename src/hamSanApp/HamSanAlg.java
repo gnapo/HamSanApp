@@ -473,10 +473,12 @@ public class HamSanAlg {
 				Point r = lRed.get(0);
 				// do we need a vertical line?
 				if (b.a == r.a) { // TODO das hier testen
+					System.out.println("haben genau zwei verschiedenfarbene parallele Geraden");
 					done = true;
 					verticalSol = true;
 					verticalSolPos = b.a;
 					return;
+					
 				}
 				done = true;
 				// find intersection point and return that. done!
@@ -566,7 +568,7 @@ public class HamSanAlg {
 				}
 				System.out.println("aww :'(");
 			}*/
-			
+			System.out.println("haben folgende kreuzungen: "+crossings);
 			minband = 0;
 			maxband = 0; // wird �berschrieben.
 			int band = 1;
@@ -576,18 +578,38 @@ public class HamSanAlg {
 			// all crossings at posInf are to the right of borders[maxband], so that all crossings at real values
 			// are geq borders[i] and less than borders[i+1] for 1<=i<maxborders
 			for (int i = bandsize; i < crossings.size(); i += bandsize) { // TODO many crossings at inf
+				System.out.println("will Intervalle Einteilen!!!");
 				 while (crossings.get(i).atInf() && crossings.get(i).atNegInf()){// only need for ugly
 					 System.out.println("haben viele kreuzungen im negativ-Unendlichen");
 					 leftmannyC=true;
 					 i++;
 				 }
+				 if (i==crossings.size()){
+					 System.out.println("Da alle Eingegebenen Punkte gleiche x-Koordinate haben, ist "
+					 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch");
+							done = true;
+							verticalSol = true;
+							verticalSolPos = crossings.get(0).crAt();
+							return;
+				 }
 				 if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()){ 
 					 System.out.println("haben viele kreuzungen im Positiv Unendlichen");
 					 rightmannyC=true;
-					 while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
-						 i--; } 
-					 if (borders[band-1]!=crossings.get(i).crAt()){
-					 borders[band] = crossings.get(i).crAt(); band++; maxband = band;}
+					 if (i==1){
+						 System.out.println("Da alle Eingegebenen Punkte gleiche x-Koordinate haben, ist "
+							 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch");
+									done = true;
+									verticalSol = true;
+									verticalSolPos = crossings.get(0).crAt();
+									return;
+						 }
+					 while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()&& i>1) {
+						 i--; 
+						 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
+					 System.out.println("haben nun index verschoben und sind bei i="+i);
+					 }
+					 //if (borders[band-1]!=crossings.get(i).crAt()){
+					 borders[band] = crossings.get(i).crAt(); band++; maxband = band;//}
 					 break; //band++ hinzugefügt 
 				 }
 				borders[band] = crossings.get(i).crAt();
