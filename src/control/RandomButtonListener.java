@@ -1,6 +1,7 @@
 package control;
 
 import hamSanApp.HamSanAlg;
+import hamSanApp.Point;
 import view.PointType;
 
 import java.awt.event.ActionEvent;
@@ -94,6 +95,29 @@ public class RandomButtonListener implements ActionListener {
 				 pp.adddoublePoint(x,(abschnitt*15)-7.5);
 			}		
 			pp.setCurrentType(type);
+		}
+		else if (c.getSelectedItem()=="test"){
+			for (int i = 3; i > 0;i--){
+				 pp.adddoublePoint(-1,i);
+			}		
+			for (int i=2; i>=0; i--){
+				if (pp.getCurrentType()==PointType.BLUE){
+					try {
+						System.out.println(Point.op2naive(hsa.lBlue.get(i), hsa.lBlue.get((i+1)%3),hsa.lBlue.get(i),hsa.lBlue.get((i+2)%3)));
+					} catch (Exception e) {
+						// TODO Automatisch generierter Erfassungsblock
+						e.printStackTrace();
+					}}
+				else {
+					try {
+						System.out.println(Point.op2naive(hsa.lRed.get(i), hsa.lRed.get((i+1)%3),hsa.lRed.get(i),hsa.lRed.get((i+2)%3)));
+					} catch (Exception e) {
+						// TODO Automatisch generierter Erfassungsblock
+						e.printStackTrace();
+					}
+				}
+			}
+			
 		}
 		List<VisualPoint> vpoints = hsa.getVisualPoints();
 		pp.setVisualPoints(vpoints);
