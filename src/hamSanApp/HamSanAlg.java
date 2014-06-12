@@ -737,6 +737,9 @@ public class HamSanAlg {
 			maxband = 0;
 			break;
 		case 3:
+			step ++;
+			break;
+		case 4:
 			
 			// cut away lines, count and make sure levelB/R are correct:
 			int deleted = 0;
