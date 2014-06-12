@@ -47,6 +47,9 @@ public class DoAlgButtonListener implements ActionListener {
 		case 3:
 			l.setText("step 3: construted trapeze");
 			break;
+		case 4:
+			l.setText("zoomed in on trapeze");
+			lp.followTrapeze();
 		case 0:
 			l.setText("step 4: removed lines outside the trapeze");
 			break;
@@ -65,7 +68,6 @@ public class DoAlgButtonListener implements ActionListener {
 				l.setText("found invalid solution");
 			}
 		}
-		lp.followTrapeze();
 		pp.setAddingAllowed(false);
 		List<VisualPoint> vpoints = hsa.getVisualPoints();
 		pp.setVisualPoints(vpoints);

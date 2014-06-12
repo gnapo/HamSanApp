@@ -21,10 +21,10 @@ public class HamSanAlg {
 	public List<Point> lRed;		//hier werden die vom Alg. ber�cksichtigten Roten Linien gespeichert
 	public List<Point> lBlueDel;	// Del f�r deleted
 	public List<Point> lRedDel;	//hier werden die nicht ber�cksichtigten linien gespeichert
-	boolean leftborder;		//
-	boolean rightborder;	//bools, die wahr sind, falls der Momentane betrachtungsbereich nach links/rechts beschr�nkt ist
-	double leftb;			//
-	double rightb;			//der linke und Rechte Rand des betrachtungsbereiches
+	public boolean leftborder;		//
+	public boolean rightborder;	//bools, die wahr sind, falls der Momentane betrachtungsbereich nach links/rechts beschr�nkt ist
+	public double leftb;			//
+	public double rightb;			//der linke und Rechte Rand des betrachtungsbereiches
 	int levelBlue;			//
 	int levelRed;			//die wievielte linie von oben ist die gesuchte medianlinie?
 	boolean firstRun;		//ist der Algorithmus schonmal etwas gelaufen (k�nnen wir noch linien ver�ndern?
@@ -740,6 +740,9 @@ public class HamSanAlg {
 			maxband = 0;
 			break;
 		case 3:
+			step ++;
+			break;
+		case 4:
 			
 			// cut away lines, count and make sure levelB/R are correct:
 			int deleted = 0;
