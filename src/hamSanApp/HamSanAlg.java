@@ -418,10 +418,13 @@ public class HamSanAlg {
 	//Im Fall, dass Lösung eine Kreuzung im Unendlichen ist, ist die Lösung eine vertikale Gerade. 
 	//Gehe alle Kreuzungen vor index oder ab index durch und finde den Cut!
 	public Point verticalcut(int index){
+		System.out.println("Sind im Fall, dass Hamsandwichcut eine Vertikale ist");
 		return new Point(0, 0);
 	}
 
 	public void doAlg() { //sets done to true iff it has found a solution
+		boolean leftmannyC=false;//wird auf true gesetzt, falls betrachteter bereich nach links bzw rechts unbeschränkt ist und 
+		boolean rightmannyC=false;//aus mehr als (alpfa * Crossings.size()) kreuzungen im Unendlichen besteht
 		if (done) {
 			if (validSol(true)) System.out.println("Yay it worked");
 			return;
@@ -511,7 +514,7 @@ public class HamSanAlg {
 				}
 			}
 			
-			if (crossings.size() == 1) { //beseitigt glaub ich einige fehlerf�lle? ja, das ist aber schlecht. :<
+			if (crossings.size() == 1) { //beseitigt glaub ich einige fehlerf�lle? ja, das ist aber schlecht. :<
 				
 				Crossing c = crossings.get(0);
 				solution = new Point(-c.crAt(), c.a.eval(c.crAt()));
@@ -564,26 +567,6 @@ public class HamSanAlg {
 				System.out.println("aww :'(");
 			}*/
 			
-			//Find the first and the last crossing, which are not at -infinity and + infinity
-			int first=0;
-			int last=0;
-			for (int i = 0; i < crossings.size(); i ++) {
-				if (crossings.get(i).atInf()==false && crossings.get(i).atNegInf()==false){
-					if (DEBUG) {
-					System.out.println("Erste reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
-							+ crossings.get(i).crAt());}
-					first=i;break;
-				}
-			}
-			for (int i = crossings.size()-1;i>=0 ; i --) {
-				if (crossings.get(i).atInf()==false){//TODO nich auch noch fragen, dass nicht bei neginf?
-					if (DEBUG){
-					System.out.println("letzte reellwertige Kreuzung bei "+i+"ter Stelle und bei x-Koordinate "
-							+ crossings.get(i).crAt());}
-					last=i;break;
-				}
-			}
-			
 			minband = 0;
 			maxband = 0; // wird �berschrieben.
 			int band = 1;
@@ -592,22 +575,27 @@ public class HamSanAlg {
 			// here's how things are meant to be: all crossings at negInf are left of borders[band] 
 			// all crossings at posInf are to the right of borders[maxband], so that all crossings at real values
 			// are geq borders[i] and less than borders[i+1] for 1<=i<maxborders
-			for (int i = first; i < last; i += bandsize) { // TODO many crossings at inf
-				/*
-				 * while (crossings.get(i).atInf() &&
-				 * crossings.get(i).atNegInf()) {i++;} // only need for ugly
-				 * cases, test later if (crossings.get(i).atInf() &&
-				 * !crossings.get(i).atNegInf()) { while
-				 * (crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
-				 * i--; } borders[band] = crossings.get(i).crAt(); maxband =
-				 * band; break; }
-				 */
+			for (int i = bandsize; i < crossings.size(); i += bandsize) { // TODO many crossings at inf
+				 while (crossings.get(i).atInf() && crossings.get(i).atNegInf()){// only need for ugly
+					 System.out.println("haben viele kreuzungen im negativ-Unendlichen");
+					 leftmannyC=true;
+					 i++;
+				 }
+				 if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()){ 
+					 System.out.println("haben viele kreuzungen im Positiv Unendlichen");
+					 rightmannyC=true;
+					 while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()) {
+						 i--; } 
+					 if (borders[band-1]!=crossings.get(i).crAt()){
+					 borders[band] = crossings.get(i).crAt(); band++; maxband = band;}
+					 break; //band++ hinzugefügt 
+				 }
 				borders[band] = crossings.get(i).crAt();
 				band++;
 				maxband = band;
 			}
 			step ++;
-			if (DEBUG) {System.out.println("Intervalle eingeteilt!");}
+			if (DEBUG) System.out.println("Intervalle eingeteilt!");
 			break;
 		case 1:
 			// find strip with odd number of intersections by binary search:
@@ -674,6 +662,21 @@ public class HamSanAlg {
 				}
 				return;
 			}
+			
+			//prüfe, ob Betrachtungsbereich nur Kreuzungen bei - inf oder + inf hat und berechne 
+			//in diesem Fall die Vertikale Lösung
+			if (!leftborder && leftmannyC){
+				System.out.println("Sind im Fall, dass es links viele Kreuzungen bei - inf gibt");
+				done = true;
+				solution = verticalcut(maxband);
+				return;
+			}
+			if (!rightborder && rightmannyC){
+				System.out.println("Sind im Fall, dass es links viele Kreuzungen bei - inf gibt");
+				done=true;
+				solution=verticalcut(minband);
+				return;
+			}
 
 			int delta = (int) Math.round(eps * lBlue.size());
 			//int delta = (int) (eps * lBlue.size()+1);
@@ -730,7 +733,7 @@ public class HamSanAlg {
 				trapeze = new Trapeze(leftb, tl, bl, rightb, tr, br);
 			}
 			step++;
-			//trapeze = new Trapeze(true, -7, 1, -1, -3,3); debug gr�nde, ich glaube trapeze tun nicht ganz wie sie sollen
+			//trapeze = new Trapeze(true, -7, 1, -1, -3,3); debug gr�nde, ich glaube trapeze tun nicht ganz wie sie sollen
 			if (DEBUG) {System.out.println("Trapez konstruiert");}
 			borders = new double[64];
 			minband = 0;
