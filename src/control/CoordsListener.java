@@ -44,10 +44,8 @@ public class CoordsListener implements ActionListener  {
 		 Double yvalue = new Double(y.getText());
 		 pp.adddoublePoint(xvalue,yvalue);
 		//jSystem.out.println("ja, ich bin hier gelandet");
-		 ha.setStepsEnabled(true);
 		}
 		ha.requestFocus();
-		
 	}
 
 }
