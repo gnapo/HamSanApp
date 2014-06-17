@@ -13,7 +13,7 @@ public class Crossing implements Comparable<Crossing> {
 	/**
 	 * Konstruktor
 	 */
-	Crossing(Point x, Point y){
+	public Crossing(Point x, Point y){
 		a=x;
 		b=y;
 	}

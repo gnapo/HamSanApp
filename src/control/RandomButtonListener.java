@@ -3,6 +3,7 @@ package control;
 import hamSanApp.HamSanAlg;
 import hamSanApp.Point;
 import view.PointType;
+import hamSanApp.Crossing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,26 +98,27 @@ public class RandomButtonListener implements ActionListener {
 			pp.setCurrentType(type);
 		}
 		else if (c.getSelectedItem()=="test"){
-			for (int i = 3; i > 0;i--){
+			pp.setCurrentType(PointType.BLUE);
+			for (int i = 4; i > 0;i--){
 				 pp.adddoublePoint(-1,i);
-			}		
-			for (int i=2; i>=0; i--){
-				if (pp.getCurrentType()==PointType.BLUE){
-					try {
-						System.out.println(Point.op2naive(hsa.lBlue.get(i), hsa.lBlue.get((i+1)%3),hsa.lBlue.get(i),hsa.lBlue.get((i+2)%3)));
-					} catch (Exception e) {
-						// TODO Automatisch generierter Erfassungsblock
-						e.printStackTrace();
-					}}
-				else {
-					try {
-						System.out.println(Point.op2naive(hsa.lRed.get(i), hsa.lRed.get((i+1)%3),hsa.lRed.get(i),hsa.lRed.get((i+2)%3)));
-					} catch (Exception e) {
-						// TODO Automatisch generierter Erfassungsblock
-						e.printStackTrace();
-					}
-				}
-			}
+			}	
+			pp.adddoublePoint(0,1);
+			Crossing c_0_1=new Crossing(hsa.lBlue.get(0),hsa.lBlue.get(1));
+			Crossing c_0_2=new Crossing(hsa.lBlue.get(0),hsa.lBlue.get(2));
+			Crossing c_1_2=new Crossing(hsa.lBlue.get(1),hsa.lBlue.get(2));
+			Crossing c_2_3=new Crossing(hsa.lBlue.get(2),hsa.lBlue.get(3));
+			Crossing c_anders=new Crossing(hsa.lBlue.get(2),hsa.lBlue.get(4));	// von unterster Linie mit anderer Linie Kreuzung
+			
+			System.out.println(c_0_1 +" "+ c_0_2 + " "+c_1_2);
+			System.out.println("ist das hier" +c_1_2.compareTo(c_0_2)+"= -1 so ist alles super");
+			System.out.println("ist das hier"+ c_0_2.compareTo(c_0_1)+"=-1 so ist alles super");
+			System.out.println("ist das hier"+ c_1_2.compareTo(c_0_1)+"=-1 so ist alles super");
+			System.out.println("ist das hier"+ c_0_1.compareTo(c_2_3)+"=1 so ist alles super");
+			System.out.println("ist das hier"+ c_anders.compareTo(c_2_3)+"=-1 so ist alles super");
+			//public int compareTo(Crossing other) { 
+		    //returns -1 if this is left than other, 0 if this is other, 1 if this is to the right
+
+			
 			
 		}
 		List<VisualPoint> vpoints = hsa.getVisualPoints();

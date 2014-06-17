@@ -135,6 +135,8 @@ package hamSanApp;
 		 * @return -1 wenn sich ij links von kl schneiden, 1 sonst
 		 * @throws sollte eigentlich nicht, nur wenn du's verkackst
 		 */
+		//liefert bei Vergleich von kreuzungen im Unendlichen gerade inverses Ergebnis. 
+		//Lässt sich das leicht korrigieren?
 		public static int op2naive(Point i, Point j, Point k, Point l) throws Exception {
 			//if ij crosses left of kl, return -1, if right return +1
 			if ((i.equals(k)&& j.equals(l))||(i.equals(l)&&j.equals(k))) return 0;
@@ -156,6 +158,7 @@ package hamSanApp;
 					else { 
 						//find the smallest index of the four
 						//TODO: evtl Test, ob Behantdlung für nur 3 verschiedene Geraden als Eingebe passt 
+						//der kleinste Index kommt nur einmal vor
 						int s = (int) Math.signum(x1);
 						if ( ((i.i < j.i) && (i.i < k.i) && (i.i < l.i)) ||
 							 (smallindex==i.i)&& (i.i!=k.i)&& (i.i!=l.i) ){
@@ -185,6 +188,18 @@ package hamSanApp;
 							if ((diff1<0)&&(diff2<0) ||((diff1<0)&&(l.a-i.a<0)) ){return -1*s;}
 							else {return 1*s;}
 						}
+						/*
+						 
+						}//Fall, dass sich nur drei Geraden schneiden und kleinster Index doppelt vorkommt
+						if (smallindex==i.i) 
+						   {return op2naive(j,i,k,l);}
+						if (smallindex==j.i&& (j.i!=k.i))
+						   {return op2naive(i,j,l,k);}
+						if ( (smallindex==j.i)&&  (j.i==k.i) ){
+							if ((diff1<0)&&(diff2<0) ||((diff1<0)&&(l.a-i.a<0)) ){return -1*s;}
+							else {return 1*s;}
+						}
+						 */
 			
 						throw new Exception("no smallest index found, this shouldn't happen. :(, x values were "+x1+" and "+x2+" and our four lines were "+i+" "+j+" "+k+" "+l);
 					}
