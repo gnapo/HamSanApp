@@ -41,7 +41,7 @@ public class Crossing implements Comparable<Crossing> {
 		if (atInf() && atNegInf()) {
 			r +="crossing at -inf";
 		}
-		if (atInf() && !atNegInf()) {
+		else if (atInf() && !atNegInf()) {
 			r +="crossing at +inf";
 		}
 		else {
