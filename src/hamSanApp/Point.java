@@ -136,7 +136,8 @@ package hamSanApp;
 		 * @throws sollte eigentlich nicht, nur wenn du's verkackst
 		 */
 		//liefert bei Vergleich von kreuzungen im Unendlichen gerade inverses Ergebnis. 
-		//Lässt sich das leicht korrigieren?
+		//Problem: Was, wenn i und j parallel sind sowie k und l, aber i und l verschiedene Steiungen haben
+		//welche Reihenfolge wollen wir dann im positiv und nagativ unendlichem haben?
 		public static int op2naive(Point i, Point j, Point k, Point l) throws Exception {
 			//if ij crosses left of kl, return -1, if right return +1
 			if ((i.equals(k)&& j.equals(l))||(i.equals(l)&&j.equals(k))) return 0;
