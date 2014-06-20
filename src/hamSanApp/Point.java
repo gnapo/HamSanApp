@@ -137,7 +137,7 @@ package hamSanApp;
 		 */
 		//liefert bei Vergleich von kreuzungen im Unendlichen gerade inverses Ergebnis. 
 		//Problem: Was, wenn i und j parallel sind sowie k und l, aber i und l verschiedene Steiungen haben
-		//welche Reihenfolge wollen wir dann im positiv und nagativ unendlichem haben?
+		//welche Reihenfolge wollen wir dann im Unendlichen haben?
 		public static int op2naive(Point i, Point j, Point k, Point l) throws Exception {
 			//if ij crosses left of kl, return -1, if right return +1
 			if ((i.equals(k)&& j.equals(l))||(i.equals(l)&&j.equals(k))) return 0;
@@ -146,7 +146,7 @@ package hamSanApp;
 				{throw new Exception("op2 was called with stupid arguments");}
 			double diff1 = i.a - j.a;
 			double diff2 = k.a - l.a;
-			if (diff1 != 0 && diff2 != 0) {
+			if (diff1 != 0 && diff2 != 0) {//haben keine Kreuzungen im unendlichen
 				double x1 = i.cross(j);
 				double x2 = k.cross(l);
 				if (x1 < x2) {
@@ -156,7 +156,7 @@ package hamSanApp;
 					if (x1 > x2) {
 						return -1;
 					}
-					else { 
+					else { //Kreuzungen liegen übereinander
 						//find the smallest index of the four
 						//TODO: evtl Test, ob Behantdlung für nur 3 verschiedene Geraden als Eingebe passt 
 						//der kleinste Index kommt nur einmal vor
@@ -205,8 +205,58 @@ package hamSanApp;
 						throw new Exception("no smallest index found, this shouldn't happen. :(, x values were "+x1+" and "+x2+" and our four lines were "+i+" "+j+" "+k+" "+l);
 					}
 				}
-			}
+			}//haben Kreuzungen im Unendlichen
 			else {
+				if (diff1 != 0){
+					if (k.i < l.i) {
+						if (k.b > l.b) {return 1;}
+						else {return -1;}
+					}
+					else { //k.i > l.i
+						if (k.b > l.b) {return -1;}
+						else {return 1;}
+					}
+				}
+				if (diff2 != 0) {
+					if (i.i < j.i) {
+						if (i.b > j.b) {return -1;}
+						else {return 1;}
+					}
+					else { //i.i > j.i
+						if (i.b > j.b) {return 1;}
+						else {return -1;}
+					}
+				}
+				//sanity:
+				if (diff1 == 0 && diff2 == 0) {
+					if ((i.i < j.i && i.i < k.i && i.i < l.i) || (j.i < i.i && j.i < k.i && j.i < l.i)) {
+						if (k.i < l.i) {
+							if (k.b < l.b) {return 1;}
+							else {return -1;}
+						}
+						else {
+							if (k.b < l.b) {return -1;}
+							else {return 1;}
+						}
+					}
+					else { // k oder l haben kleinsten index
+						if (i.i < j.i) {
+							if (i.b < j.b) {return -1;}
+							else {return 1;}
+						}
+						else {
+							if (i.b < j.b) {return 1;}
+							else {return -1;}
+						}
+					}
+				}
+				
+				throw new Exception("uh, something went wrong comparing");
+			}
+			
+		}
+		
+		/*else {
 				if (diff1 != 0){
 					if (k.i < l.i) {
 						if (k.b > l.b) {return 1;}
@@ -251,9 +301,7 @@ package hamSanApp;
 					}
 				}
 				
-				throw new Exception("uh, something went wrong comparing");
-			}
-		}
+				throw new Exception("uh, something went wrong comparing");*/
 		/**
 		 * dritte operation, brauchen wir warscheinlich nicht
 		 */

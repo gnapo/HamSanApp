@@ -7,15 +7,15 @@ package hamSanApp;
 	 */
 public class Crossing implements Comparable<Crossing> {
 
-	public Point a; //
-	public Point b; // die beiden Linien
+	public Point line1; //
+	public Point line2; // die beiden Linien
 
 	/**
 	 * Konstruktor
 	 */
-	public Crossing(Point x, Point y){
-		a=x;
-		b=y;
+	public Crossing(Point crossline1, Point crossline2){
+		line1=crossline1;
+		line2=crossline2;
 	}
 	
 	/**
@@ -55,11 +55,26 @@ public class Crossing implements Comparable<Crossing> {
 	 */
 	@Override
 	public int compareTo(Crossing other) { //TODO: test this a bit
-		//returns -1 if this is left than other, 0 if this is other, 1 if this is to the right
+		//returns -1 if this is more left (than other), 0 if this is other, 1 if this is more right (than other)
 		if (other == null) {throw new NullPointerException("tried to compare to null. whoops.");}
 		if (this.equals(other)) {return(0);}
 		try {
-			return (-1)* Point.op2naive(a, b, other.a, other.b);
+			int smallindex=Math.min(Math.min(Math.min(this.line1.i,this.line2.i),other.line1.i),other.line2.i);
+			//Fall: beide Kreuzungen sind im Unendlichen
+			if(this.atInf() && other.atInf()){
+				if (this.atNegInf()&&(other.atNegInf()==false))//this negativ, other positiv
+					{return -1;}
+				else if (this.atNegInf()==false &&(other.atNegInf()))//this positiv, other negativ
+					{return 1;}
+				else if (this.atNegInf() && other.atNegInf()) {//this neg, oth neg
+					if ((smallindex == this.line1.i) || (smallindex == this.line2.i)){ //Theorie: Kreuzungspaar mit kleinerem Index ist weiter rechts
+						return 1;
+					}else {return -1;}
+						
+				}
+			}
+
+		//	return (-1)* Point.op2naive(a, b, other.a, other.b);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -71,7 +86,7 @@ public class Crossing implements Comparable<Crossing> {
 	 * @return true wenn ja
 	 */
 	public boolean atInf() {
-		return a.a==b.a;
+		return line1.a==line2.a;
 	}
 	
 	/**
@@ -80,12 +95,12 @@ public class Crossing implements Comparable<Crossing> {
 	 */
 	public boolean atNegInf() {
 		if (!atInf()) {return false;}
-		if (a.i<b.i){
-			if (a.b < b.b) {return false;}
+		if (line1.i<line2.i){
+			if (line1.b < line2.b) {return false;}
 			else {return true;}
 		}
 		else {
-			if (a.b < b.b) {return true;}
+			if (line1.b < line2.b) {return true;}
 			else {return false;}
 		}
 	}
@@ -97,7 +112,7 @@ public class Crossing implements Comparable<Crossing> {
 	 */
 	public double crAt() {
 		if (!atInf()) {
-			return a.cross(b);
+			return line1.cross(line2);
 		}
 		else {
 			return 0;
