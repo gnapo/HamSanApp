@@ -67,41 +67,34 @@ public class RandomButtonListener implements ActionListener {
 		}
 		else if (c.getSelectedItem()=="single random points"){
 			double neg=Math.random(); double steigung=Math.random(); double abschnitt =Math.random();double x=0;
-			if (neg <=0.5){x=(steigung*10)-5;}
-			else {x=-(steigung*10)-5;}
+			if (neg <=0.5){x=(steigung*10);}
+			else {x=-(steigung*10);}
 			PointType type=pp.getCurrentType();
 			double neg2=Math.random();
 			if (neg2 <=0.5){pp.setCurrentType(PointType.BLUE);}
 			else {pp.setCurrentType(PointType.RED);}
-			pp.adddoublePoint(x,(abschnitt*15)-7.5);
+			pp.adddoublePoint(x,(abschnitt*20)-10);
 			pp.setCurrentType(type);
 		}
 		else if (c.getSelectedItem()=="random paralel lines"){
-		/*	double neg=Math.random();double x=0;
-			if (neg <=0.5){x=(r.nextDouble()*10)-5;}
-			else {x=-((r.nextDouble()*10)-5);}
-			PointType type=pp.getCurrentType();
-			for (int i = 0; i < 10 + r.nextDouble()*20;i++){
-				double neg2=Math.random();
-				if (neg2 <=0.5){pp.setCurrentType(PointType.BLUE);}
-				else {pp.setCurrentType(PointType.RED);}
-				 pp.adddoublePoint(x,(r.nextDouble()*15)-7.5);*/
 			double neg=Math.random(); double steigung=Math.random();
 			double x=0;
-			if (neg <=0.5){x=(steigung*10)-5;}
-			else {x=-((steigung*10)-5);}
+			if (neg <=0.5){x=steigung*10;}
+			else {x=-steigung*10;}
 			PointType type=pp.getCurrentType();
-			for (int i = 0; i < 10;i++){
+			double interationen=Math.random()*10-5+2;
+			for (int i = 0; i < interationen;i++){
 				double neg2=Math.random();
 				double abschnitt =Math.random();
 				if (neg2 <=0.5){pp.setCurrentType(PointType.BLUE);}
 				else {pp.setCurrentType(PointType.RED);}
-				 pp.adddoublePoint(x,(abschnitt*15)-7.5);
+				 pp.adddoublePoint(x,(abschnitt*20)-10);
 			}		
 			pp.setCurrentType(type);
 		}
 		else if (c.getSelectedItem()=="test"){
-			pp.setCurrentType(PointType.BLUE);
+		/*	//Test  von compareTo mit 4 parallelen Geraden
+		 * pp.setCurrentType(PointType.BLUE);
 			for (int i = 4; i > 0;i--){
 				 pp.adddoublePoint(-1,i);
 			}	
@@ -119,8 +112,8 @@ public class RandomButtonListener implements ActionListener {
 			System.out.println("ist das hier"+ c_0_2.compareTo(c_0_1)+"=-1 so ist alles super");
 			System.out.println("ist das hier"+ c_1_2.compareTo(c_0_1)+"=-1 so ist alles super");
 			System.out.println("ist das hier"+ c_0_1.compareTo(c_2_3)+"=1 so ist alles super");
-			System.out.println("ist das hier"+ c_anders.compareTo(c_2_3)+"=-1 so ist alles super");
-			System.out.println("ist das hier"+ c_2_3.compareTo(c_anders)+"=1 so ist alles super");
+			System.out.println("ist das hier"+ c_anders.compareTo(c_2_3)+"=1 so ist alles super");
+		    System.out.println("ist das hier"+ c_2_3.compareTo(c_anders)+"=-1 so ist alles super");
 			crossings = new ArrayList<Crossing>();
 			crossings.add(c_anders);
 			crossings.add(c_2_3);
@@ -129,9 +122,10 @@ public class RandomButtonListener implements ActionListener {
 			crossings.add(c_0_1);
 			Collections.sort(crossings);
 			System.out.println("ich will, dass das hier richtig sortiert ist:"+crossings);
+			*/
 			
 			// generate all the crossings:
-			/*crossings = new ArrayList<Crossing>();
+			crossings = new ArrayList<Crossing>();
 			
 			for (int i = 0; i < hsa.lBlue.size(); i++) { //blue-red
 				for (int j = 0; j < hsa.lRed.size(); j++) {
@@ -169,7 +163,7 @@ public class RandomButtonListener implements ActionListener {
 			// sort them. crossings implements comparable.
 
 			// make stripes with at most alpha*(n choose 2) crossings a piece.
-			Collections.sort(crossings);*/
+			Collections.sort(crossings);
 			
 			
 			

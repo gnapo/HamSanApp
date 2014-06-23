@@ -519,7 +519,7 @@ public class HamSanAlg {
 			if (crossings.size() == 1) { //beseitigt glaub ich einige fehlerf�lle? ja, das ist aber schlecht. :<
 				
 				Crossing c = crossings.get(0);
-				solution = new Point(-c.crAt(), c.a.eval(c.crAt()));
+				solution = new Point(-c.crAt(), c.line1.eval(c.crAt()));
 				if (DEBUG) { System.out.println("es gibt nur eine Kreuzung im Betrachteten Bereich zwischen roten und blauen Linien. es muss die Loesung sein");}
 				done = true;
 				return;
@@ -570,7 +570,7 @@ public class HamSanAlg {
 			}*/
 			//int a=crossings.size()/2;int b=crossings.size()-1;
 			//System.out.println("haben folgende kreuzungen: "+"bei 0 "+crossings.get(0)+" in der Mitte : "+crossings.get(a)+"; am Ende "+crossings.get(b));
-			System.out.println("haben folgende kreuzungen: "+crossings);
+			//System.out.println("haben folgende kreuzungen: "+crossings);
 			minband = 0;
 			maxband = 0; // wird �berschrieben.
 			int band = 1;
