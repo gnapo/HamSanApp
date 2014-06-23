@@ -82,7 +82,7 @@ public class RandomButtonListener implements ActionListener {
 			if (neg <=0.5){x=steigung*10;}
 			else {x=-steigung*10;}
 			PointType type=pp.getCurrentType();
-			double interationen=Math.random()*10-5+2;
+			double interationen=Math.random()*5+2;
 			for (int i = 0; i < interationen;i++){
 				double neg2=Math.random();
 				double abschnitt =Math.random();

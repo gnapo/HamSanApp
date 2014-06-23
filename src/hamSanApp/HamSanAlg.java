@@ -48,6 +48,10 @@ public class HamSanAlg {
 
 	boolean leftsetthistime = false;	//
 	boolean rightsetthistime = false;	// used for going from step 2 to 3.
+	boolean leftmannyC=false;//wird auf true gesetzt, falls linker bzw rechter Randbereich bei Intervalleinteilung 
+	boolean rightmannyC=false;//aus mehr als (alpfa * Crossings.size()) kreuzungen im negativ bzw positivUnendlichen besteht
+	List<Crossing> AllCrossings;//Wird nur im Fall von Vertikaler Lösung verwendet und enthält dann
+	                                 //alle Kreutungen
 	
 	final double alpha = 1.0d/32.0d; 	//
 	final double eps = 1.0d/8.0d;		//Konstanten f�r den Alg
@@ -417,14 +421,21 @@ public class HamSanAlg {
 	
 	//Im Fall, dass Lösung eine Kreuzung im Unendlichen ist, ist die Lösung eine vertikale Gerade. 
 	//Gehe alle Kreuzungen vor index oder ab index durch und finde den Cut!
-	public Point verticalcut(int index){
+	public boolean verticalcut(){
 		System.out.println("Sind im Fall, dass Hamsandwichcut eine Vertikale ist");
-		return new Point(0, 0);
+		for(int i=0; i<AllCrossings.size(); i++){
+			verticalSolPos=AllCrossings.get(i).crAt();
+			if (validSol(true)){
+				System.out.println("Verticale Lösung gefunden");
+				return true;
+			}
+		}
+		System.out.println("Es gibt keine Vertikale Lösung");
+		verticalSolPos=0;
+		return false;
 	}
 
 	public void doAlg() { //sets done to true iff it has found a solution
-		boolean leftmannyC=false;//wird auf true gesetzt, falls betrachteter bereich nach links bzw rechts unbeschränkt ist und 
-		boolean rightmannyC=false;//aus mehr als (alpfa * Crossings.size()) kreuzungen im Unendlichen besteht
 		if (done) {
 			if (validSol(true)) System.out.println("Yay it worked");
 			return;
@@ -568,8 +579,8 @@ public class HamSanAlg {
 				}
 				System.out.println("aww :'(");
 			}*/
-			//int a=crossings.size()/2;int b=crossings.size()-1;
-			//System.out.println("haben folgende kreuzungen: "+"bei 0 "+crossings.get(0)+" in der Mitte : "+crossings.get(a)+"; am Ende "+crossings.get(b));
+			int a=crossings.size()/2;int b=crossings.size()-1;
+			System.out.println("haben folgende kreuzungen: "+"vorne "+crossings.get(0)+" in der Mitte : "+crossings.get(a)+"; am Ende "+crossings.get(b));
 			//System.out.println("haben folgende kreuzungen: "+crossings);
 			minband = 0;
 			maxband = 0; // wird �berschrieben.
@@ -579,41 +590,78 @@ public class HamSanAlg {
 			// here's how things are meant to be: all crossings at negInf are left of borders[band] 
 			// all crossings at posInf are to the right of borders[maxband], so that all crossings at real values
 			// are geq borders[i] and less than borders[i+1] for 1<=i<maxborders
-			for (int i = bandsize; i < crossings.size(); i += bandsize) { // TODO many crossings at inf
-				System.out.println("Intervalle werden eingeteilt");
-				 while (crossings.get(i).atInf() && crossings.get(i).atNegInf()){// only need for ugly
-					 System.out.println("haben viele kreuzungen im negativ-Unendlichen");
-					 leftmannyC=true;
-					 i++;
-				 }
-				 if (i==crossings.size()){
-					 System.out.println("Da alle Eingegebenen Punkte gleiche x-Koordinate haben, ist "
-					 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch");
-							done = true;
-							verticalSol = true;
-							verticalSolPos = lBlue.get(0).a;
-							return;
-				 }
-				 if (crossings.get(i).atInf() && !crossings.get(i).atNegInf()){ 
-					 System.out.println("haben viele kreuzungen im Positiv Unendlichen");
-					 rightmannyC=true;
-					 while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()&& i>1) {
-						 i--; 
-						 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
-					 System.out.println("haben nun index verschoben und sind bei i="+i);
-					 }
-					 if (i==1){
-						 System.out.println("Da alle Eingegebenen Punkte gleiche x-Koordinate haben, ist "
-							 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch");
-									done = true;
-									verticalSol = true;
-									verticalSolPos = lBlue.get(0).a;
-									return;
-						 }
-					 if ((band>1)&&borders[band-1]!=crossings.get(i).crAt()){
-					 borders[band] = crossings.get(i).crAt(); band++; maxband = band;}
-					 break; //band++ hinzugefügt 
-				 }
+			
+			leftmannyC=false;//wird auf true gesetzt,falls linker bzw rechter Randbereich bei Intervalleinteilung 
+			rightmannyC=false;//mehr als bandsize viele Kreutungen im negativ/bzw positiv Unendlichen haben
+			System.out.println("Intervalle werden eingeteilt");
+			for (int i = bandsize; i < crossings.size(); i += bandsize) { 
+                //Fall, dass bei aktuellem Index i Kreuzung im Unendlichen liegt
+				if (crossings.get(i).atInf()){
+					if (crossings.get(i).atNegInf()){//Fall, dass erste bandsize Kreutungen im negativ-Unendlichen liegen
+
+					// gibt es im negativ Unendlichen mehr als bandsize Kreuzungen, so vergrößere erstes Intervall so, 
+					//dass alle Kreuzungen im negativ Unendlichen darin enthalten sind.
+						leftmannyC=true;
+						 System.out.println("haben viele kreuzungen im negativ-Unendlichen");
+						while (i<crossings.size() && crossings.get(i).atInf() && crossings.get(i).atNegInf()){
+							i++;
+						}
+						//Gibt es nur Kreuzungen im negativ und positiv unendlichen, so besteht die Eingabe aus parallelen 
+						//Geraden bzw aus Punkten mit gleicher x-Koordinate. die Vertikalte durch all diese Punkte 
+						//ist in diesem Fall die Lösung
+						if ((i==crossings.size())||crossings.get(i).atInf() && !crossings.get(i).atNegInf()){
+							System.out.println("Da alle Geraden parallel sind, haben "
+									+ "eingegebene Punkte gleiche x-Koordinate. Deshalb ist "
+							 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch; "
+							 		+ "Fall von vielen kreutzungen bei - Inf");
+								done = true;
+								verticalSol = true;
+								verticalSolPos = lBlue.get(0).a;
+								return;
+						}
+					}//Ende: Fall, dass erste bandsize Kreuzungen im negativ-Unendlichen leigen
+					
+       
+					else{//Fall: haben bei Index i Kreuzung im Positiv Unendlichen
+						if (i==bandsize){//passiert das schon zu Beginn der Intervalleinteilung,
+							//haben wir wahrscheinlich parallele Geraden als Eingabe
+							boolean isparallel=false;
+							for(int j=0;j<crossings.size()-1; j++){
+								if(crossings.get(j).crAt()==crossings.get(j+1).crAt()){
+								isparallel=true;
+								}
+							}
+							if (isparallel==true){
+								System.out.println("Da alle Geraden parallel sind, haben "
+							 		+ "eingegebene Punkte gleiche x-Koordinate. Deshalb ist "
+								 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch"
+								 		+ "im Fall, dass Parallelität geprüft wird");
+										done = true;
+										verticalSol = true;
+										verticalSolPos = lBlue.get(0).a;
+										return;
+							}
+							else{
+								System.out.println("komischer fall, in dem im Erten Intervall schon Kreuzung Unendlich auftaucht");
+								}
+						}//Ende des Falls, dass wir bei Beginn der Intervalleinteilung eine Kreutzung im positiv Unendlicheh haben
+						
+						else{//Haben Kreutzung im positiv Unendlichen nicht zu Beginn der Intervalleinteilung
+							System.out.println("haben viele kreuzungen im Positiv Unendlichen");
+							rightmannyC=true;
+							while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()&& i>1) {
+								i--; 
+								 //	 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
+								 // System.out.println("haben nun index verschoben und sind bei i="+i);
+							}
+							// if ((band>1)&&borders[band-1]!=crossings.get(i).crAt()){
+							borders[band] = crossings.get(i).crAt(); band++; maxband = band;//}
+							break; //band++ hinzugefügt 
+						}
+					}//Ende vom Fall, dass beim aktuellen Index Kreuzung im Positiv Unendlichen ist
+				}//Ende fom Fall, dass beim aktuellen Index Kreutzung im Unendlichen ist
+	///////Fall, dass beim aktuellen Index keine Kreuzung im Unendlichen ist
+				
 				borders[band] = crossings.get(i).crAt();
 				band++;
 				maxband = band;
@@ -692,13 +740,21 @@ public class HamSanAlg {
 			if (!leftborder && leftmannyC){
 				System.out.println("Sind im Fall, dass es links viele Kreuzungen bei - inf gibt");
 				done = true;
-				solution = verticalcut(maxband);
+				verticalSol=true;
+				//solution = verticalcut(maxband);
+				//solution = verticalcut();
+				AllCrossings=crossings;
+				verticalcut();//hier wierd verticalSolPos berechnet
 				return;
 			}
 			if (!rightborder && rightmannyC){
 				System.out.println("Sind im Fall, dass es links viele Kreuzungen bei - inf gibt");
 				done=true;
-				solution=verticalcut(minband);
+				verticalSol=true;
+				//solution=verticalcut(minband);
+				//solution=verticalcut();
+				 AllCrossings=crossings;
+				verticalcut();//hier wierd verticalSolPos berechnet
 				return;
 			}
 
