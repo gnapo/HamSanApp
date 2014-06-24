@@ -50,8 +50,6 @@ public class HamSanAlg {
 	boolean rightsetthistime = false;	// used for going from step 2 to 3.
 	boolean leftmannyC=false;//wird auf true gesetzt, falls linker bzw rechter Randbereich bei Intervalleinteilung 
 	boolean rightmannyC=false;//aus mehr als (alpfa * Crossings.size()) kreuzungen im negativ bzw positivUnendlichen besteht
-	List<Crossing> AllCrossings;//Wird nur im Fall von Vertikaler Lösung verwendet und enthält dann
-	                                 //alle Kreutungen
 	
 	final double alpha = 1.0d/32.0d; 	//
 	final double eps = 1.0d/8.0d;		//Konstanten f�r den Alg
@@ -375,6 +373,7 @@ public class HamSanAlg {
 			if (Math.max(bleft, bright) > (lBlue.size()+lBlueDel.size())/2) return false;
 			if (Math.max(rleft, rright) > (lRed.size()+lRedDel.size())/2) return false;
 			
+		//	System.out.println("haben Vertikale Lösung gefunden");
 			return true;
 		}
 		
@@ -410,6 +409,8 @@ public class HamSanAlg {
 		
 		if (Math.max(bbelow, babove) > (lBlue.size()+lBlueDel.size())/2) return false;
 		if (Math.max(rbelow, rabove) > (lRed.size()+lRedDel.size())/2) return false;
+		
+	//	System.out.println("haben korrekten Cut gefunden.");
 		return true;
 	}
 	
@@ -423,17 +424,26 @@ public class HamSanAlg {
 	//Gehe alle Kreuzungen vor index oder ab index durch und finde den Cut!
 	public boolean verticalcut(){
 		System.out.println("Sind im Fall, dass Hamsandwichcut eine Vertikale ist");
-		for(int i=0; i<AllCrossings.size(); i++){
-			verticalSolPos=AllCrossings.get(i).crAt();
+		for(int i=0; i<lBlue.size(); i++){
+			verticalSolPos=lBlue.get(i).a;
 			if (validSol(true)){
-				System.out.println("Verticale Lösung gefunden");
+				System.out.println("Verticale Lösung durch blauen Punkt gefunden");
 				return true;
 			}
 		}
-		System.out.println("Es gibt keine Vertikale Lösung");
-		verticalSolPos=0;
+		System.out.println("Es gibt keine Vertikale Lösung durch einen blauen Punkt");
+		for(int i=0; i<lRed.size(); i++){
+			verticalSolPos=lRed.get(i).a;
+			if (validSol(true)){
+				System.out.println("Verticale Lösung durch roten Punkt gefunden");
+				return true;
+			}
+		System.out.println("Es gibt überhaupt keine Vertikale Lösung");
+		}
 		return false;
+		
 	}
+		
 
 	public void doAlg() { //sets done to true iff it has found a solution
 		if (done) {
@@ -642,8 +652,23 @@ public class HamSanAlg {
 										return;
 							}
 							else{
-								System.out.println("komischer fall, in dem im Erten Intervall schon Kreuzung Unendlich auftaucht");
+								System.out.println("komischer fall, in dem im Ersten Intervall schon Kreuzung Unendlich auftaucht");
+								//da nicht alle Geraden parallel sind, muss es eine Kreuzung geben, die nicht im Unendlichen liegt 
+								//und im ersten Itervall enthalten ist. 
+								//Wir erhalten also in diesem Fall nur genau zwei Intervalle!
+									System.out.println("haben genau zwei Intervalle. Im Ersten Intervall ist mindestens "
+											+ "eine Kreutung enthalten, die nicht im Unendlichen liegt");
+									rightmannyC=true;
+									while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()&& i>1) {
+										i--; 
+										 //	 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
+										 // System.out.println("haben nun index verschoben und sind bei i="+i);
+									}
+									// if ((band>1)&&borders[band-1]!=crossings.get(i).crAt()){
+									borders[band] = crossings.get(i).crAt(); band++; maxband = band;//}
+									break; 
 								}
+								
 						}//Ende des Falls, dass wir bei Beginn der Intervalleinteilung eine Kreutzung im positiv Unendlicheh haben
 						
 						else{//Haben Kreutzung im positiv Unendlichen nicht zu Beginn der Intervalleinteilung
@@ -743,7 +768,6 @@ public class HamSanAlg {
 				verticalSol=true;
 				//solution = verticalcut(maxband);
 				//solution = verticalcut();
-				AllCrossings=crossings;
 				verticalcut();//hier wierd verticalSolPos berechnet
 				return;
 			}
@@ -753,7 +777,6 @@ public class HamSanAlg {
 				verticalSol=true;
 				//solution=verticalcut(minband);
 				//solution=verticalcut();
-				 AllCrossings=crossings;
 				verticalcut();//hier wierd verticalSolPos berechnet
 				return;
 			}
