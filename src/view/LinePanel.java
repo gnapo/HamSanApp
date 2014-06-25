@@ -110,7 +110,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 					continue;
 				}
 				double crossingA = c.crAt();
-				double crossingB = c.a.a * crossingA + c.a.b;
+				double crossingB = c.line1.a * crossingA + c.line1.b;
 
 				Point2D.Double asAB = new Point2D.Double(crossingA, crossingB);
 				Point2D.Double asXY = VisualPoint.toXY(asAB, xmin, ymin, xmax, ymax, this.getSize());
