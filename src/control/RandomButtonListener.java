@@ -24,7 +24,8 @@ public class RandomButtonListener implements ActionListener {
 	private JComboBox<String> c;
 	private HamSanApplet applet;
 
-	public RandomButtonListener(HamSanAlg hsa, LinePanel lp, PointPanel pp, JComboBox<String> c, HamSanApplet applet) {
+	public RandomButtonListener(HamSanAlg hsa, LinePanel lp, PointPanel pp,
+			JComboBox<String> c, HamSanApplet applet) {
 		r = new Random();
 		r.setSeed(1);
 		this.hsa = hsa;
@@ -55,10 +56,12 @@ public class RandomButtonListener implements ActionListener {
 
 			} else if (c.getSelectedItem() == "random points (square)") {
 				for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
-					hsa.addLine((r.nextDouble() * 10) - 5, (r.nextDouble() * 15) - 7.5, false);
+					hsa.addLine((r.nextDouble() * 10) - 5,
+							(r.nextDouble() * 15) - 7.5, false);
 				}
 				for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
-					hsa.addLine((r.nextDouble() * 10) - 5, (r.nextDouble() * 15) - 7.5, true);
+					hsa.addLine((r.nextDouble() * 10) - 5,
+							(r.nextDouble() * 15) - 7.5, true);
 				}
 
 			} else if (c.getSelectedItem() == "single random points") {
@@ -105,38 +108,38 @@ public class RandomButtonListener implements ActionListener {
 				pp.setCurrentType(type);
 
 			} else if (c.getSelectedItem() == "all Points on one side") {
-				//alle Punkte auf einer Geraden
+				// alle Punkte auf einer Geraden
 				PointType type = pp.getCurrentType();
-				
-				for (int i = -9; i<-4; i+=2) {
+
+				for (int i = -9; i < -4; i += 2) {
 					pp.setCurrentType(PointType.BLUE);
-					pp.adddoublePoint(i,i);
+					pp.adddoublePoint(i, i);
 				}
 				pp.setCurrentType(PointType.RED);
 				pp.adddoublePoint(-4, -4);
-				for (int i = -3; i<1; i+=2) {
+				for (int i = -3; i < 1; i += 2) {
 					pp.setCurrentType(PointType.BLUE);
-					pp.adddoublePoint(i,i);
+					pp.adddoublePoint(i, i);
 				}
-				for (int i = 1; i<5; i+=2) {
+				for (int i = 1; i < 5; i += 2) {
 					pp.setCurrentType(PointType.RED);
-					pp.adddoublePoint(i,i);
+					pp.adddoublePoint(i, i);
 				}
 				pp.setCurrentType(PointType.BLUE);
 				pp.adddoublePoint(5, 5);
-				for (int i = 6; i<10; i+=2) {
+				for (int i = 6; i < 10; i += 2) {
 					pp.setCurrentType(PointType.RED);
-					pp.adddoublePoint(i,i);
+					pp.adddoublePoint(i, i);
 				}
 				pp.setCurrentType(PointType.RED);
-				pp.adddoublePoint(6,7);
-				pp.adddoublePoint(4,8);
-				pp.adddoublePoint(3,5);
+				pp.adddoublePoint(6, 7);
+				pp.adddoublePoint(4, 8);
+				pp.adddoublePoint(3, 5);
 				pp.setCurrentType(PointType.BLUE);
-				pp.adddoublePoint(-3,-1);
-				pp.adddoublePoint(-8,-4);
+				pp.adddoublePoint(-3, -1);
+				pp.adddoublePoint(-8, -4);
 				pp.setCurrentType(type);
-				
+
 			} else if (c.getSelectedItem() == "vertical solution") {
 				// Vertikale LÃ¶sung
 
@@ -182,20 +185,21 @@ public class RandomButtonListener implements ActionListener {
 					for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
 						double phi = r.nextDouble() * Math.PI * 2;
 						double rad = r.nextDouble() * 5;
-						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad, false);
+						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad,
+								false);
 					}
 				} else {
 					for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
 						double phi = r.nextDouble() * Math.PI * 2;
 						double rad = r.nextDouble() * 5;
-						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad, true);
+						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad,
+								true);
 					}
 				}
 
 			} else if (c.getSelectedItem() == "collinear case") {
 				// alle Punkte auf einer Geraden
 				PointType type = pp.getCurrentType();
-
 				for (int i = -9; i < -4; i++) {
 					pp.setCurrentType(PointType.BLUE);
 					pp.adddoublePoint(i, i);
@@ -218,7 +222,30 @@ public class RandomButtonListener implements ActionListener {
 				}
 				pp.setCurrentType(type);
 
-			} 
+			} else if (c.getSelectedItem() == "early stop") {
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(-1, 2);
+				pp.adddoublePoint(-1, 1);
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(-1, 0);
+				pp.adddoublePoint(-1, -1);
+				pp.adddoublePoint(-1, -2);
+
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(0, 1);
+				pp.adddoublePoint(0, -1);
+				pp.adddoublePoint(0, 2);
+				pp.adddoublePoint(0, 0);
+				pp.adddoublePoint(0, -2);
+
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(1, 1);
+				pp.adddoublePoint(1, 2);
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(1, 0);
+				pp.adddoublePoint(1, -1);
+				pp.adddoublePoint(1, -2);
+			}
 			List<VisualPoint> vpoints = hsa.getVisualPoints();
 			pp.setVisualPoints(vpoints);
 			lp.setVisualPoints(vpoints);
