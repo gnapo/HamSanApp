@@ -3,9 +3,7 @@ package view;
 import hamSanApp.HamSanAlg;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
@@ -17,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import control.CoordsListener;
 import control.CrossingsListener;
@@ -78,7 +75,7 @@ public class HamSanApplet extends JApplet {
 	    colourlabel.setAlignmentX(10);
  
 	    //Preset ComboBox
-	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines","single random points"};
+	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines","single random points","special case 1", "special case 2", "special case 3"};
 	    presetList = new JComboBox<String>(presets);
 	    presetList.setFocusable(false);
 	    
@@ -130,7 +127,9 @@ public class HamSanApplet extends JApplet {
 	    
 	    JButton resetZoomButton = new JButton("Reset zoom");
 	    resetZoomButton.setFocusable(false);
-	    resetZoomButton.addActionListener(new ResetZoomListener(lp));
+	    ResetZoomListener resetZoomListener = new ResetZoomListener(lp);
+	    resetZoomButton.addActionListener(resetZoomListener);
+	    resetZoomButton.setMnemonic(KeyEvent.VK_Z);
 	    
 	    randomButton = new JButton("Add points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
@@ -203,7 +202,7 @@ public class HamSanApplet extends JApplet {
 		
 		this.add(dualPanels, BorderLayout.CENTER);
 	    this.add(lowerPanel, BorderLayout.SOUTH);
-	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener, OldpointsresetButtonListener));
+	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener, OldpointsresetButtonListener, resetZoomListener));
 		this.addKeyListener(new ZoomDragListener(lp));
 
 	    setFocusable(true);

@@ -1,6 +1,5 @@
 package control;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -18,8 +17,9 @@ public class ToggleListener implements KeyListener {
 	private RandomButtonListener randBut;
 	private OldpointsResetButtonListener oldresBut;
 	private JLabel clabel;
+	private ResetZoomListener resetz;
 	
-	public ToggleListener(JLabel colourlabel,PointPanel pp,DoAlgButtonListener doalg,DoAllgButtonListener doallg,ResetButtonListener res,RandomButtonListener ran, OldpointsResetButtonListener oldpointresBut) {
+	public ToggleListener(JLabel colourlabel,PointPanel pp,DoAlgButtonListener doalg,DoAllgButtonListener doallg,ResetButtonListener res,RandomButtonListener ran, OldpointsResetButtonListener oldpointresBut, ResetZoomListener rz) {
 		myPointPanel = pp;
 		algBut = doalg;
 		allgBut = doallg;
@@ -27,6 +27,7 @@ public class ToggleListener implements KeyListener {
 		oldresBut=oldpointresBut;
 		randBut = ran;
 		clabel=colourlabel;
+		resetz = rz;
 	}
 	
 	@Override
@@ -63,6 +64,10 @@ public class ToggleListener implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_S) {
 			//reset but keep old points
 			oldresBut.doStuff();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_Z ) {
+			//reset zoom
+			resetz.doStuff();
 		}
 	}
 

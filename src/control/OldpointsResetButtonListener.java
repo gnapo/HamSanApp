@@ -40,33 +40,6 @@ public class OldpointsResetButtonListener implements ActionListener {
 		applet.setPlacingEnabled(true);
 		applet.setStepsEnabled(true);
 		
-		/*List<Point> oldBlue; 		
-		oldBlue=hsa.lBlue;
-		oldBlue.addAll(hsa.lBlueDel);
-		List<Point> oldRed;	
-		oldRed=hsa.lRed;
-		oldRed.addAll(hsa.lRedDel);
-		//sorge dafür, das kleinster Index erstes Element ist,
-		//denn dieses wird unter Umständen zu Beginn gelöscht
-		int smallestBlue = oldBlue.get(0).i;
-		int smallestRed = oldRed.get(0).i;
-		for(int j=0;j<oldBlue.size();j++){
-			if(smallestBlue>oldBlue.get(j).i){
-				smallestBlue=j;
-			}
-		}
-		for(int j=0;j<oldRed.size();j++){
-			if(smallestRed>oldRed.get(j).i){
-				smallestRed=j;
-			}
-		}
-		Point firstBlue=oldBlue.get(0);
-		oldBlue.set(0, oldBlue.get(smallestBlue-1));
-		oldBlue.set(smallestBlue-1,firstBlue);*/
-		
-	//	Point firstRed=oldRed.get(0);
-	//	oldRed.set(0, oldRed.get(smallestRed-1));
-	//	oldRed.set(smallestRed-1,firstRed);
 		List<Point> oldBlue; 		
 		oldBlue=hsa.firstlBlue;
 		List<Point> oldRed;	
