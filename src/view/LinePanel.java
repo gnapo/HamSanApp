@@ -55,7 +55,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	
 	private int initialX, initialY;
 
-	private Mode mode = Mode.ZOOM_RECTANGLE;
+	private Mode mode = Mode.DRAG;
 	
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;

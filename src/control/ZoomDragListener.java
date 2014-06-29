@@ -23,14 +23,14 @@ public class ZoomDragListener implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-			linePanel.setMode(Mode.DRAG);
+			linePanel.setMode(Mode.ZOOM_RECTANGLE);
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-			linePanel.setMode(Mode.ZOOM_RECTANGLE);
+			linePanel.setMode(Mode.DRAG);
 		}
 	}
 
