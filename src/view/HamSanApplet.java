@@ -4,7 +4,6 @@ import hamSanApp.HamSanAlg;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
@@ -26,7 +25,6 @@ import control.OldpointsResetButtonListener;
 import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
-import control.ToggleColorButtonListener;
 import control.ToggleListener;
 import control.ZoomDragListener;
 
@@ -70,17 +68,15 @@ public class HamSanApplet extends JApplet {
 	    //infoLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    
-	    // colour label
-	    JLabel colourlabel = new JLabel("Color: blue - space to change");
-	    colourlabel.setText("<html>Color: <font color='blue'>blue</font> - space to change</html>");
-	    //colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    // colour labels
+	    JLabel colourlabel = new JLabel("colour: blue - space to change");
+	    colourlabel.setText("<html>colour: <font color='blue'>blue</font> - space to change</html>");
+	    colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    colourlabel.setAlignmentX(10);
-	    JButton toggleColorButton = new JButton("Toggle Color");
-	    toggleColorButton.setFocusable(false);
  
 	    //Preset ComboBox
 	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines",
-	    		"single random points","special case 1", "special case 2", "special case 3", "special case 4"};
+	    		"single random points","all Points on one side", "vertical solution", "only one color","collinear case","early stop"};
 	    presetList = new JComboBox<String>(presets);
 	    presetList.setFocusable(false);
 	    
@@ -172,13 +168,8 @@ public class HamSanApplet extends JApplet {
 	    algPanel.add(oldpointsresetButton);
 	    neccessaryPanel.add(algPanel);
 	    
-	    JPanel colorPanel = new JPanel();
-	    colorPanel.setLayout(new FlowLayout());
-	    colorPanel.add(colourlabel);
-	    colorPanel.add(toggleColorButton);
-	    neccessaryPanel.add(colorPanel);
+	    neccessaryPanel.add(colourlabel);
 	    
-	    toggleColorButton.addActionListener(new ToggleColorButtonListener(pp, colourlabel));
 	    neccessaryPanel.add(infoLabel);
 	    
 	    JPanel optionalPanel = new JPanel();

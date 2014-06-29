@@ -1,12 +1,9 @@
 package control;
 
-import hamSanApp.Crossing;
 import hamSanApp.HamSanAlg;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -26,9 +23,9 @@ public class RandomButtonListener implements ActionListener {
 	private Random r;
 	private JComboBox<String> c;
 	private HamSanApplet applet;
-	private ArrayList<Crossing> crossings;
 
-	public RandomButtonListener(HamSanAlg hsa, LinePanel lp, PointPanel pp, JComboBox<String> c, HamSanApplet applet) {
+	public RandomButtonListener(HamSanAlg hsa, LinePanel lp, PointPanel pp,
+			JComboBox<String> c, HamSanApplet applet) {
 		r = new Random();
 		r.setSeed(1);
 		this.hsa = hsa;
@@ -59,10 +56,12 @@ public class RandomButtonListener implements ActionListener {
 
 			} else if (c.getSelectedItem() == "random points (square)") {
 				for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
-					hsa.addLine((r.nextDouble() * 10) - 5, (r.nextDouble() * 15) - 7.5, false);
+					hsa.addLine((r.nextDouble() * 10) - 5,
+							(r.nextDouble() * 15) - 7.5, false);
 				}
 				for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
-					hsa.addLine((r.nextDouble() * 10) - 5, (r.nextDouble() * 15) - 7.5, true);
+					hsa.addLine((r.nextDouble() * 10) - 5,
+							(r.nextDouble() * 15) - 7.5, true);
 				}
 
 			} else if (c.getSelectedItem() == "single random points") {
@@ -108,24 +107,41 @@ public class RandomButtonListener implements ActionListener {
 				}
 				pp.setCurrentType(type);
 
-			} else if (c.getSelectedItem() == "special case 1") {
-				// Auf einer Seite des Hamsandwichcuts sind Gar keine Punkte!
+			} else if (c.getSelectedItem() == "all Points on one side") {
+				// alle Punkte auf einer Geraden
+				PointType type = pp.getCurrentType();
 
-				pp.setCurrentType(PointType.BLUE);
-				for (int i = 4; i > 0; i--) {
-					pp.adddoublePoint(-1, i);
+				for (int i = -9; i < -4; i += 2) {
+					pp.setCurrentType(PointType.BLUE);
+					pp.adddoublePoint(i, i);
 				}
 				pp.setCurrentType(PointType.RED);
-				for (int i = 8; i > 5; i--) {
-					pp.adddoublePoint(-1, i);
+				pp.adddoublePoint(-4, -4);
+				for (int i = -3; i < 1; i += 2) {
+					pp.setCurrentType(PointType.BLUE);
+					pp.adddoublePoint(i, i);
 				}
-
+				for (int i = 1; i < 5; i += 2) {
+					pp.setCurrentType(PointType.RED);
+					pp.adddoublePoint(i, i);
+				}
 				pp.setCurrentType(PointType.BLUE);
-				for (int i = 1; i >= 0; i--) {
-					pp.adddoublePoint(-2, i);
+				pp.adddoublePoint(5, 5);
+				for (int i = 6; i < 10; i += 2) {
+					pp.setCurrentType(PointType.RED);
+					pp.adddoublePoint(i, i);
 				}
-			} else if (c.getSelectedItem() == "special case 2") {
-				// Vertikale Lösung
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(6, 7);
+				pp.adddoublePoint(4, 8);
+				pp.adddoublePoint(3, 5);
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(-3, -1);
+				pp.adddoublePoint(-8, -4);
+				pp.setCurrentType(type);
+
+			} else if (c.getSelectedItem() == "vertical solution") {
+				// Vertikale LÃ¶sung
 
 				pp.setCurrentType(PointType.BLUE);
 				for (int i = 4; i > 0; i--) {
@@ -162,27 +178,28 @@ public class RandomButtonListener implements ActionListener {
 				}
 				pp.adddoublePoint(2, 2);
 
-			} else if (c.getSelectedItem() == "special case 3") {
+			} else if (c.getSelectedItem() == "only one color") {
 				// nur einfarbige Punkte
 				double color = Math.random();
 				if (color <= 0.5) {
 					for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
 						double phi = r.nextDouble() * Math.PI * 2;
 						double rad = r.nextDouble() * 5;
-						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad, false);
+						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad,
+								false);
 					}
 				} else {
 					for (int i = 0; i < 10 + r.nextDouble() * 20; i++) {
 						double phi = r.nextDouble() * Math.PI * 2;
 						double rad = r.nextDouble() * 5;
-						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad, true);
+						hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad,
+								true);
 					}
 				}
 
-			} else if (c.getSelectedItem() == "special case 4") {
+			} else if (c.getSelectedItem() == "collinear case") {
 				// alle Punkte auf einer Geraden
 				PointType type = pp.getCurrentType();
-
 				for (int i = -9; i < -4; i++) {
 					pp.setCurrentType(PointType.BLUE);
 					pp.adddoublePoint(i, i);
@@ -205,45 +222,29 @@ public class RandomButtonListener implements ActionListener {
 				}
 				pp.setCurrentType(type);
 
-			} else if (c.getSelectedItem() == "test") {
-				// Test von compareTo mit 4 parallelen Geraden
+			} else if (c.getSelectedItem() == "early stop") {
 				pp.setCurrentType(PointType.BLUE);
-				for (int i = 4; i > 0; i--) {
-					pp.adddoublePoint(-1, i);
-				}
+				pp.adddoublePoint(-1, 2);
+				pp.adddoublePoint(-1, 1);
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(-1, 0);
+				pp.adddoublePoint(-1, -1);
+				pp.adddoublePoint(-1, -2);
+
+				pp.setCurrentType(PointType.RED);
 				pp.adddoublePoint(0, 1);
-				Crossing c_0_1 = new Crossing(hsa.lBlue.get(0), hsa.lBlue.get(1));
-				Crossing c_0_2 = new Crossing(hsa.lBlue.get(0), hsa.lBlue.get(2));
-				Crossing c_1_2 = new Crossing(hsa.lBlue.get(1), hsa.lBlue.get(2));
-				Crossing c_2_3 = new Crossing(hsa.lBlue.get(2), hsa.lBlue.get(3));
-				Crossing c_anders = new Crossing(hsa.lBlue.get(2), hsa.lBlue.get(4)); // von
-																						// unterster
-																						// Linie
-																						// mit
-																						// anderer
-																						// Linie
-																						// Kreuzung
+				pp.adddoublePoint(0, -1);
+				pp.adddoublePoint(0, 2);
+				pp.adddoublePoint(0, 0);
+				pp.adddoublePoint(0, -2);
 
-				// public int compareTo(Crossing other) {
-				// returns -1 if this is left than other, 0 if this is other, 1
-				// if
-				// this is to the right
-				System.out.println(c_0_1 + " " + c_0_2 + " " + c_1_2);
-				System.out.println("ist das hier" + c_1_2.compareTo(c_0_2) + "= -1 so ist alles super");
-				System.out.println("ist das hier" + c_0_2.compareTo(c_0_1) + "=-1 so ist alles super");
-				System.out.println("ist das hier" + c_1_2.compareTo(c_0_1) + "=-1 so ist alles super");
-				System.out.println("ist das hier" + c_0_1.compareTo(c_2_3) + "=1 so ist alles super");
-				System.out.println("ist das hier" + c_anders.compareTo(c_2_3) + "=1 so ist alles super");
-				System.out.println("ist das hier" + c_2_3.compareTo(c_anders) + "=-1 so ist alles super");
-				crossings = new ArrayList<Crossing>();
-				crossings.add(c_anders);
-				crossings.add(c_2_3);
-				crossings.add(c_1_2);
-				crossings.add(c_0_2);
-				crossings.add(c_0_1);
-				Collections.sort(crossings);
-				System.out.println("ich will, dass das hier richtig sortiert ist:" + crossings);
-
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(1, 1);
+				pp.adddoublePoint(1, 2);
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(1, 0);
+				pp.adddoublePoint(1, -1);
+				pp.adddoublePoint(1, -2);
 			}
 			List<VisualPoint> vpoints = hsa.getVisualPoints();
 			pp.setVisualPoints(vpoints);
