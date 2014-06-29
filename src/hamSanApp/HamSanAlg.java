@@ -325,7 +325,7 @@ public class HamSanAlg {
 		}
 		Collections.sort(col, c);
 		Collections.reverse(col); //this might give us less wonky trapezes. let's see :D
-		return col.get(level).a;
+		return col.get(level-1).a;
 	}
 	
 	/**
