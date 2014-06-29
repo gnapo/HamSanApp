@@ -25,6 +25,7 @@ import control.OldpointsResetButtonListener;
 import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
+import control.ToggleColorButtonListener;
 import control.ToggleListener;
 import control.ZoomDragListener;
 
@@ -69,15 +70,19 @@ public class HamSanApplet extends JApplet {
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    
 	    // colour labels
-	    JLabel colourlabel = new JLabel("colour: blue - space to change");
-	    colourlabel.setText("<html>colour: <font color='blue'>blue</font> - space to change</html>");
-	    colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    JLabel colourlabel = new JLabel("Color: blue - space to change");
+	    colourlabel.setText("<html>Color: <font color='blue'>blue</font> - space to change</html>");
+	    //colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    JButton colorButton = new JButton("Toggle Color");
+	    colorButton.setFocusable(false);
+	    colorButton.addActionListener(new ToggleColorButtonListener(pp, colourlabel));
 	    colourlabel.setAlignmentX(10);
  
 	    //Preset ComboBox
 	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines",
 	    		"single random points","all Points on one side", "vertical solution", "only one color",
 	    		"collinear case", "multiple solutions(1)","multiple solutions(2)"};
+
 	    presetList = new JComboBox<String>(presets);
 	    presetList.setFocusable(false);
 	    
@@ -125,11 +130,11 @@ public class HamSanApplet extends JApplet {
 	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp, infoLabel, this); 
 	    doAllgButton.addActionListener(doAllgButtonListener);
 	    
-	    JButton resetZoomButton = new JButton("Reset zoom");
+	    JButton resetZoomButton = new JButton("Reset view");
 	    resetZoomButton.setFocusable(false);
 	    ResetZoomListener resetZoomListener = new ResetZoomListener(lp);
 	    resetZoomButton.addActionListener(resetZoomListener);
-	    resetZoomButton.setMnemonic(KeyEvent.VK_Z);
+	    resetZoomButton.setMnemonic(KeyEvent.VK_V);
 	    
 	    randomButton = new JButton("Add points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
@@ -169,7 +174,10 @@ public class HamSanApplet extends JApplet {
 	    algPanel.add(oldpointsresetButton);
 	    neccessaryPanel.add(algPanel);
 	    
-	    neccessaryPanel.add(colourlabel);
+	    JPanel colorPanel = new JPanel();
+	    colorPanel.add(colourlabel);
+	    colorPanel.add(colorButton);
+	    neccessaryPanel.add(colorPanel);
 	    
 	    neccessaryPanel.add(infoLabel);
 	    

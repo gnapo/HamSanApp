@@ -248,8 +248,6 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
 		double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
 
-		System.out.println("aMin: " + aMin + ", aMax: " + aMax + ", bMin: " + bMin + ", bMax: " + bMax);
-
 		this.setMinAndMax(aMin, bMin, aMax, bMax);
 
 		corner1 = null;
@@ -265,11 +263,13 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				double top = h.trapeze.topright;
 				double bot = h.trapeze.botright;
 				double he = top - bot;
+				he = Math.max(1, he);
 				setMinAndMax(h.trapeze.right - 5, bot - he, h.trapeze.right + 1, top + he);
 			} else {
 				double top = h.trapeze.topleft;
 				double bot = h.trapeze.botleft;
 				double he = top - bot;
+				he = Math.max(1, he);
 				setMinAndMax(h.trapeze.left - 1, bot - he, h.trapeze.left + 5, top + he);
 			}
 		} else {
@@ -433,7 +433,6 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void setMinAndMax(double xmin, double ymin, double xmax, double ymax) {

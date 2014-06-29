@@ -7,7 +7,7 @@ package hamSanApp;
 	 */
 public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten intervall ist?
 	/**
-	 * Konstruktor, alles ganz selbsterklärend
+	 * Konstruktor, alles ganz selbsterklï¿½rend
 	 */
 	Trapeze(double x1, double y_topleft, double y_botleft,double x2, double y_topright, double y_botright) {
 		left = x1;
@@ -21,9 +21,9 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 	}
 	
 	/**
-	 * Konstruktor für ein unbeschränktes trapez
-	 * @param left ist das Trapez nach links unbeschränkt?
-	 * @param top der größere y-wert
+	 * Konstruktor fï¿½r ein unbeschrï¿½nktes trapez
+	 * @param left ist das Trapez nach links unbeschrï¿½nkt?
+	 * @param top der grï¿½ï¿½ere y-wert
 	 * @param bot der kleinere y-wert
 	 * @param topslope die Steigungsgrenze oben
 	 * @param botslope die Steigungsgrenze unten
@@ -42,7 +42,6 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 		}
 		topslope = tslope;
 		botslope = bslope;
-		
 	}
 	
 	public double left; 		//linker Rand
@@ -50,15 +49,15 @@ public class Trapeze { // TODO was tun, wenn das trapez in einem unbegrenzten in
 	public double topleft; 	//
 	public double topright;	//
 	public double botleft; 	//
-	public double botright;	// die vier y-Werte zur Beschränkung
-	public boolean bounded;	//ist das Trapez beschränkt?
-	public boolean openleft;	//ist das unbeschränkte Trapez nach links offen?
+	public double botright;	// die vier y-Werte zur Beschrï¿½nkung
+	public boolean bounded;	//ist das Trapez beschrï¿½nkt?
+	public boolean openleft;	//ist das unbeschrï¿½nkte Trapez nach links offen?
 	public double topslope;	//
 	public double botslope;	// die steigungsgrenzen des Trapezes oben und unten.
 	/**
 	 * Testet, ob eine Linie das Trapez schneidet
 	 * @param i die zu testende Linie
-	 * @return +1 wenn die linie obendrüber geht, 0 wenn sie schneidet, -1 wenn sie untendrunter geht
+	 * @return +1 wenn die linie obendrï¿½ber geht, 0 wenn sie schneidet, -1 wenn sie untendrunter geht
 	 */
 	public int intersects(Point i) { //TODO: testen
 		

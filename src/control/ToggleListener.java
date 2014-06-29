@@ -65,7 +65,7 @@ public class ToggleListener implements KeyListener {
 			//reset but keep old points
 			oldresBut.doStuff();
 		}
-		if (e.getKeyCode() == KeyEvent.VK_Z ) {
+		if (e.getKeyCode() == KeyEvent.VK_V ) {
 			//reset zoom
 			resetz.doStuff();
 		}
