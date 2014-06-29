@@ -250,8 +250,13 @@ public class RandomButtonListener implements ActionListener {
 				pp.adddoublePoint(1, -1);
 				pp.adddoublePoint(1, -2);
 			} 
-			else if (c.getSelectedItem() == "multiple solutions(2)") {
+			else if (c.getSelectedItem() == "multiple solutions(1)") {
 				// Erste Einfügereihenfolge
+				pp.setCurrentType(PointType.BLUE);
+				for (int i = -3; i >= -7; i--) {
+					pp.adddoublePoint(1, i);
+				}
+				
 				PointType type = pp.getCurrentType();
 				pp.setCurrentType(PointType.RED);
 				for (int i = 0; i >-4 ; i--) {
@@ -268,9 +273,12 @@ public class RandomButtonListener implements ActionListener {
 					pp.adddoublePoint(-1, i);
 				}
 				pp.setCurrentType(PointType.BLUE);
+			//	pp.adddoublePoint(-1, 9);
+				pp.setCurrentType(PointType.BLUE);
 				pp.adddoublePoint(-1, 8);
+				pp.adddoublePoint(-1, 7);
 				pp.setCurrentType(PointType.RED);
-				for (int i = 7; i > 5; i--) {
+				for (int i = 6; i > 5; i--) {
 					pp.adddoublePoint(-1, i);
 				}
 				
@@ -301,10 +309,11 @@ public class RandomButtonListener implements ActionListener {
 				pp.setCurrentType(type);
 
 
-			} else if (c.getSelectedItem() == "multiple solutions(1)") {
+			} else if (c.getSelectedItem() == "multiple solutions(2)") {
 				//zweite Einfügereihenfolge					
 					
 					PointType type = pp.getCurrentType();
+			
 					
 					pp.setCurrentType(PointType.RED);
 					for (int i = -3; i<=0 ; i++) {
@@ -316,7 +325,7 @@ public class RandomButtonListener implements ActionListener {
 						pp.adddoublePoint(-2, i);
 					}
 					pp.setCurrentType(PointType.RED);
-					for (int i = 6; i < 8; i++) {
+					for (int i = 6; i < 7; i++) {
 						pp.adddoublePoint(-1, i);
 					}
 
@@ -329,7 +338,10 @@ public class RandomButtonListener implements ActionListener {
 						}
 						pp.adddoublePoint(4, i);
 					}
-
+					pp.setCurrentType(PointType.BLUE);
+					for (int i = -3; i >= -7; i--) {
+						pp.adddoublePoint(1, i);
+					}
 					pp.setCurrentType(PointType.RED);
 					for (int i = -4; i <= -2; i++) {
 						if (i % 2 == 0) {
@@ -351,6 +363,7 @@ public class RandomButtonListener implements ActionListener {
 					pp.adddoublePoint(4, 9);
 					pp.setCurrentType(PointType.BLUE);
 					pp.adddoublePoint(-1, 8);
+					pp.adddoublePoint(-1, 7);
 					pp.setCurrentType(type);
 
 			} else if (c.getSelectedItem() == "unbounded trapeze") {
