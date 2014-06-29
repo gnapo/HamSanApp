@@ -60,7 +60,7 @@ The solution to this point set looks wrong on first glance because there are no 
 <h4>Vertical solution</h4>
 In some cases, the solution is a vertical line. This is a special case, and the corresponding point that is dual to the solution is “at infinity” insofar as two parallel lines meet at infinity. For the algorithm, this means counting the number of crossings at infinity. All lines cross because we’re in general position, remember?
 <h4>Only one color</h4>
-If we only have one color, it is easy to find a ham sandwich cut. It is even possible to construct one for any slope! If you imagine adding a single point of the other color, you can see that you can also have a ham sandwich cut of your set that goes through any given point. (These two statements mean the same thing in projectiIve geometry!) <br>
+If we only have one color, it is easy to find a ham sandwich cut. It is even possible to construct one for any slope! If you imagine adding a single point of the other color, you can see that you can also have a ham sandwich cut of your set that goes through any given point. (These two statements mean the same thing in projective geometry!) <br>
 Our implementation is boring and chooses the cut with slope 0.
 <h4>Collinear case</h4>
 If all the points are on a line and the numbers around the middle point aren’t symmetrical, there is only a single solution. Contrast this to the general case, where the middle levels may intersect very often.
