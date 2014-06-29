@@ -597,7 +597,7 @@ public class HamSanAlg {
 				System.out.println("aww :'(");
 			}*/
 			int a=crossings.size()/2;int b=crossings.size()-1;
-			System.out.println("haben folgende kreuzungen: "+"vorne "+crossings.get(0)+" in der Mitte : "+crossings.get(a)+"; am Ende "+crossings.get(b));
+			//System.out.println("haben folgende kreuzungen: "+"vorne "+crossings.get(0)+" in der Mitte : "+crossings.get(a)+"; am Ende "+crossings.get(b));
 			//System.out.println("haben folgende kreuzungen: "+crossings);
 			minband = 0;
 			maxband = 0; // wird �berschrieben.

@@ -52,13 +52,21 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private boolean drawDeleted = true;
 	
 	private boolean zoomQuickfix = true;
+	
+	private int initialX, initialY;
 
+	private Mode mode = Mode.DRAG;
+	
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;
 		visualPoints = hsa.getVisualPoints();
 		this.addMouseMotionListener(this);
 		this.addMouseWheelListener(this);
 		this.addMouseListener(this);
+	}
+	
+	public void setMode(Mode mode) {
+		this.mode = mode;
 	}
 
 	public void setPointPanel(PointPanel pp) {
@@ -319,58 +327,79 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			corner1 = new Point2D.Double(e.getX(), e.getY());
+		switch (mode) {
+			case ZOOM_RECTANGLE: 
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					corner1 = new Point2D.Double(e.getX(), e.getY());
+				}
+				break;
+			case DRAG:
+				initialX = e.getX();
+				initialY = e.getY();
 		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		corner2 = new Point2D.Double(e.getX(), e.getY());
-		this.repaint();
+		switch (mode) {
+			case ZOOM_RECTANGLE:
+				corner2 = new Point2D.Double(e.getX(), e.getY());
+				this.repaint();
+				break;
+			case DRAG:
+				int dx = e.getX() - initialX;
+				
+				int dy = e.getY() - initialY;
+				System.out.println("dx: "+dx+ ", dy: "+dy);
+				initialX += dx;
+				initialY += dy;
+				corner1 = new Point2D.Double(-dx, dy);
+				corner2 = new Point2D.Double(this.getWidth() - dx, this.getHeight() + dy);
+				doZoom();
+				this.repaint();
+		}
 	}
 
+	private void doZoom() {
+		if (corner1 == null || corner1.equals(corner2)) {
+			return;
+		}
+		
+		zoomQuickfix = !zoomQuickfix;
+
+		// set new xmin, xmax, ymin, ymax
+		int x1 = (int) Math.min(corner1.x, corner2.x);
+		int y1 = (int) Math.min(corner1.y, corner2.y);
+		int x2 = (int) Math.max(corner1.x, corner2.x);
+		int y2 = (int) Math.max(corner1.y, corner2.y);
+
+		double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
+		double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
+		double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
+		double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
+		
+		//this.setMinAndMax(aMin, bMax, aMax, bMin);
+		double realAMin = Math.min(aMin, aMax);
+		double realAMax = Math.max(aMin, aMax);
+		double realBMin = Math.min(bMin, bMax);
+		double realBMax = Math.max(bMin, bMax);
+		
+		if (zoomQuickfix){
+			this.setMinAndMax(realAMin, realBMin, realAMax, realBMax);
+		} else {
+			this.setMinAndMax(realAMin, -realBMin, realAMax, -realBMax);
+		}
+
+		corner1 = null;
+		corner2 = null;
+		this.repaint();
+	}
+	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			corner2 = new Point2D.Double(e.getX(), e.getY());
-
-			if (corner1.equals(corner2)) {
-				return;
-			}
-			
-			zoomQuickfix = !zoomQuickfix;
-
-			// set new xmin, xmax, ymin, ymax
-			int x1 = (int) Math.min(corner1.x, corner2.x);
-			int y1 = (int) Math.min(corner1.y, corner2.y);
-			int x2 = (int) Math.max(corner1.x, corner2.x);
-			int y2 = (int) Math.max(corner1.y, corner2.y);
-			
-			System.out.println("x1: "+x1+", x2: "+x2+", y1:"+y1+", y2: "+y2);
-
-			double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
-			double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
-			double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
-			double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
-			
-			//this.setMinAndMax(aMin, bMax, aMax, bMin);
-			double realAMin = Math.min(aMin, aMax);
-			double realAMax = Math.max(aMin, aMax);
-			double realBMin = Math.min(bMin, bMax);
-			double realBMax = Math.max(bMin, bMax);
-			
-			if (zoomQuickfix){
-				this.setMinAndMax(realAMin, realBMin, realAMax, realBMax);
-			} else {
-				this.setMinAndMax(realAMin, -realBMin, realAMax, -realBMax);
-			}
-
-			System.out.println("aMin: " + aMin + ", aMax: "+aMax+", bMin: " + bMin + ", bMax:" + bMax);
-			
-			corner1 = null;
-			corner2 = null;
-			this.repaint();
+			doZoom();
 		}
 	}
 
