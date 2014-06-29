@@ -288,8 +288,6 @@ public class HamSanAlg {
 		}
 		if (leftborder && c.crAt() < leftb-tolerance) { return false;}
 		if (rightborder && c.crAt() >= rightb+tolerance) { return false;}
-		//if (leftborder && c.crAt() < leftb) { return false;}
-		//if (rightborder && c.crAt() >= rightb) { return false;}//
 		return true;
 	}
 	
@@ -314,7 +312,7 @@ public class HamSanAlg {
 	 * @param level wievielt-groesste steigung?
 	 * @return die steigung
 	 */
-	public double getslope(boolean blue, int level) { //TODO testme
+	public double getslope(boolean blue, int level) { 
 		LineComparator2 c = new LineComparator2();
 		List<Point> col;
 		if (blue) {
@@ -324,7 +322,7 @@ public class HamSanAlg {
 			col = new ArrayList<Point>(lRed);
 		}
 		Collections.sort(col, c);
-		Collections.reverse(col); //this might give us less wonky trapezes. let's see :D
+		Collections.reverse(col); 
 		return col.get(level-1).a;
 	}
 	
@@ -340,7 +338,7 @@ public class HamSanAlg {
 			return false; //haben noch keinen schnitt.
 		}
 			
-		if (!verticalSol && solution == null) return false; //wtf? had a trapeze not kill any lines.
+		if (!verticalSol && solution == null) return false; 
 		double tol = 0.0000001; //tolerance
 		if (verticalSol) {
 			int bleft = 0;
@@ -412,8 +410,8 @@ public class HamSanAlg {
 		
 		if (Math.max(bbelow, babove) > (lBlue.size()+lBlueDel.size())/2) return false;
 		if (Math.max(rbelow, rabove) > (lRed.size()+lRedDel.size())/2) return false;
-		
-	//	System.out.println("haben korrekten Cut gefunden.");
+
+
 		return true;
 	}
 	
@@ -500,8 +498,8 @@ public class HamSanAlg {
 				Point b = lBlue.get(0);
 				Point r = lRed.get(0);
 				// do we need a vertical line?
-				if (b.a == r.a) { // TODO das hier testen
-					System.out.println("haben genau zwei verschiedenfarbene parallele Geraden");
+				if (b.a == r.a) { 
+					if (DEBUG) {System.out.println("haben genau zwei verschiedenfarbene parallele Geraden");}
 					done = true;
 					verticalSol = true;
 					verticalSolPos = b.a;
@@ -510,9 +508,6 @@ public class HamSanAlg {
 				}
 				done = true;
 				// find intersection point and return that. done!
-				// double sl = (b.b-r.b)/(b.a-r.a);
-				// solution = new Point(sl,r.b-r.a*sl);
-				// or should it be:
 				Crossing c = new Crossing(r, b);
 				solution = new Point(-c.crAt(), r.eval(c.crAt()));
 				return;
@@ -544,14 +539,14 @@ public class HamSanAlg {
 				}
 			}
 			
-			if (crossings.size() == 1) { //beseitigt glaub ich einige fehlerf�lle? ja, das ist aber schlecht. :<
+			if (crossings.size() == 1) {
 				
 				Crossing c = crossings.get(0);
 				solution = new Point(-c.crAt(), c.line1.eval(c.crAt()));
 				if (DEBUG) { System.out.println("es gibt nur eine Kreuzung im Betrachteten Bereich zwischen roten und blauen Linien. es muss die Loesung sein");}
 				done = true;
 				return;
-			}
+			} 
 			
 			for (int i = 0; i < lBlue.size(); i++) { //blue-blue
 				for (int j = i + 1; j < lBlue.size(); j++) {
@@ -574,31 +569,9 @@ public class HamSanAlg {
 
 			// sort them. crossings implements comparable.
 
-			// make stripes with at most alpha*(n choose 2) crossings a piece.
 			Collections.sort(crossings);
+			// make stripes with at most alpha*(n choose 2) crossings a piece.			
 			
-			
-			
-			// might work?
-			/*
-			if (DEBUG && false) {
-				// warning: cheating going on.
-				for (int i = 0; i < crossings.size(); i++) {
-					double pos = crossings.get(i).crAt();
-					if (levelPos(pos, true, levelBlue) == levelPos(pos, false,
-							levelRed)) {
-						System.out.println("yayy!");
-						done = true;
-						solution = new Point(-pos, levelPos(pos, true,
-								levelBlue));
-						return;
-					}
-				}
-				System.out.println("aww :'(");
-			}*/
-			//int a=crossings.size()/2;int b=crossings.size()-1;
-			//System.out.println("haben folgende kreuzungen: "+"vorne "+crossings.get(0)+" in der Mitte : "+crossings.get(a)+"; am Ende "+crossings.get(b));
-			//System.out.println("haben folgende kreuzungen: "+crossings);
 			minband = 0;
 			maxband = 0; // wird �berschrieben.
 			int band = 1;
@@ -619,7 +592,7 @@ public class HamSanAlg {
 					// gibt es im negativ Unendlichen mehr als bandsize Kreuzungen, so vergrößere erstes Intervall so, 
 					//dass alle Kreuzungen im negativ Unendlichen darin enthalten sind.
 						leftmannyC=true;
-						 System.out.println("haben viele kreuzungen im negativ-Unendlichen");
+						if (DEBUG) {System.out.println("haben viele kreuzungen im negativ-Unendlichen");}
 						while (i<crossings.size() && crossings.get(i).atInf() && crossings.get(i).atNegInf()){
 							i++;
 						}
@@ -627,10 +600,10 @@ public class HamSanAlg {
 						//Geraden bzw aus Punkten mit gleicher x-Koordinate. die Vertikalte durch all diese Punkte 
 						//ist in diesem Fall die Lösung
 						if ((i==crossings.size())||crossings.get(i).atInf() && !crossings.get(i).atNegInf()){
-							System.out.println("Da alle Geraden parallel sind, haben "
+								if (DEBUG) {System.out.println("Da alle Geraden parallel sind, haben "
 									+ "eingegebene Punkte gleiche x-Koordinate. Deshalb ist "
 							 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch; "
-							 		+ "Fall von vielen kreutzungen bei - Inf");
+							 		+ "Fall von vielen kreutzungen bei - Inf");}
 								done = true;
 								verticalSol = true;
 								verticalSolPos = lBlue.get(0).a;
@@ -649,29 +622,27 @@ public class HamSanAlg {
 								}
 							}
 							if (isparallel==true){
+								if (DEBUG) {
 								System.out.println("Da alle Geraden parallel sind, haben "
 							 		+ "eingegebene Punkte gleiche x-Koordinate. Deshalb ist "
 								 		+ "das Ergebnis eine Vertikale durch alle Punkte hindurch"
-								 		+ "im Fall, dass Parallelität geprüft wird");
+								 		+ "im Fall, dass Parallelität geprüft wird");}
 										done = true;
 										verticalSol = true;
 										verticalSolPos = lBlue.get(0).a;
 										return;
 							}
 							else{
-								System.out.println("komischer fall, in dem im Ersten Intervall schon Kreuzung Unendlich auftaucht");
+								if (DEBUG) {System.out.println("komischer fall, in dem im Ersten Intervall schon Kreuzung Unendlich auftaucht");
 								//da nicht alle Geraden parallel sind, muss es eine Kreuzung geben, die nicht im Unendlichen liegt 
 								//und im ersten Itervall enthalten ist. 
 								//Wir erhalten also in diesem Fall nur genau zwei Intervalle!
 									System.out.println("haben genau zwei Intervalle. Im Ersten Intervall ist mindestens "
-											+ "eine Kreutung enthalten, die nicht im Unendlichen liegt");
+											+ "eine Kreutung enthalten, die nicht im Unendlichen liegt");}
 									rightmannyC=true;
 									while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()&& i>1) {
 										i--; 
-										 //	 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
-										 // System.out.println("haben nun index verschoben und sind bei i="+i);
 									}
-									// if ((band>1)&&borders[band-1]!=crossings.get(i).crAt()){
 									borders[band] = crossings.get(i).crAt(); band++; maxband = band;//}
 									break; 
 								}
@@ -683,12 +654,11 @@ public class HamSanAlg {
 							rightmannyC=true;
 							while(crossings.get(i).atInf() && !crossings.get(i).atNegInf()&& i>1) {
 								i--; 
-								 //	 System.out.println("sind bei Index"+i+"und kreuzung "+crossings.get(i)); 
-								 // System.out.println("haben nun index verschoben und sind bei i="+i);
+								
 							}
-							// if ((band>1)&&borders[band-1]!=crossings.get(i).crAt()){
+							
 							borders[band] = crossings.get(i).crAt(); band++; maxband = band;//}
-							break; //band++ hinzugefügt 
+							break; 
 						}
 					}//Ende vom Fall, dass beim aktuellen Index Kreuzung im Positiv Unendlichen ist
 				}//Ende fom Fall, dass beim aktuellen Index Kreutzung im Unendlichen ist
@@ -703,7 +673,7 @@ public class HamSanAlg {
 			break;
 		case 1:
 			// find strip with odd number of intersections by binary search:
-			boolean bluetop;  //TODO i think this is how bluetop should be initialized, someone review?
+			boolean bluetop;  
 			if (leftborder) {
 				int res = blueTop(leftb);
 				if (res == 0) {
@@ -773,8 +743,6 @@ public class HamSanAlg {
 				System.out.println("Sind im Fall, dass es links viele Kreuzungen bei - inf gibt");
 				done = true;
 				verticalSol=true;
-				//solution = verticalcut(maxband);
-				//solution = verticalcut();
 				verticalcut();//hier wierd verticalSolPos berechnet
 				return;
 			}
@@ -782,27 +750,25 @@ public class HamSanAlg {
 				System.out.println("Sind im Fall, dass es links viele Kreuzungen bei - inf gibt");
 				done=true;
 				verticalSol=true;
-				//solution=verticalcut(minband);
-				//solution=verticalcut();
 				verticalcut();//hier wierd verticalSolPos berechnet
 				return;
 			}
 
 			int delta = (int) Math.round(eps * lBlue.size());
-			//int delta = (int) (eps * lBlue.size()+1);
+			
 		
 			int topLvl = levelBlue - delta;
 			int botLvl = levelBlue + delta;
 			if (true) { //sanity check
 				if (levelBlue < 1 || levelBlue >= lBlue.size()) {
-					System.out.println("REALLY BAD ERROR: yeah, levelBlue is fubar. go home and try again.");
+					if (DEBUG) {System.out.println("REALLY BAD ERROR: yeah, levelBlue is fubar. go home and try again.");}
 				}
 				if (topLvl < 1) {
-					System.out.println("toplvl to small: fixing");
+					if (DEBUG) {System.out.println("toplvl to small: fixing");}
 					topLvl = 1;
 				}
 				if (botLvl >= lBlue.size()) {
-					System.out.println("botlvl to big: fixing");
+					if (DEBUG) {System.out.println("botlvl to big: fixing");}
 					botLvl = lBlue.size();
 				}
 			}
@@ -814,7 +780,7 @@ public class HamSanAlg {
 					double ts = getslope(true, topLvl);
 					double bs = getslope(true, botLvl);
 					trapeze = new Trapeze(true, rightb, tr, br, ts, bs);
-					if (DEBUG) { System.out.println("making a trapeze open to the left:");}
+					if (DEBUG) {System.out.println("making a trapeze open to the left:");}
 					if (DEBUG) {System.out.println("rightb: "+rightb+" tr: "+tr+" br: "+br+" ts: "+ts+" bs: "+bs);}
 					
 				} else if (!rightborder) { // nach links offen
@@ -839,7 +805,7 @@ public class HamSanAlg {
 				trapeze = new Trapeze(leftb, tl, bl, rightb, tr, br);
 			}
 			step++;
-			//trapeze = new Trapeze(true, -7, 1, -1, -3,3); debug gr�nde, ich glaube trapeze tun nicht ganz wie sie sollen
+			
 			if (DEBUG) {System.out.println("Trapez konstruiert");}
 			borders = new double[64];
 			minband = 0;
