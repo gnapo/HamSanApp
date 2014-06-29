@@ -1,5 +1,6 @@
 package control;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -36,9 +37,11 @@ public class ToggleListener implements KeyListener {
 			myPointPanel.togglePointType();
 			if(myPointPanel.getCurrentType()==PointType.BLUE){
 				clabel.setText("colour: blue - space to change" );
+				clabel.setForeground(Color.BLUE);
 			}
 			else{
 				clabel.setText("colour: red - space to change" );
+				clabel.setForeground(Color.RED);
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_N) {

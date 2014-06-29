@@ -3,6 +3,7 @@ package view;
 import hamSanApp.HamSanAlg;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import control.CoordsListener;
 import control.CrossingsListener;
@@ -65,11 +67,12 @@ public class HamSanApplet extends JApplet {
 		
 		// the label
 	    JLabel infoLabel = new JLabel("step 0: place points");
-	    infoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+	    //infoLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    
 	    // colour labels
 	    JLabel colourlabel = new JLabel("colour: blue - space to change");
+	    colourlabel.setForeground(Color.BLUE);
 	    colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    colourlabel.setAlignmentX(10);
  
