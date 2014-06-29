@@ -110,23 +110,40 @@ public class RandomButtonListener implements ActionListener {
 			}
 			pp.setCurrentType(type);
 			
-		} else if (c.getSelectedItem() == "special case 1") {
-			//Auf einer Seite des Hamsandwichcuts sind Gar keine Punkte!
-
-			pp.setCurrentType(PointType.BLUE);
-			for (int i = 4; i > 0; i--) {
-				pp.adddoublePoint(-1, i);
+		} else if (c.getSelectedItem() == "all Points on one side") {
+			//alle Punkte auf einer Geraden
+			PointType type = pp.getCurrentType();
+			
+			for (int i = -9; i<-4; i+=2) {
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(i,i);
 			}
 			pp.setCurrentType(PointType.RED);
-			for (int i = 8; i > 5; i--) {
-				pp.adddoublePoint(-1, i);
+			pp.adddoublePoint(-4, -4);
+			for (int i = -3; i<1; i+=2) {
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(i,i);
 			}
-			
+			for (int i = 1; i<5; i+=2) {
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(i,i);
+			}
 			pp.setCurrentType(PointType.BLUE);
-			for (int i = 1; i >=0 ; i--) {
-				pp.adddoublePoint(-2, i);
+			pp.adddoublePoint(5, 5);
+			for (int i = 6; i<10; i+=2) {
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(i,i);
 			}
-		} else if (c.getSelectedItem() == "special case 2") {
+			pp.setCurrentType(PointType.RED);
+			pp.adddoublePoint(6,7);
+			pp.adddoublePoint(4,8);
+			pp.adddoublePoint(3,5);
+			pp.setCurrentType(PointType.BLUE);
+			pp.adddoublePoint(-3,-1);
+			pp.adddoublePoint(-8,-4);
+			pp.setCurrentType(type);
+
+		} else if (c.getSelectedItem() == "vertical solution") {
 			//Vertikale Lösung
 
 			pp.setCurrentType(PointType.BLUE);
@@ -164,7 +181,7 @@ public class RandomButtonListener implements ActionListener {
 			}
 			pp.adddoublePoint(2, 2);
 			
-		} else if (c.getSelectedItem() == "special case 3") {
+		} else if (c.getSelectedItem() == "only one color") {
 			//nur einfarbige Punkte
 			double color = Math.random();
 			if(color <=0.5){
@@ -181,7 +198,7 @@ public class RandomButtonListener implements ActionListener {
 				}
 			}
 			
-		} else if (c.getSelectedItem() == "special case 4") {
+		} else if (c.getSelectedItem() == "collinear case") {
 			//alle Punkte auf einer Geraden
 			PointType type = pp.getCurrentType();
 			
