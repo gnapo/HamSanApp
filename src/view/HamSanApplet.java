@@ -135,9 +135,6 @@ public class HamSanApplet extends JApplet {
 	    setPoint.setFocusable(false);
 	    setPoint.addActionListener(new CoordsListener(this,pp,coord1, coord2));
 	    
-	    JPanel buttonPanel = new JPanel();
-	    buttonPanel.setLayout(new GridLayout(2, 1));
-	    
 	    JPanel xPanel = new JPanel();
 	    xPanel.add(xLabel);
 	    xPanel.add(coord1);
@@ -146,26 +143,52 @@ public class HamSanApplet extends JApplet {
 	    yPanel.add(yLabel);
 	    yPanel.add(coord2);
 	    
-	    buttonPanel.add(startAlgButton);
-	    buttonPanel.add(doAllgButton);
-	    buttonPanel.add(resetButton);
-	    buttonPanel.add(crossingBox);
-	    buttonPanel.add(deletedBox);
-	    buttonPanel.add(resetZoomButton);
-	    buttonPanel.add(randomButton);
-	    buttonPanel.add(setPoint);//Koordinateneingabe
-	    buttonPanel.add(xPanel);
-	    buttonPanel.add(yPanel);
-	    buttonPanel.add(presetList);
 	    
-	    JPanel buttonsAndLabel = new JPanel();
-	    buttonsAndLabel.setLayout(new GridLayout(2,1));
-	    buttonsAndLabel.add(buttonPanel);
-	    buttonsAndLabel.add(infoLabel);
-	    buttonsAndLabel.add(colourlabel);
+	    JPanel lowerPanel = new JPanel();
+	    lowerPanel.setLayout(new GridLayout(1, 2));
+	    
+	    JPanel neccessaryPanel = new JPanel();
+	    neccessaryPanel.setLayout(new GridLayout(3, 1));
+	    
+	    JPanel algPanel = new JPanel();
+	    algPanel.add(startAlgButton);
+	    algPanel.add(doAllgButton);
+	    algPanel.add(resetButton);
+	    neccessaryPanel.add(algPanel);
+	    
+	    neccessaryPanel.add(colourlabel);
+	    
+	    neccessaryPanel.add(infoLabel);
+	    
+	    JPanel optionalPanel = new JPanel();
+	    optionalPanel.setLayout(new GridLayout(3, 1));
+	    
+	    JPanel visualPanel = new JPanel();
+	    visualPanel.add(crossingBox);
+	    visualPanel.add(deletedBox);
+	    visualPanel.add(resetZoomButton);
+	    
+	    optionalPanel.add(visualPanel);
+	    
+	    JPanel placeRandomPanel = new JPanel();
+	    placeRandomPanel.add(presetList);
+	    placeRandomPanel.add(randomButton);
+	    
+	    optionalPanel.add(placeRandomPanel);
+	    
+	    JPanel placeCoordinatesPanel = new JPanel();
+	    placeCoordinatesPanel.add(xPanel);
+	    placeCoordinatesPanel.add(yPanel);
+	    placeCoordinatesPanel.add(setPoint);//Koordinateneingabe
+	    
+	    optionalPanel.add(placeCoordinatesPanel);
+	    
+	    
+	    lowerPanel.add(neccessaryPanel);
+	    lowerPanel.add(optionalPanel);
 		
 		this.add(dualPanels, BorderLayout.CENTER);
-	    this.add(buttonsAndLabel, BorderLayout.SOUTH);
+	    this.add(lowerPanel, BorderLayout.SOUTH);
 	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener));
 		this.addKeyListener(new ZoomDragListener(lp));
 	    setFocusable(true);
