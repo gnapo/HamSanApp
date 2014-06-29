@@ -267,11 +267,13 @@ public class RandomButtonListener implements ActionListener {
 				for (int i = 2; i > 0; i--) {
 					pp.adddoublePoint(-1, i);
 				}
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(-1, 8);
 				pp.setCurrentType(PointType.RED);
-				for (int i = 8; i > 5; i--) {
+				for (int i = 7; i > 5; i--) {
 					pp.adddoublePoint(-1, i);
 				}
-
+				
 				pp.setCurrentType(PointType.BLUE);
 				for (int i = 7; i >= 5; i--) {
 					if (i % 2 == 0) {
@@ -292,6 +294,7 @@ public class RandomButtonListener implements ActionListener {
 					pp.adddoublePoint(-4, i);
 				}
 				pp.adddoublePoint(2, 2);
+				pp.setCurrentType(PointType.RED);
 				pp.adddoublePoint(-3,8);
 				pp.setCurrentType(PointType.RED);
 				pp.adddoublePoint(4, 9);
@@ -342,6 +345,7 @@ public class RandomButtonListener implements ActionListener {
 					for (int i = 1; i <=2; i++) {
 						pp.adddoublePoint(-1, i);
 					}
+					pp.setCurrentType(PointType.RED);
 					pp.adddoublePoint(-3,8);
 					pp.setCurrentType(PointType.RED);
 					pp.adddoublePoint(4, 9);
