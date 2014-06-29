@@ -160,7 +160,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 				double yMin = VisualPoint.bToY(bMin, ymin, ymax, this.getSize());
 				double yMax = VisualPoint.bToY(bMax, ymin, ymax, this.getSize());
 
-				g.drawLine(0, (int) yMin, this.getWidth(), (int) yMax);
+				g.drawLine(0, this.getHeight() - (int) yMin, this.getWidth(), this.getHeight() - (int) yMax);
 			}
 		}
 		g.setColor(Color.black);
@@ -174,7 +174,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			addPoint(e.getX(), e.getY(), currentType);
+			addPoint(e.getX(), this.getHeight() - e.getY(), currentType);
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			if (highlightedPoint != null && addingAllowed) {
 				h.removeLine(highlightedPoint.getMyPoint());
@@ -237,7 +237,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 		}
 
 		for (VisualPoint v : visualPoints) {
-			if (v.containsCursorPoint(e.getX(), e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
+			if (v.containsCursorPoint(e.getX(), this.getHeight() - e.getY(), xmin, xmax, ymin, ymax, this.getSize())) {
 				v.highlighted = true;
 				highlightedPoint = v;
 				linePanel.setVisualPoints(visualPoints);

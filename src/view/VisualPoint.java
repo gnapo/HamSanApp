@@ -59,7 +59,7 @@ public class VisualPoint {
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		
 		double xd = (a - xmin) * xscale;
-		double yd = (-b + ymax) * yscale;
+		double yd = (b - ymin) * yscale;
 		int xa = (int) xd;
 		int yb = (int) yd;
 		
@@ -77,7 +77,7 @@ public class VisualPoint {
 		double xscale = componentSize.getWidth() / (xmax - xmin);
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		double pointX = (pointAB.x - xmin) * xscale;
-		double pointY = (-pointAB.y + ymax) * yscale;
+		double pointY = (pointAB.y - ymin) * yscale;
 		Point2D.Double p = new Point2D.Double(pointX, pointY);
 		return p;
 	}
@@ -88,9 +88,9 @@ public class VisualPoint {
 		return asX;
 	}
 	
-	public static double bToY(double value, double ymin, double ymax, Dimension componentSize) {
+	public static double bToY(double value, double ymin, double ymax, Dimension componentSize) {		
 		double yscale = componentSize.getHeight() / (ymax - ymin);
-		double asY = (-value + ymax) * yscale;
+		double asY = (value - ymin) * yscale;
 		return asY;
 	}
 	
@@ -102,7 +102,7 @@ public class VisualPoint {
 	
 	public static double yToB(double value, double ymin, double ymax, Dimension componentSize) {
 		double yscale = componentSize.getHeight() / (ymax - ymin);
-		double asB = ((double) -value / yscale) - ymin;
+		double asB = ((double) value / yscale) + ymin;
 		return asB;
 	}
 	
@@ -111,7 +111,7 @@ public class VisualPoint {
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		
 		double a = ((double) pointXY.x / xscale) + xmin;
-		double b = ((double) -pointXY.y / yscale) - ymin;
+		double b = ((double) pointXY.y / yscale) + ymin;
 		Point2D.Double p = new Point2D.Double(a, b);
 		return p;
 	}
@@ -141,7 +141,7 @@ public class VisualPoint {
 		Point2D.Double inXYCoords1 = toXY(inABCoords1, xmin, ymin, xmax, ymax, componentSize);
 		
 		Line2D line = new Line2D.Double(inXYCoords0.getX(), inXYCoords0.getY(), inXYCoords1.getX(), inXYCoords1.getY());
-		double dist = line.ptLineDist(x, y);
+		double dist = line.ptLineDist(x, componentSize.getHeight() - y);
 		
 		if (dist < 2) {
 			return true;
@@ -154,7 +154,7 @@ public class VisualPoint {
 		double xscale = componentSize.getWidth() / (xmax - xmin);
 		double yscale = componentSize.getHeight() / (ymax - ymin);
 		double xd = (a - xmin) * xscale;
-		double yd = (-b + ymax) * yscale;
+		double yd = (b - ymin) * yscale;
 		int x = (int) xd;
 		int y = (int) yd;
 		
@@ -175,22 +175,29 @@ public class VisualPoint {
 		}
 		
 		if (this.deleted) {
-			g.drawOval(x - 3, y - 3, 6, 6);
+			g.drawOval(x - 3, (int) componentSize.getHeight() - y - 3, 6, 6);
 		} else {
-			g.fillOval(x - 3, y - 3, 6, 6);
+			g.fillOval(x - 3, (int) componentSize.getHeight() - y - 3, 6, 6);
 		}
 	}
 	
 	public void drawAsLine(Graphics graphics, double xmin, double xmax, double ymin, double ymax, Dimension componentSize) {
 		Graphics2D g = (Graphics2D) graphics;
 		
-		double yscale = componentSize.getHeight() / (ymax - ymin);
+		double b1 = a*xmin + b;
+		double b2 = a*xmax + b;
+		
+		double y1 = VisualPoint.bToY(b1, ymin, ymax, componentSize);
+		double y2 = VisualPoint.bToY(b2, ymin, ymax, componentSize);
+		
+		
+		/*double yscale = componentSize.getHeight() / (ymax - ymin);
 		
 		double y1 = a*xmin + b;
     	double y2 = a*xmax + b;
 
     	double dy1 = ((-y1)+ ymax)*yscale;
-    	double dy2 = ((-y2)+ ymax)*yscale;
+    	double dy2 = ((-y2)+ ymax)*yscale;*/
 		
 		if (this.type == PointType.BLUE) {
 			if (this.highlighted) {
@@ -227,10 +234,10 @@ public class VisualPoint {
 		if (this.deleted) {
 			g.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3}, 0));
 			
-			g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
+			g.drawLine(0,(int) componentSize.getHeight() - (int) y1,(int) componentSize.getWidth(), (int) componentSize.getHeight() - (int) y2);
 			g.setStroke(new BasicStroke(1));
 		} else {
-        	g.drawLine(0,(int) dy1,(int) componentSize.getWidth(), (int) dy2);
+			g.drawLine(0,(int) componentSize.getHeight() - (int) y1,(int) componentSize.getWidth(), (int) componentSize.getHeight() - (int) y2);
 		}
 	}
 
