@@ -51,12 +51,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	private boolean drawDeleted = true;
 
-	private boolean zoomQuickfix = true;
-
 	private int initialX, initialY;
 
 	private Mode mode = Mode.DRAG;
-	
+
 	private int currentMouseButton = -1;
 
 	LinePanel(HamSanAlg hsa) {
@@ -87,7 +85,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		int x0 = (int) VisualPoint.aToX(0, xmin, xmax, this.getSize());
 		int y0 = (int) VisualPoint.bToY(0, ymin, ymax, this.getSize());
 
-		g.drawLine(0, this.getHeight()-y0, this.getWidth(), this.getHeight()-y0);
+		g.drawLine(0, this.getHeight() - y0, this.getWidth(), this.getHeight() - y0);
 		g.drawLine(x0, 0, x0, this.getHeight());
 	}
 
@@ -176,10 +174,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			int ybl = (int) VisualPoint.bToY(h.trapeze.botleft, ymin, ymax, this.getSize());
 			int ybr = (int) VisualPoint.bToY(h.trapeze.botright, ymin, ymax, this.getSize());
 			int ytr = (int) VisualPoint.bToY(h.trapeze.topright, ymin, ymax, this.getSize());
-			g2d.drawLine(x1, ytl, x1, ybl);
-			g2d.drawLine(x1, ybl, x2, ybr);
-			g2d.drawLine(x2, ybr, x2, ytr);
-			g2d.drawLine(x2, ytr, x1, ytl);
+			g2d.drawLine(x1, this.getHeight() - ytl, x1, this.getHeight() - ybl);
+			g2d.drawLine(x1, this.getHeight() - ybl, x2, this.getHeight() - ybr);
+			g2d.drawLine(x2, this.getHeight() - ybr, x2, this.getHeight() - ytr);
+			g2d.drawLine(x2, this.getHeight() - ytr, x1, this.getHeight() - ytl);
 			g2d.setStroke(new BasicStroke());
 		}
 		if (h.trapeze != null && !h.trapeze.bounded) {
@@ -196,9 +194,9 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				int ybl = (int) VisualPoint.bToY(h.trapeze.botright + (dx1 - h.trapeze.right) * h.trapeze.botslope,
 						ymin, ymax, this.getSize());
 
-				g2d.drawLine(x1, ybl, x2, ybr);
-				g2d.drawLine(x2, ybr, x2, ytr);
-				g2d.drawLine(x2, ytr, x1, ytl);
+				g2d.drawLine(x1, this.getHeight() - ybl, x2, this.getHeight() - ybr);
+				g2d.drawLine(x2, this.getHeight() - ybr, x2, this.getHeight() - ytr);
+				g2d.drawLine(x2, this.getHeight() - ytr, x1, this.getHeight() - ytl);
 				g2d.setStroke(new BasicStroke());
 			} else {
 				Graphics2D g2d = (Graphics2D) g;
@@ -212,10 +210,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 						ymax, this.getSize());
 				int ybr = (int) VisualPoint.bToY(h.trapeze.botleft + (dx2 - h.trapeze.left) * h.trapeze.botslope, ymin,
 						ymax, this.getSize());
-				g2d.drawLine(x1, ytl, x1, ybl);
-				g2d.drawLine(x1, ybl, x2, ybr);
+				g2d.drawLine(x1, this.getHeight() - ytl, x1, this.getHeight() - ybl);
+				g2d.drawLine(x1, this.getHeight() - ybl, x2, this.getHeight() - ybr);
 
-				g2d.drawLine(x2, ytr, x1, ytl);
+				g2d.drawLine(x2, this.getHeight() - ytr, x1, this.getHeight() - ytl);
 				g2d.setStroke(new BasicStroke());
 			}
 		}
@@ -234,6 +232,31 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		g.drawRect(x1, y1, dx, dy);
 	}
 
+	private void doZoom() {
+		if (corner1 == null || corner1.equals(corner2)) {
+			return;
+		}
+
+		// set new xmin, xmax, ymin, ymax
+		int x1 = (int) Math.min(corner1.x, corner2.x);
+		int y1 = (int) Math.min(this.getHeight() - corner1.y, this.getHeight() - corner2.y);
+		int x2 = (int) Math.max(corner1.x, corner2.x);
+		int y2 = (int) Math.max(this.getHeight() - corner1.y, this.getHeight() - corner2.y);
+
+		double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
+		double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
+		double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
+		double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
+
+		System.out.println("aMin: " + aMin + ", aMax: " + aMax + ", bMin: " + bMin + ", bMax: " + bMax);
+
+		this.setMinAndMax(aMin, bMin, aMax, bMax);
+
+		corner1 = null;
+		corner2 = null;
+		this.repaint();
+	}
+
 	public void followTrapeze() {
 		if (h.trapeze == null)
 			return;
@@ -242,12 +265,12 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				double top = h.trapeze.topright;
 				double bot = h.trapeze.botright;
 				double he = top - bot;
-				setMinAndMax(h.trapeze.right - 5, top + he, h.trapeze.right + 1, bot - he);
+				setMinAndMax(h.trapeze.right - 5, bot - he, h.trapeze.right + 1, top + he);
 			} else {
 				double top = h.trapeze.topleft;
 				double bot = h.trapeze.botleft;
 				double he = top - bot;
-				setMinAndMax(h.trapeze.left - 1, top + he, h.trapeze.left + 5, bot - he);
+				setMinAndMax(h.trapeze.left - 1, bot - he, h.trapeze.left + 5, top + he);
 			}
 		} else {
 			double w = h.trapeze.right - h.trapeze.left;
@@ -256,7 +279,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			double bot = Math.min(h.trapeze.botleft, h.trapeze.botright);
 			double he = (top - bot) / 2;
 
-			setMinAndMax(h.trapeze.left - w, top + he, h.trapeze.right + w, bot - he);
+			setMinAndMax(h.trapeze.left - w, bot - he, h.trapeze.right + w, top + he);
 		}
 		this.repaint();
 	}
@@ -289,7 +312,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	public void setShowCrossings(boolean showCrossings) {
 		this.showCrossings = showCrossings;
 	}
-	
+
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		double zoom = zoomFactor + e.getPreciseWheelRotation() / 100;
@@ -331,7 +354,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		case ZOOM_RECTANGLE:
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				corner1 = new Point2D.Double(e.getX(), e.getY());
-			} else { //dragging
+			} else { // dragging
 				initialX = e.getX();
 				initialY = e.getY();
 			}
@@ -356,7 +379,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			} else { // dragging
 				int dx = e.getX() - initialX;
 				int dy = e.getY() - initialY;
-				
+
 				initialX += dx;
 				initialY += dy;
 				corner1 = new Point2D.Double(-dx, -dy);
@@ -369,7 +392,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			if (currentMouseButton == MouseEvent.BUTTON1) {
 				int dx = e.getX() - initialX;
 				int dy = e.getY() - initialY;
-				
+
 				initialX += dx;
 				initialY += dy;
 				corner1 = new Point2D.Double(-dx, -dy);
@@ -383,36 +406,9 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		}
 	}
 
-	private void doZoom() {
-		if (corner1 == null || corner1.equals(corner2)) {
-			return;
-		}
-
-		zoomQuickfix = !zoomQuickfix;
-
-		// set new xmin, xmax, ymin, ymax
-		int x1 = (int) Math.min(corner1.x, corner2.x);
-		int y1 = (int) Math.min(this.getHeight() - corner1.y, this.getHeight() - corner2.y);
-		int x2 = (int) Math.max(corner1.x, corner2.x);
-		int y2 = (int) Math.max(this.getHeight() - corner1.y, this.getHeight() - corner2.y);
-
-		double aMin = VisualPoint.xToA(x1, xmin, xmax, this.getSize());
-		double aMax = VisualPoint.xToA(x2, xmin, xmax, this.getSize());
-		double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
-		double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
-
-		System.out.println("aMin: "+aMin+", aMax: "+aMax+", bMin: "+bMin+", bMax: "+bMax);
-		
-		this.setMinAndMax(aMin, bMin, aMax, bMax);
-
-		corner1 = null;
-		corner2 = null;
-		this.repaint();
-	}
-
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		switch(mode) {
+		switch (mode) {
 		case ZOOM_RECTANGLE:
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				corner2 = new Point2D.Double(e.getX(), e.getY());
@@ -449,7 +445,6 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.referenceLength = (xmax - xmin);
 		this.referenceHeight = (ymax - ymin);
 		this.zoomCenterAB = new Point2D.Double((xmax + xmin) / 2, (ymax + ymin) / 2);
-		this.zoomQuickfix = true;
 	}
 
 	public void setDrawDeleted(boolean selected) {

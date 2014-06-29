@@ -102,8 +102,6 @@ public class HamSanApplet extends JApplet {
 	    OldpointsResetButtonListener OldpointsresetButtonListener = new OldpointsResetButtonListener(hsa, pp, lp, infoLabel, this); 
 	    oldpointsresetButton.addActionListener(OldpointsresetButtonListener);
 
-	    
-	    
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
 	    crossingBox.setSelected(false); 
