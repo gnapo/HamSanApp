@@ -140,7 +140,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			int x = (int) cutXY.x;
 			int y = (int) cutXY.y;
 
-			g.fillOval(x - 4, y - 4, 8, 8);
+			g.fillOval(x - 4, this.getHeight() - y - 4, 8, 8);
 		}
 
 		if (corner1 != null && corner2 != null) {
