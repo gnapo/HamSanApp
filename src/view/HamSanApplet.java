@@ -75,7 +75,8 @@ public class HamSanApplet extends JApplet {
 	    colourlabel.setAlignmentX(10);
  
 	    //Preset ComboBox
-	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines","single random points","special case 1", "special case 2", "special case 3"};
+	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines",
+	    		"single random points","special case 1", "special case 2", "special case 3", "special case 4"};
 	    presetList = new JComboBox<String>(presets);
 	    presetList.setFocusable(false);
 	    
