@@ -51,7 +51,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	
 	private boolean drawDeleted = true;
 	
-	private boolean zoomQuickfix = true;
+	private boolean zoomQuickfix = false;
 	
 	private int initialX, initialY;
 
@@ -424,7 +424,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.referenceLength = (xmax-xmin);
 		this.referenceHeight = (ymax-ymin);
 		this.zoomCenterAB = new Point2D.Double((xmax+xmin)/2, (ymax+ymin)/2);
-		this.zoomQuickfix = true;
+		this.zoomQuickfix = false;
 	}
 
 	public void setDrawDeleted(boolean selected) {
