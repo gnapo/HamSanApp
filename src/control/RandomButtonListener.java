@@ -353,6 +353,13 @@ public class RandomButtonListener implements ActionListener {
 					pp.adddoublePoint(-1, 8);
 					pp.setCurrentType(type);
 
+			} else if (c.getSelectedItem() == "unbounded trapeze") {
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(-0.5, 2);
+				pp.adddoublePoint(0.3, 0.3);
+				pp.adddoublePoint(2, -0.5);
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(0.9, 1.8);
 			}
 
 			
