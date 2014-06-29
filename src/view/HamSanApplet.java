@@ -25,6 +25,7 @@ import control.OldpointsResetButtonListener;
 import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
+import control.ToggleColorButtonListener;
 import control.ToggleListener;
 import control.ZoomDragListener;
 
@@ -69,9 +70,12 @@ public class HamSanApplet extends JApplet {
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    
 	    // colour labels
-	    JLabel colourlabel = new JLabel("colour: blue - space to change");
-	    colourlabel.setText("<html>colour: <font color='blue'>blue</font> - space to change</html>");
-	    colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    JLabel colourlabel = new JLabel("Color: blue - space to change");
+	    colourlabel.setText("<html>Color: <font color='blue'>blue</font> - space to change</html>");
+	    //colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    JButton colorButton = new JButton("Toggle Color");
+	    colorButton.setFocusable(false);
+	    colorButton.addActionListener(new ToggleColorButtonListener(pp, colourlabel));
 	    colourlabel.setAlignmentX(10);
  
 	    //Preset ComboBox
@@ -168,7 +172,10 @@ public class HamSanApplet extends JApplet {
 	    algPanel.add(oldpointsresetButton);
 	    neccessaryPanel.add(algPanel);
 	    
-	    neccessaryPanel.add(colourlabel);
+	    JPanel colorPanel = new JPanel();
+	    colorPanel.add(colourlabel);
+	    colorPanel.add(colorButton);
+	    neccessaryPanel.add(colorPanel);
 	    
 	    neccessaryPanel.add(infoLabel);
 	    
