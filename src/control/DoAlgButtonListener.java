@@ -46,7 +46,7 @@ public class DoAlgButtonListener implements ActionListener {
 				l.setText("step 2: found interval with odd intersection property");
 				break;
 			case 3:
-				l.setText("step 3: construted trapeze");
+				l.setText("step 3: constructed trapeze");
 				break;
 			case 4:
 				l.setText("zoomed in on trapeze");
