@@ -4,6 +4,7 @@ import hamSanApp.HamSanAlg;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
@@ -63,6 +64,7 @@ public class HamSanApplet extends JApplet {
 		
 		// the label
 	    JLabel infoLabel = new JLabel("step 0: place points");
+	    infoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
  
 	    //Preset ComboBox
