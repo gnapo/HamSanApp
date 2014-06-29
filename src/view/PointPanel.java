@@ -29,7 +29,7 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	private LinePanel linePanel;
 
 	private HamSanAlg h;
-	
+
 	private HamSanApplet applet;
 
 	public int getXmin() {
@@ -73,17 +73,11 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			currentType = PointType.BLUE;
 		}
 	}
-		
+
 	public boolean addPoint(int x, int y, PointType type) {
 		if (addingAllowed) {
-			
 			double a = VisualPoint.xToA(x, xmin, xmax, this.getSize());
 			double b = VisualPoint.yToB(y, ymin, ymax, this.getSize());
-			/* old code, didn't work for some reason
-			double xscale = this.getWidth() / (xmax - xmin);
-			double yscale = this.getHeight() / (ymax - ymin);
-			double a = ((double) x / xscale) + xmin;
-			double b = ((double) -y / yscale) - ymin;*/
 
 			VisualPoint candidate = new VisualPoint(a, b, type, false);
 			if (visualPoints.contains(candidate)) {
@@ -104,24 +98,20 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			return false;
 		}
 	}
-	
-	
+
 	public boolean adddoublePoint(double x, double y) {
 		if (addingAllowed) {
-			double a = x + xmin +(xmax-xmin)/2;
-			double b =y + ymin +(ymax-ymin)/2;
+			double a = x + xmin + (xmax - xmin) / 2;
+			double b = y + ymin + (ymax - ymin) / 2;
 
 			VisualPoint candidate = new VisualPoint(a, b, currentType, false);
 			if (visualPoints.contains(candidate)) {
-				System.out.println("not allowed, hier, obwohl ich nicht hier sein will");
 				return false;
 			} else {
 				visualPoints.add(candidate);
 				if (currentType == PointType.BLUE) {
-					System.out.println("currentTyp ist Blau, Punkt wird Blau");
 					candidate.setMyPoint(h.addLine(a, b, true));
 				} else {
-					System.out.println("currentTyp ist Rot, Punkt wird Rot");
 					candidate.setMyPoint(h.addLine(a, b, false));
 				}
 				this.refreshAll();
@@ -131,7 +121,6 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 			return false;
 		}
 	}
-	
 
 	public void drawCross(Graphics g) {
 		g.setColor(Color.white);
@@ -148,15 +137,15 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 
 		g.setColor(Color.magenta);
 		if (h.done && (h.verticalSol || h.solution != null)) {
-			
+
 			if (h.verticalSol) {
 				double xVal = VisualPoint.aToX(h.verticalSolPos, xmin, xmax, this.getSize());
-				
+
 				g.drawLine((int) xVal, 0, (int) xVal, this.getHeight());
 			} else {
 				double bMin = h.solution.a * xmin + h.solution.b;
 				double bMax = h.solution.a * xmax + h.solution.b;
-				
+
 				double yMin = VisualPoint.bToY(bMin, ymin, ymax, this.getSize());
 				double yMax = VisualPoint.bToY(bMax, ymin, ymax, this.getSize());
 
@@ -186,26 +175,18 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isAddingAllowed() {
@@ -220,7 +201,8 @@ public class PointPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseDragged(MouseEvent e) {
 		if (highlightedPoint != null && addingAllowed) {
 			h.removeLine(highlightedPoint.getMyPoint());
-			highlightedPoint.setXY(new Point2D.Double(e.getX(), this.getHeight() - e.getY()), xmin, ymin, xmax, ymax, this.getSize());
+			highlightedPoint.setXY(new Point2D.Double(e.getX(), this.getHeight() - e.getY()), xmin, ymin, xmax, ymax,
+					this.getSize());
 			highlightedPoint.setMyPoint(h.addLine(highlightedPoint.getA(), highlightedPoint.getB(),
 					highlightedPoint.isBlue()));
 			refreshAll();
