@@ -24,6 +24,7 @@ import control.CrossingsListener;
 import control.DeletedListener;
 import control.DoAlgButtonListener;
 import control.DoAllgButtonListener;
+import control.OldpointsResetButtonListener;
 import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
@@ -96,6 +97,15 @@ public class HamSanApplet extends JApplet {
 	    ResetButtonListener resetButtonListener = new ResetButtonListener(hsa, pp, lp, infoLabel, this); 
 	    resetButton.addActionListener(resetButtonListener);
 	    
+	    JButton oldpointsresetButton = new JButton("Start again");
+	    oldpointsresetButton.setMnemonic(KeyEvent.VK_S);
+	    oldpointsresetButton.setVisible(true);
+	    oldpointsresetButton.setFocusable(false);
+	    OldpointsResetButtonListener OldpointsresetButtonListener = new OldpointsResetButtonListener(hsa, pp, lp, infoLabel, this); 
+	    oldpointsresetButton.addActionListener(OldpointsresetButtonListener);
+
+	    
+	    
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
 	    crossingBox.setSelected(false); 
@@ -157,6 +167,7 @@ public class HamSanApplet extends JApplet {
 	    algPanel.add(startAlgButton);
 	    algPanel.add(doAllgButton);
 	    algPanel.add(resetButton);
+	    algPanel.add(oldpointsresetButton);
 	    neccessaryPanel.add(algPanel);
 	    
 	    neccessaryPanel.add(colourlabel);
@@ -192,8 +203,9 @@ public class HamSanApplet extends JApplet {
 		
 		this.add(dualPanels, BorderLayout.CENTER);
 	    this.add(lowerPanel, BorderLayout.SOUTH);
-	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener));
+	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener, OldpointsresetButtonListener));
 		this.addKeyListener(new ZoomDragListener(lp));
+
 	    setFocusable(true);
 	    this.requestFocusInWindow();
 	    this.requestFocus();
