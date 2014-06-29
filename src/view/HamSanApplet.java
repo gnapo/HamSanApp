@@ -208,5 +208,11 @@ public class HamSanApplet extends JApplet {
 		startAlgButton.setEnabled(enabled);
 		doAllgButton.setEnabled(enabled);
 	}
+	
+	public void setSize(int width, int height)
+	{
+	   super.setSize(width,height);
+	   validate();
+	}
 
 }
