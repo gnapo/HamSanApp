@@ -176,10 +176,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			int ybl = (int) VisualPoint.bToY(h.trapeze.botleft, ymin, ymax, this.getSize());
 			int ybr = (int) VisualPoint.bToY(h.trapeze.botright, ymin, ymax, this.getSize());
 			int ytr = (int) VisualPoint.bToY(h.trapeze.topright, ymin, ymax, this.getSize());
-			g2d.drawLine(x1, ytl, x1, ybl);
-			g2d.drawLine(x1, ybl, x2, ybr);
-			g2d.drawLine(x2, ybr, x2, ytr);
-			g2d.drawLine(x2, ytr, x1, ytl);
+			g2d.drawLine(x1, this.getHeight() - ytl, x1, this.getHeight() - ybl);
+			g2d.drawLine(x1, this.getHeight() - ybl, x2, this.getHeight() - ybr);
+			g2d.drawLine(x2, this.getHeight() - ybr, x2, this.getHeight() - ytr);
+			g2d.drawLine(x2, this.getHeight() - ytr, x1, this.getHeight() - ytl);
 			g2d.setStroke(new BasicStroke());
 		}
 		if (h.trapeze != null && !h.trapeze.bounded) {
@@ -196,9 +196,9 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				int ybl = (int) VisualPoint.bToY(h.trapeze.botright + (dx1 - h.trapeze.right) * h.trapeze.botslope,
 						ymin, ymax, this.getSize());
 
-				g2d.drawLine(x1, ybl, x2, ybr);
-				g2d.drawLine(x2, ybr, x2, ytr);
-				g2d.drawLine(x2, ytr, x1, ytl);
+				g2d.drawLine(x1, this.getHeight() - ybl, x2, this.getHeight() - ybr);
+				g2d.drawLine(x2, this.getHeight() - ybr, x2, this.getHeight() - ytr);
+				g2d.drawLine(x2, this.getHeight() - ytr, x1, this.getHeight() - ytl);
 				g2d.setStroke(new BasicStroke());
 			} else {
 				Graphics2D g2d = (Graphics2D) g;
@@ -212,10 +212,10 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 						ymax, this.getSize());
 				int ybr = (int) VisualPoint.bToY(h.trapeze.botleft + (dx2 - h.trapeze.left) * h.trapeze.botslope, ymin,
 						ymax, this.getSize());
-				g2d.drawLine(x1, ytl, x1, ybl);
-				g2d.drawLine(x1, ybl, x2, ybr);
+				g2d.drawLine(x1, this.getHeight() - ytl, x1, this.getHeight() - ybl);
+				g2d.drawLine(x1, this.getHeight() - ybl, x2, this.getHeight() - ybr);
 
-				g2d.drawLine(x2, ytr, x1, ytl);
+				g2d.drawLine(x2, this.getHeight() - ytr, x1, this.getHeight() - ytl);
 				g2d.setStroke(new BasicStroke());
 			}
 		}

@@ -7,8 +7,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JApplet;
@@ -108,8 +106,6 @@ public class HamSanApplet extends JApplet {
 	    OldpointsResetButtonListener OldpointsresetButtonListener = new OldpointsResetButtonListener(hsa, pp, lp, infoLabel, this); 
 	    oldpointsresetButton.addActionListener(OldpointsresetButtonListener);
 
-	    
-	    
 	    JCheckBox crossingBox = new JCheckBox("Show crossings?");
 	    crossingBox.setEnabled(true);
 	    crossingBox.setSelected(false); 
