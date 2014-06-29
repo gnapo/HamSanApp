@@ -56,6 +56,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private int initialX, initialY;
 
 	private Mode mode = Mode.DRAG;
+	
+	private int currentMouseButton = -1;
 
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;
@@ -287,7 +289,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	public void setShowCrossings(boolean showCrossings) {
 		this.showCrossings = showCrossings;
 	}
-
+	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		double zoom = zoomFactor + e.getPreciseWheelRotation() / 100;
@@ -324,15 +326,23 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		currentMouseButton = e.getButton();
 		switch (mode) {
 		case ZOOM_RECTANGLE:
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				corner1 = new Point2D.Double(e.getX(), e.getY());
+			} else { //dragging
+				initialX = e.getX();
+				initialY = e.getY();
 			}
 			break;
 		case DRAG:
-			initialX = e.getX();
-			initialY = e.getY();
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				initialX = e.getX();
+				initialY = e.getY();
+			} else { // zooming rectangle
+				corner1 = new Point2D.Double(e.getX(), e.getY());
+			}
 		}
 	}
 
@@ -340,20 +350,36 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	public void mouseDragged(MouseEvent e) {
 		switch (mode) {
 		case ZOOM_RECTANGLE:
-			corner2 = new Point2D.Double(e.getX(), e.getY());
-			this.repaint();
+			if (currentMouseButton == MouseEvent.BUTTON1) {
+				corner2 = new Point2D.Double(e.getX(), e.getY());
+				this.repaint();
+			} else { // dragging
+				int dx = e.getX() - initialX;
+				int dy = e.getY() - initialY;
+				
+				initialX += dx;
+				initialY += dy;
+				corner1 = new Point2D.Double(-dx, -dy);
+				corner2 = new Point2D.Double(this.getWidth() - dx, this.getHeight() - dy);
+				doZoom();
+				this.repaint();
+			}
 			break;
 		case DRAG:
-			int dx = e.getX() - initialX;
-			int dy = e.getY() - initialY;
-			
-			// System.out.println("dx: "+dx+ ", dy: "+dy);
-			initialX += dx;
-			initialY += dy;
-			corner1 = new Point2D.Double(-dx, -dy);
-			corner2 = new Point2D.Double(this.getWidth() - dx, this.getHeight() - dy);
-			doZoom();
-			this.repaint();
+			if (currentMouseButton == MouseEvent.BUTTON1) {
+				int dx = e.getX() - initialX;
+				int dy = e.getY() - initialY;
+				
+				initialX += dx;
+				initialY += dy;
+				corner1 = new Point2D.Double(-dx, -dy);
+				corner2 = new Point2D.Double(this.getWidth() - dx, this.getHeight() - dy);
+				doZoom();
+				this.repaint();
+			} else { // zooming rectangle
+				corner2 = new Point2D.Double(e.getX(), e.getY());
+				this.repaint();
+			}
 		}
 	}
 
@@ -386,10 +412,20 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			corner2 = new Point2D.Double(e.getX(), e.getY());
-			doZoom();
+		switch(mode) {
+		case ZOOM_RECTANGLE:
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				corner2 = new Point2D.Double(e.getX(), e.getY());
+				doZoom();
+			}
+			break;
+		case DRAG:
+			if (e.getButton() == MouseEvent.BUTTON3) { // zoom rectangle
+				corner2 = new Point2D.Double(e.getX(), e.getY());
+				doZoom();
+			}
 		}
+		currentMouseButton = -1;
 	}
 
 	@Override
