@@ -72,7 +72,7 @@ public class HamSanApplet extends JApplet {
 	    
 	    // colour labels
 	    JLabel colourlabel = new JLabel("colour: blue - space to change");
-	    colourlabel.setForeground(Color.BLUE);
+	    colourlabel.setText("<html>colour: <font color='blue'>blue</font> - space to change</html>");
 	    colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
 	    colourlabel.setAlignmentX(10);
  

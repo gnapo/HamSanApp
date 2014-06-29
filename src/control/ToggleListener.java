@@ -36,12 +36,10 @@ public class ToggleListener implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			myPointPanel.togglePointType();
 			if(myPointPanel.getCurrentType()==PointType.BLUE){
-				clabel.setText("colour: blue - space to change" );
-				clabel.setForeground(Color.BLUE);
+				clabel.setText("<html>colour: <font color='blue'>blue</font> - space to change</html>");
 			}
 			else{
-				clabel.setText("colour: red - space to change" );
-				clabel.setForeground(Color.RED);
+				clabel.setText("<html>colour: <font color='red'>red</font> - space to change</html>");
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_N) {
