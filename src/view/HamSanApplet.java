@@ -127,7 +127,9 @@ public class HamSanApplet extends JApplet {
 	    
 	    JButton resetZoomButton = new JButton("Reset zoom");
 	    resetZoomButton.setFocusable(false);
-	    resetZoomButton.addActionListener(new ResetZoomListener(lp));
+	    ResetZoomListener resetZoomListener = new ResetZoomListener(lp);
+	    resetZoomButton.addActionListener(resetZoomListener);
+	    resetZoomButton.setMnemonic(KeyEvent.VK_Z);
 	    
 	    randomButton = new JButton("Add points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
@@ -200,7 +202,7 @@ public class HamSanApplet extends JApplet {
 		
 		this.add(dualPanels, BorderLayout.CENTER);
 	    this.add(lowerPanel, BorderLayout.SOUTH);
-	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener, OldpointsresetButtonListener));
+	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener, OldpointsresetButtonListener, resetZoomListener));
 		this.addKeyListener(new ZoomDragListener(lp));
 
 	    setFocusable(true);
