@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf8" />
@@ -21,42 +21,41 @@ The algorithm can be activated one step at a time, or all remaining steps. Reset
 
 <h2>Explanation of the algorithm</h2>
 <h3>The problem</h3>
-We are given two points sets in the plane, blue and red and we want to find a line that halves both sets. This means that we want at most half the points of a given color to be on one side of the line. For this purpose, points on the line are not counted to either side.
+We are given two points sets in the plane, blue and red and we want to find a line that halves both sets. This means that we want at most half the points of any given color to be on one side of the line. For this purpose, points on the line are not counted to either side. They are, however counted to the total number of points, which leads to situations such as "all points on one side" (see below).
 
 <h3>Duality to the rescue</h3>
-For the algorithm, it is useful to view the dual of the points. The dual of a point (a,b) is the line y=ax+b. Note that this definition differs slightly from the one we used in the lecture (see <a href="#ref4">[4]</a>). We can see that if a point is above/on/below a line, the dual of the point will be above/on/below the dual of the line. Another facet of duality is that it gets tedious differentiating between points and lines. So from this point on, they are treated as the same object with dwo different ways of looking at them and whenever we write points or lines, you should assume we mean both.
+For the algorithm, it is useful to view the dual of the points. The dual of a point (a,b) is the line y=ax+b. Note that this definition differs slightly from the one we used in the lecture (see <a href="#ref4">[4]</a>). We can see that if a point is above/on/below a line, the dual of the point will be above/on/below the dual of the line. Another facet of duality is that it gets tedious differentiating between points and lines. So from this point on, they are treated as the same object with two different ways of looking at them and whenever we write points or lines, you should assume we mean both.
 <br>
 In our applet, the points are displayed and added on the left side and the lines they belong to are displayed on the right side. Feel free to place a point and drag it around to see how the primal and dual cases interact.
 <br>
-If we restrict the problem to just one set of points we see that a line that is below no more than half the points and above no more than half the points if and only if the dual of the line is above and below no more than half the duals of the points. For each x, there is at least one point (x,y) that is below and above no more than half the lines. The union of all these points is called the median level. Every point on the media level corresponds to a line that halves the points. Also, if the number of points in the set is odd, the median level looks like a jagged line, intersecting with lines along segments. If the number is even, we may delete any one point and the resulting median level is a subset of the previous median level, so wlog the point sets are of odd size.
+If we restrict the problem to just one set of points, we see that a line is below no more than half the points and above no more than half the points if and only if the dual of the line is above and below no more than half the duals of the points. For each x, there is at least one point (x,y) that is below and above no more than half the lines. The union of all these points is called the median level. Every point on the media level corresponds to a line that halves the points. Also, if the number of points in the set is odd, the median level looks like a jagged line which is composed of line segments. These line sections run between segments. If the number is even, we may delete any one point and the resulting median level is a subset of the previous median level, so wlog the point sets are of odd size.
 <br>
 Coming back to the case with two point sets, there is a median level for each point set.
 If we find an intersection point of the two median levels, we find a line that halves both the red and the blue point set.
 
 <h3>A few words about general position</h3>
-So how are we so sure that the red and blue median levels intersect? One important thing to note is that the two unbounded segments of the median level are on the same line. If all lines have differing slopes, we know that the blue and red median levels switch sides in the long run, so they intersect an odd number of times. We use a technique called simulation of simplicity (see <a href="#ref2">[2]</a>) to treat all lines as if they were in general position. General position for this problem means that all slopes of lines are different and consequently every pair of lines has 
-<br>
-also means that all This also lets us treat all intersections as having a different x value, which will be useful later.
+How do we know that the red and blue median levels intersect? One important thing to note is that the two unbounded segments of the median level are on the same line. If all lines have differing slopes, we know that the blue and red median levels switch sides in the long run, so they intersect an odd number of times. We use a technique called simulation of simplicity (see <a href="#ref2">[2]</a>) to treat all lines as if they were in general position. General position for this problem means that all slopes of lines are different and consequently every pair of lines has exactly one crossing, even those that are parallel before simulation of simplicity.
+This also lets us treat all intersections as having a different x value, which will be useful later.
 
 <h3>The algorithm by Lo, Matoušek and Steiger (see <a href="#ref1">[1]</a> for more details)</h3>
 We know we want to find an intersection of the red and blue median levels, but calculating them completely is too costly, we want to be done in O(n) time. The algorithm operates iteratively. Each iteration is guaranteed to remove a constant fraction of lines that we don’t need for our ham sandwich cut and takes time linearly in the number of remaining points. Each iteration is devided into steps, which we will explain in more detail:
-<p>Step one: The considered interval (at the beginning, this is all of IR) is devided into halfopen subintervals, such that each subinterval contains at most 1/32 of all crossings (at least one). In the right panel, the intervals are shown as delimited by vertical soft grey lines. The complete interval is delimited by thicker black lines.</p>
-<p>Step two: One interval, in which the blue and red median levels cross an odd number of times is chosen. This is done by binary search: for one x, we can find out via quickselect in O(log n) time whether the blue or the red median level is higher. If they change inside some interval, they cross an odd number of times. Note that steps one and two can be done in linear time (see <a href="#ref3">[3]</a>)</p>
+<p>Step one: The considered interval (at the beginning, this is all of the real numbers) is devided into halfopen subintervals, such that each subinterval contains at most 1/32 of all crossings (at least one). In the right panel, the intervals are shown as delimited by vertical soft grey lines. All of the considered interval is delimited by thicker black lines.</p>
+<p>Step two: One interval is chosen in which the blue and red median levels cross an odd number of times. This is done by binary search: for one x, we can find out via quickselect in O(n) time whether the blue or the red median level is higher. If they change inside some interval, they cross an odd number of times. Note that steps one and two can be done in linear time (see <a href="#ref3">[3]</a>).</p>
 <p>Step three: A trapeze is constructed around the median level of the bigger of the two sets. We do this by counting ⅛ of all lines of that color up and down on both sides of the interval and connecting the four points. Because of the limited number of crossings inside the interval, we can prove that the median level stays completely inside the trapeze. The trapeze is drawn in thick black lines. There is a further “step” here that just moves the camera to the trapeze.</p>
-<p>Step four: We delete all lines that do not intersect the trapeze. Because we know one of the median levels is completely inside the trapeze, we know that all crossings between the two median levels are. Therefore, the lines outside the trapeze do not contribute to finding the intersections, and we delete them. If we delete a line above the trapeze, we take note that the number of lines above the median level decreases for the purpose of finding the median level inside our considered interval. Because of the construction of the Trapeze, we delete at least a constant fraction of lines. Deleted lines are drawn dotted and faintly, or as empty circles as points.</p>
+<p>Step four: We delete all lines that do not intersect the trapeze. Because we know one of the median levels is completely inside the trapeze, we know that all crossings between the two median levels are. Therefore, the lines outside the trapeze do not contribute to finding the intersections, and we delete them. If we delete a line above the trapeze, we take note that the number of lines above the median level decreases for the purpose of finding the median level inside our considered interval. Because of the construction of the trapeze, we delete at least a constant fraction of lines. Deleted lines are drawn dotted and faintly respectivly as as empty circles.</p>
 <p>
-After step four, the process repeats until we only have one blue and one read line remaining. Their crossing must be the ham sandwich cut.
+After step four, the process repeats until we only have one blue and one red line remaining. Their crossing must be the ham sandwich cut.
 <br>
 The algorithm may stop earlier though. If at any point where we check whether the red or the blue median level is higher and it turns out they cross at this point, we found a ham sandwich cut and can stop the algorithm.
 </p>
 
 <h3>What about higher dimensions?</h3>
 The ham sandwich problem can be generalized to higher dimensions. For example, in three dimensions you can always find a plane that halves three sets of points. Or, more generally, in d dimensions you can always find a hyperplane that halves d sets of points.
-The algorithm by Lo, Matoušek and Steiger can also be generalized to higher dimensions and achieves O(n<sup>d-1-a(d)</sup>) time for some small constant a(d). The problem requires at least Ω(n<sup>d-2</sup>) time to solve.
+The algorithm <a href="#ref1">[1]</a> by Lo, Matoušek and Steiger can also be generalized to higher dimensions and achieves O(n<sup>d-1-a(d)</sup>) time for some small constant a(d). The problem requires at least Ω(n<sup>d-2</sup>) time to solve.
 
 <h3>Some interesting special cases that can arise:</h3>
 <h4>All points on one side</h4>
-The solution to this point set looks wrong on first glance because there are no points on one side of the solution at at all! It doesn’t quite look like what we would expect of a “halving”. But it is still correct. Points on the line are counted to neither side, and not more than half the points of any color are on a side of the line.
+The solution to this point set looks wrong on first glance because there are no points on one side of the solution at all! It doesn’t quite look like what we would expect of a “halving”. But it is still correct. Points on the line are counted to neither side, and not more than half the points of any color are on a side of the line.
 <h4>Vertical solution</h4>
 In some cases, the solution is a vertical line. This is a special case, and the corresponding point that is dual to the solution is “at infinity” insofar as two parallel lines meet at infinity. For the algorithm, this means counting the number of crossings at infinity. All lines cross because we’re in general position, remember?
 <h4>Only one color</h4>
@@ -65,9 +64,13 @@ Our implementation is boring and chooses the cut with slope 0.
 <h4>Collinear case</h4>
 If all the points are on a line and the numbers around the middle point aren’t symmetrical, there is only a single solution. Contrast this to the general case, where the middle levels may intersect very often.
 <h4>Unbounded trapeze</h4>
-If the interval chosen in step two is unbounded, (this doesn’t happen very often and is tricky to do on purpose) the trapeze is unbounded on one side. in this special example the trapeze is also degenerate, so it is actually just a ray.
+If the interval chosen in step two is unbounded (this doesn’t happen very often and is tricky to do on purpose), the trapeze is unbounded on one side. In this special example the trapeze is also degenerate, so it is actually just a ray.
 <h4>Multiple solutions</h4>
-There are some reasons why the same set of points can lead to different ham sandwich cuts with this algorithm. The order in which they are inserted matters. If the point sets are even, the algorithm deletes the first point in the set to make sure the median level is one dimensional. The order also determines whether two lines that are parallel before simulation of simplicity meet at positive or negative infinity. The same thing applies to two crossings with the same x value.
+There are some reasons why the same set of points can lead to different ham sandwich cuts with this algorithm. The order in which the points are inserted matters. If the point sets are even, the algorithm deletes the first point in the set to make sure the median level is one-dimensional. The order also determines whether two lines that are parallel before simulation of simplicity meet at positive or negative infinity. The order of the points also determines the order of two crossings with the same x value before simulation of simplicity. This can change the decomposition into intervals and and the result of the algorithm.
+
+
+<h3>Authors</h3>
+Annette Karrer, Sarah Lutteropp, Fabian Stroh
 
 <h3>Links</h3>
 <a name="ref1">[1]</a>  Chi-Yuan Lo, J. Matoušek, W. Steiger, Algorithms for ham-sandwich cuts
@@ -104,6 +107,8 @@ Other online resources and applets
 <a name="ref8">[8]</a> G. Fredricks The ham sandwich Theorem
     An interactive applet.
  <a href="http://gfredericks.com/gfrlog/93">http://gfredericks.com/gfrlog/93</a>
+
+
 </body>
 </html>
 
