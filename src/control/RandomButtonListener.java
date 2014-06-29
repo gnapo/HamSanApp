@@ -23,7 +23,6 @@ public class RandomButtonListener implements ActionListener {
 	private Random r;
 	private JComboBox<String> c;
 	private HamSanApplet applet;
-
 	public RandomButtonListener(HamSanAlg hsa, LinePanel lp, PointPanel pp, JComboBox<String> c, HamSanApplet applet) {
 		r = new Random();
 		r.setSeed(1);
@@ -38,6 +37,8 @@ public class RandomButtonListener implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		doStuff();
 	}
+	
+	
 
 	public void doStuff() {
 		if (!hsa.done) {
@@ -139,7 +140,8 @@ public class RandomButtonListener implements ActionListener {
 				
 			} else if (c.getSelectedItem() == "vertical solution") {
 				// Vertikale LÃ¶sung
-
+				PointType type = pp.getCurrentType();
+				
 				pp.setCurrentType(PointType.BLUE);
 				for (int i = 4; i > 0; i--) {
 					pp.adddoublePoint(-1, i);
@@ -174,6 +176,7 @@ public class RandomButtonListener implements ActionListener {
 					pp.adddoublePoint(-4, i);
 				}
 				pp.adddoublePoint(2, 2);
+				pp.setCurrentType(type);
 
 			} else if (c.getSelectedItem() == "only one color") {
 				// nur einfarbige Punkte
@@ -217,8 +220,109 @@ public class RandomButtonListener implements ActionListener {
 					pp.adddoublePoint(i, i);
 				}
 				pp.setCurrentType(type);
-
 			} 
+			else if (c.getSelectedItem() == "multiple solutions(2)") {
+				// Erste Einfügereihenfolge
+				PointType type = pp.getCurrentType();
+				pp.setCurrentType(PointType.RED);
+				for (int i = 0; i >-4 ; i--) {
+					pp.adddoublePoint(-1, i);
+				}
+
+				pp.setCurrentType(PointType.BLUE);
+				for (int i = 1; i >= 0; i--) {
+					pp.adddoublePoint(-2, i);
+				}
+				
+				pp.setCurrentType(PointType.BLUE);
+				for (int i = 2; i > 0; i--) {
+					pp.adddoublePoint(-1, i);
+				}
+				pp.setCurrentType(PointType.RED);
+				for (int i = 8; i > 5; i--) {
+					pp.adddoublePoint(-1, i);
+				}
+
+				pp.setCurrentType(PointType.BLUE);
+				for (int i = 7; i >= 5; i--) {
+					if (i % 2 == 0) {
+						pp.setCurrentType(PointType.RED);
+					} else {
+						pp.setCurrentType(PointType.BLUE);
+					}
+					pp.adddoublePoint(4, i);
+				}
+
+				pp.setCurrentType(PointType.RED);
+				for (int i = -2; i >= -4; i--) {
+					if (i % 2 == 0) {
+						pp.setCurrentType(PointType.RED);
+					} else {
+						pp.setCurrentType(PointType.BLUE);
+					}
+					pp.adddoublePoint(-4, i);
+				}
+				pp.adddoublePoint(2, 2);
+				pp.adddoublePoint(-3,8);
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(4, 9);
+				pp.setCurrentType(type);
+
+
+			} else if (c.getSelectedItem() == "multiple solutions(1)") {
+				//zweite Einfügereihenfolge					
+					
+					PointType type = pp.getCurrentType();
+					
+					pp.setCurrentType(PointType.RED);
+					for (int i = -3; i<=0 ; i++) {
+						pp.adddoublePoint(-1, i);
+					}
+
+					pp.setCurrentType(PointType.BLUE);
+					for (int i = 1; i >= 0; i--) {
+						pp.adddoublePoint(-2, i);
+					}
+					pp.setCurrentType(PointType.RED);
+					for (int i = 6; i < 8; i++) {
+						pp.adddoublePoint(-1, i);
+					}
+
+					pp.setCurrentType(PointType.BLUE);
+					for (int i = 5; i <= 7; i++) {
+						if (i % 2 == 0) {
+							pp.setCurrentType(PointType.RED);
+						} else {
+							pp.setCurrentType(PointType.BLUE);
+						}
+						pp.adddoublePoint(4, i);
+					}
+
+					pp.setCurrentType(PointType.RED);
+					for (int i = -4; i <= -2; i++) {
+						if (i % 2 == 0) {
+							pp.setCurrentType(PointType.RED);
+						} else {
+							pp.setCurrentType(PointType.BLUE);
+						}
+						pp.adddoublePoint(-4, i);
+					}
+					pp.adddoublePoint(2, 2);
+					pp.setCurrentType(PointType.RED);
+					pp.setCurrentType(PointType.BLUE);
+					for (int i = 1; i <=2; i++) {
+						pp.adddoublePoint(-1, i);
+					}
+					pp.adddoublePoint(-3,8);
+					pp.setCurrentType(PointType.RED);
+					pp.adddoublePoint(4, 9);
+					pp.setCurrentType(PointType.BLUE);
+					pp.adddoublePoint(-1, 8);
+					pp.setCurrentType(type);
+
+			}
+
+			
 			List<VisualPoint> vpoints = hsa.getVisualPoints();
 			pp.setVisualPoints(vpoints);
 			lp.setVisualPoints(vpoints);

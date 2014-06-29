@@ -76,7 +76,8 @@ public class HamSanApplet extends JApplet {
  
 	    //Preset ComboBox
 	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines",
-	    		"single random points","all Points on one side", "vertical solution", "only one color","collinear case"};
+	    		"single random points","all Points on one side", "vertical solution", "only one color",
+	    		"collinear case", "multiple solutions(1)","multiple solutions(2)"};
 	    presetList = new JComboBox<String>(presets);
 	    presetList.setFocusable(false);
 	    
