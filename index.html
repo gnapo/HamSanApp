@@ -43,7 +43,7 @@ We know we want to find an intersection of the red and blue median levels, but c
 <br>
 Step one: The considered interval (at the beginning, this is all of IR) is devided into halfopen subintervals, such that each subinterval contains at most 1/32 of all crossings (at least one). In the right panel, the intervals are shown as delimited by vertical soft grey lines. The complete interval is delimited by thicker black lines.
 <br>
-Step two: One interval, in which the blue and red median levels cross an odd number of times is chosen. This is done by binary search: for one x, we can find out via quickselect in O(logn) time whether the blue or the red median level is higher. If they change inside some interval, they cross an odd number of times. Note that steps one and two can be done in linear time (see [3])
+Step two: One interval, in which the blue and red median levels cross an odd number of times is chosen. This is done by binary search: for one x, we can find out via quickselect in O(log n) time whether the blue or the red median level is higher. If they change inside some interval, they cross an odd number of times. Note that steps one and two can be done in linear time (see [3])
 <br>
 Step three: A trapeze is constructed around the median level of the bigger of the two sets. We do this by counting ⅛ of all lines of that color up and down on both sides of the interval and connecting the four points. Because of the limited number of crossings inside the interval, we can prove that the median level stays completely inside the trapeze. The trapeze is drawn in thick black lines. There is a further “step” here that just moves the camera to the trapeze.
 <br>
@@ -55,7 +55,7 @@ The algorithm may stop earlier though. If at any point where we check whether th
 
 <h3>What about higher dimensions?</h3>
 The ham sandwich problem can be generalized to higher dimensions. For example, in three dimensions you can always find a plane that halves three sets of points. Or, more generally, in d dimensions you can always find a hyperplane that halves d sets of points.
-The algorithm by Lo, Matoušek and Steiger can also be generalized to higher dimensions and achieves O(nd-1-a(d)) time for some small constant a(d). The problem requires at least Ω(nd-2) time to solve.
+The algorithm by Lo, Matoušek and Steiger can also be generalized to higher dimensions and achieves O(n <sup>d-1-a(d)</sup>) time for some small constant a(d). The problem requires at least Ω(n <sup>d-2</sup>) time to solve.
 <br>
 Some interesting special cases:
 <br>
