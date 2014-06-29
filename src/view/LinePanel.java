@@ -128,8 +128,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 				int x = (int) asXY.x;
 				int y = (int) asXY.y;
 
-				g.drawLine(x - 2, y, x + 2, y);
-				g.drawLine(x, y - 2, x, y + 2);
+				g.drawLine(x - 2, this.getHeight() - y, x + 2, this.getHeight() - y);
+				g.drawLine(x, this.getHeight() - y - 2, x, this.getHeight() - y + 2);
 
 				// drawPoint(g, (int) asXY.x, (int) asXY.y);
 			}
