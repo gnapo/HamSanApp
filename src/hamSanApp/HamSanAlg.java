@@ -610,7 +610,7 @@ public class HamSanAlg {
 			
 			leftmannyC=false;//wird auf true gesetzt,falls linker bzw rechter Randbereich bei Intervalleinteilung 
 			rightmannyC=false;//mehr als bandsize viele Kreutungen im negativ/bzw positiv Unendlichen haben
-			System.out.println("Intervalle werden eingeteilt");
+			if (DEBUG) {System.out.println("Intervalle werden eingeteilt");}
 			for (int i = bandsize; i < crossings.size(); i += bandsize) { 
                 //Fall, dass bei aktuellem Index i Kreuzung im Unendlichen liegt
 				if (crossings.get(i).atInf()){
@@ -699,7 +699,7 @@ public class HamSanAlg {
 				maxband = band;
 			}
 			step ++;
-			if (DEBUG) System.out.println("Intervalle eingeteilt!");
+			if (DEBUG) {System.out.println("Intervalle eingeteilt!");}
 			break;
 		case 1:
 			// find strip with odd number of intersections by binary search:
@@ -790,14 +790,10 @@ public class HamSanAlg {
 
 			int delta = (int) Math.round(eps * lBlue.size());
 			//int delta = (int) (eps * lBlue.size()+1);
-			if (DEBUG) { //sanity check
-				if (levelBlue < 0 || levelBlue >= lBlue.size()) {
-					System.out.println("REALLY BAD ERROR: yeah, levelBlue is fubar. go home and try again.");
-				}
-			}
+		
 			int topLvl = levelBlue - delta;
 			int botLvl = levelBlue + delta;
-			if (DEBUG) { //sanity check
+			if (true) { //sanity check
 				if (levelBlue < 1 || levelBlue >= lBlue.size()) {
 					System.out.println("REALLY BAD ERROR: yeah, levelBlue is fubar. go home and try again.");
 				}
