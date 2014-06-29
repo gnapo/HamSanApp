@@ -245,7 +245,7 @@ public class RandomButtonListener implements ActionListener {
 				pp.adddoublePoint(1, 0);
 				pp.adddoublePoint(1, -1);
 				pp.adddoublePoint(1, -2);
-			}
+			} 
 			List<VisualPoint> vpoints = hsa.getVisualPoints();
 			pp.setVisualPoints(vpoints);
 			lp.setVisualPoints(vpoints);
