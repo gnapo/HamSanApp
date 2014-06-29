@@ -53,10 +53,21 @@ The algorithm may stop earlier though. If at any point where we check whether th
 <h3>What about higher dimensions?</h3>
 The ham sandwich problem can be generalized to higher dimensions. For example, in three dimensions you can always find a plane that halves three sets of points. Or, more generally, in d dimensions you can always find a hyperplane that halves d sets of points.
 The algorithm by Lo, Matoušek and Steiger can also be generalized to higher dimensions and achieves O(n<sup>d-1-a(d)</sup>) time for some small constant a(d). The problem requires at least Ω(n<sup>d-2</sup>) time to solve.
-<br>
-Some interesting special cases:
-<br>
-insert special cases here!
+
+<h3>Some interesting special cases that can arise:</h3>
+<h4>All points on one side</h4>
+The solution to this point set looks wrong on first glance because there are no points on one side of the solution at at all! It doesn’t quite look like what we would expect of a “halving”. But it is still correct. points on the line are counted to neither side, and not more than half the points of any color are on a side of the line.
+<h4>Vertical solution</h4>
+In some cases, the solution is a vertical line. This is a special case, and the corresponding point that is dual to the solution is “at infinity” insofar as two parallel lines meet at infinity. For the algorithm, this means counting the number of crossings at infinity. All lines cross because we’re in general position, remember?
+<h4>Only one color</h4>
+f we only have one color, it is easy to find a ham sandwich cut. It is even possible to construct one for any slope! If you imagine adding a single point of the other color, you can see that you can also have a ham sandwich cut of your set that goes through any given point. (These two statements mean the same thing in projectiIve geometry!) <br>
+Our implementation is boring and chooses the cut with slope 0.
+<h4>Collinear case</h4>
+If all the points are on a line and the numbers around the middle point aren’t symmetrical, there is only a single solution. Contrast this to the general case, where the middle levels may intersect very often.
+<h4>Unbounded trapeze</h4>
+If the interval chosen in step two is unbounded, (this doesn’t happen very often and is tricky to do on purpose) the trapeze is unbounded on one side. in this special example the trapeze is also degenerate, so it is actually just a ray.
+<h4>Multiple solutions</h4>
+There are some reasons why the same set of points can lead to different ham sandwich cuts with this algorithm. The order in which they are inserted matters. If the point sets are even, the algorithm deletes the first point in the set to make sure the median level is one dimensional. The order also determines whether two lines that are parallel before simulation of simplicity meet at positive or negative infinity. The same thing applies to two crossings with the same x value.
 
 <h3>Links</h3>
 <a name="ref1">[1]</a>  Chi-Yuan Lo, J. Matoušek, W. Steiger, Algorithms for ham-sandwich cuts
