@@ -163,6 +163,7 @@ public class RandomButtonListener implements ActionListener {
 				pp.adddoublePoint(-4, i);
 			}
 			pp.adddoublePoint(2, 2);
+			
 		} else if (c.getSelectedItem() == "special case 3") {
 			//nur einfarbige Punkte
 			double color = Math.random();
@@ -179,6 +180,32 @@ public class RandomButtonListener implements ActionListener {
 					hsa.addLine(Math.sin(phi) * rad, Math.cos(phi) * rad, true);
 				}
 			}
+			
+		} else if (c.getSelectedItem() == "special case 4") {
+			//alle Punkte auf einer Geraden
+			PointType type = pp.getCurrentType();
+			
+			for (int i = -9; i<-4; i++) {
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(i,i);
+			}
+			pp.setCurrentType(PointType.RED);
+			pp.adddoublePoint(-4, -4);
+			for (int i = -3; i<1; i++) {
+				pp.setCurrentType(PointType.BLUE);
+				pp.adddoublePoint(i,i);
+			}
+			for (int i = 1; i<5; i++) {
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(i,i);
+			}
+			pp.setCurrentType(PointType.BLUE);
+			pp.adddoublePoint(5, 5);
+			for (int i = 6; i<10; i++) {
+				pp.setCurrentType(PointType.RED);
+				pp.adddoublePoint(i,i);
+			}
+			pp.setCurrentType(type);
 
 		} else if (c.getSelectedItem() == "test") {
 			// Test von compareTo mit 4 parallelen Geraden
