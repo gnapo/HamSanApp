@@ -21,6 +21,8 @@ public class HamSanAlg {
 	public List<Point> lRed;		//hier werden die vom Alg. ber�cksichtigten Roten Linien gespeichert
 	public List<Point> lBlueDel;	// Del f�r deleted
 	public List<Point> lRedDel;	//hier werden die nicht ber�cksichtigten linien gespeichert
+	public List<Point> firstlRed;//Punktemengen zu Beginn des Algorithmus
+	public List<Point> firstlBlue;
 	public boolean leftborder;		//
 	public boolean rightborder;	//bools, die wahr sind, falls der Momentane betrachtungsbereich nach links/rechts beschr�nkt ist
 	public double leftb;			//
@@ -86,6 +88,7 @@ public class HamSanAlg {
 		minband = 0;
 		
 	}
+	
 	
 	/**
 	 * Linien hinzuf�gen in Form zweier Koordinaten.
@@ -458,6 +461,10 @@ public class HamSanAlg {
 		case 0:
 			trapeze = null;
 			if (firstRun) {
+				//speichere Anfangskonstellation der Punkte ab
+				firstlRed = new ArrayList<Point>(lRed);
+				firstlBlue = lRed;//Punktemengen zu Beginn des Algorithmus
+				firstlBlue = new ArrayList<Point>(lBlue);
 				// make sure that both sets are odd by deleting a point out of
 				// each set:
 				if (((lBlue.size() % 2) == 0) && lBlue.size() > 0) {

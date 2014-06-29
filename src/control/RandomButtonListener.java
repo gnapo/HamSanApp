@@ -1,9 +1,7 @@
 package control;
 
-import hamSanApp.HamSanAlg;
-import hamSanApp.Point;
-import view.PointType;
 import hamSanApp.Crossing;
+import hamSanApp.HamSanAlg;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +15,7 @@ import javax.swing.JComboBox;
 import view.HamSanApplet;
 import view.LinePanel;
 import view.PointPanel;
+import view.PointType;
 import view.VisualPoint;
 
 
@@ -137,7 +136,7 @@ public class RandomButtonListener implements ActionListener {
 			}
 			
 			if (crossings.size() == 1) { //beseitigt glaub ich einige fehlerf�lle? ja, das ist aber schlecht. :<
-				Crossing c = crossings.get(0);
+				//Crossing c = crossings.get(0);
 				return;
 			}
 			

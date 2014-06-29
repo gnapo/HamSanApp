@@ -15,13 +15,15 @@ public class ToggleListener implements KeyListener {
 	private DoAllgButtonListener allgBut;
 	private ResetButtonListener resBut;
 	private RandomButtonListener randBut;
+	private OldpointsResetButtonListener oldresBut;
 	private JLabel clabel;
 	
-	public ToggleListener(JLabel colourlabel,PointPanel pp,DoAlgButtonListener doalg,DoAllgButtonListener doallg,ResetButtonListener res,RandomButtonListener ran) {
+	public ToggleListener(JLabel colourlabel,PointPanel pp,DoAlgButtonListener doalg,DoAllgButtonListener doallg,ResetButtonListener res,RandomButtonListener ran, OldpointsResetButtonListener oldpointresBut) {
 		myPointPanel = pp;
 		algBut = doalg;
 		allgBut = doallg;
 		resBut = res;
+		oldresBut=oldpointresBut;
 		randBut = ran;
 		clabel=colourlabel;
 	}
@@ -56,6 +58,10 @@ public class ToggleListener implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_P) {
 			//add Points
 			randBut.doStuff();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_S) {
+			//reset but keep old points
+			oldresBut.doStuff();
 		}
 	}
 
