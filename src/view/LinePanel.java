@@ -50,6 +50,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 	private List<VisualPoint> visualPoints;
 	
 	private boolean drawDeleted = true;
+	
+	private boolean zoomQuickfix = true;
 
 	LinePanel(HamSanAlg hsa) {
 		h = hsa;
@@ -336,6 +338,8 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			if (corner1.equals(corner2)) {
 				return;
 			}
+			
+			zoomQuickfix = !zoomQuickfix;
 
 			// set new xmin, xmax, ymin, ymax
 			int x1 = (int) Math.min(corner1.x, corner2.x);
@@ -350,9 +354,19 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			double bMin = VisualPoint.yToB(y1, ymin, ymax, this.getSize());
 			double bMax = VisualPoint.yToB(y2, ymin, ymax, this.getSize());
 			
-			this.setMinAndMax(aMin, bMax, aMax, bMin);
+			//this.setMinAndMax(aMin, bMax, aMax, bMin);
+			double realAMin = Math.min(aMin, aMax);
+			double realAMax = Math.max(aMin, aMax);
+			double realBMin = Math.min(bMin, bMax);
+			double realBMax = Math.max(bMin, bMax);
+			
+			if (zoomQuickfix){
+				this.setMinAndMax(realAMin, realBMin, realAMax, realBMax);
+			} else {
+				this.setMinAndMax(realAMin, -realBMin, realAMax, -realBMax);
+			}
 
-			System.out.println("xMin: " + xmin + ", xMax: "+xmax+", yMin: " + ymin + ", yMax:" + ymax);
+			System.out.println("aMin: " + aMin + ", aMax: "+aMax+", bMin: " + bMin + ", bMax:" + bMax);
 			
 			corner1 = null;
 			corner2 = null;
@@ -381,6 +395,7 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 		this.referenceLength = (xmax-xmin);
 		this.referenceHeight = (ymax-ymin);
 		this.zoomCenterAB = new Point2D.Double((xmax+xmin)/2, (ymax+ymin)/2);
+		this.zoomQuickfix = true;
 	}
 
 	public void setDrawDeleted(boolean selected) {
