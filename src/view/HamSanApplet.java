@@ -67,6 +67,11 @@ public class HamSanApplet extends JApplet {
 	    JLabel infoLabel = new JLabel("step 0: place points");
 	    infoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 	    infoLabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    
+	    // colour labels
+	    JLabel colourlabel = new JLabel("colour: blue - space to change");
+	    colourlabel.setPreferredSize(new Dimension(this.getWidth(), 20));
+	    colourlabel.setAlignmentX(10);
  
 	    //Preset ComboBox
 	    String[] presets = {"random points (square)", "random points (circle)","random paralel lines","single random points"};
@@ -138,8 +143,8 @@ public class HamSanApplet extends JApplet {
 	    xPanel.add(coord1);
 	    
 	    JPanel yPanel = new JPanel();
-	    xPanel.add(yLabel);
-	    xPanel.add(coord2);
+	    yPanel.add(yLabel);
+	    yPanel.add(coord2);
 	    
 	    buttonPanel.add(startAlgButton);
 	    buttonPanel.add(doAllgButton);
@@ -157,11 +162,12 @@ public class HamSanApplet extends JApplet {
 	    buttonsAndLabel.setLayout(new GridLayout(2,1));
 	    buttonsAndLabel.add(buttonPanel);
 	    buttonsAndLabel.add(infoLabel);
+	    buttonsAndLabel.add(colourlabel);
 		
 		this.add(dualPanels, BorderLayout.CENTER);
 	    this.add(buttonsAndLabel, BorderLayout.SOUTH);
-	    this.addKeyListener(new ToggleListener(pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener));
-	    this.addKeyListener(new ZoomDragListener(lp));
+	    this.addKeyListener(new ToggleListener(colourlabel,pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener));
+		this.addKeyListener(new ZoomDragListener(lp));
 	    setFocusable(true);
 	    this.requestFocusInWindow();
 	    this.requestFocus();
