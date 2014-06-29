@@ -345,13 +345,13 @@ public class LinePanel extends JPanel implements MouseMotionListener, MouseWheel
 			break;
 		case DRAG:
 			int dx = e.getX() - initialX;
-
 			int dy = e.getY() - initialY;
+			
 			// System.out.println("dx: "+dx+ ", dy: "+dy);
 			initialX += dx;
 			initialY += dy;
-			corner1 = new Point2D.Double(dx, dy);
-			corner2 = new Point2D.Double(this.getWidth() + dx, this.getHeight() + dy);
+			corner1 = new Point2D.Double(-dx, -dy);
+			corner2 = new Point2D.Double(this.getWidth() - dx, this.getHeight() - dy);
 			doZoom();
 			this.repaint();
 		}
