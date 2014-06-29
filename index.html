@@ -40,18 +40,15 @@ also means that all This also lets us treat all intersections as having a differ
 
 <h3>The algorithm by Lo, Matoušek and Steiger (see <a href="#ref1">[1]</a> for more details)</h3>
 We know we want to find an intersection of the red and blue median levels, but calculating them completely is too costly, we want to be done in O(n) time. The algorithm operates iteratively. Each iteration is guaranteed to remove a constant fraction of lines that we don’t need for our ham sandwich cut and takes time linearly in the number of remaining points. Each iteration is devided into steps, which we will explain in more detail:
-<br>
-Step one: The considered interval (at the beginning, this is all of IR) is devided into halfopen subintervals, such that each subinterval contains at most 1/32 of all crossings (at least one). In the right panel, the intervals are shown as delimited by vertical soft grey lines. The complete interval is delimited by thicker black lines.
-<br>
-Step two: One interval, in which the blue and red median levels cross an odd number of times is chosen. This is done by binary search: for one x, we can find out via quickselect in O(log n) time whether the blue or the red median level is higher. If they change inside some interval, they cross an odd number of times. Note that steps one and two can be done in linear time (see <a href="#ref3">[3]</a>)
-<br>
-Step three: A trapeze is constructed around the median level of the bigger of the two sets. We do this by counting ⅛ of all lines of that color up and down on both sides of the interval and connecting the four points. Because of the limited number of crossings inside the interval, we can prove that the median level stays completely inside the trapeze. The trapeze is drawn in thick black lines. There is a further “step” here that just moves the camera to the trapeze.
-<br>
-Step four: We delete all lines that do not intersect the trapeze. because we know one of the median levels is completely inside the trapeze, we know that all crossings between the two median levels are. Therefore, the lines outside the trapeze do not contribute to finding the intersections, and we delete them. If we delete a line above the trapeze, we take note that the number of lines above the median level decreases for the purpose of finding the median level inside our considered interval. Because of the construction of the Trapeze, we delete at least a constant fraction of lines. Deleted lines are drawn dotted and faintly, or as empty circles as points.
-<br>
+<p>Step one: The considered interval (at the beginning, this is all of IR) is devided into halfopen subintervals, such that each subinterval contains at most 1/32 of all crossings (at least one). In the right panel, the intervals are shown as delimited by vertical soft grey lines. The complete interval is delimited by thicker black lines.</p>
+<p>Step two: One interval, in which the blue and red median levels cross an odd number of times is chosen. This is done by binary search: for one x, we can find out via quickselect in O(log n) time whether the blue or the red median level is higher. If they change inside some interval, they cross an odd number of times. Note that steps one and two can be done in linear time (see <a href="#ref3">[3]</a>)</p>
+<p>Step three: A trapeze is constructed around the median level of the bigger of the two sets. We do this by counting ⅛ of all lines of that color up and down on both sides of the interval and connecting the four points. Because of the limited number of crossings inside the interval, we can prove that the median level stays completely inside the trapeze. The trapeze is drawn in thick black lines. There is a further “step” here that just moves the camera to the trapeze.</p>
+<p>Step four: We delete all lines that do not intersect the trapeze. Because we know one of the median levels is completely inside the trapeze, we know that all crossings between the two median levels are. Therefore, the lines outside the trapeze do not contribute to finding the intersections, and we delete them. If we delete a line above the trapeze, we take note that the number of lines above the median level decreases for the purpose of finding the median level inside our considered interval. Because of the construction of the Trapeze, we delete at least a constant fraction of lines. Deleted lines are drawn dotted and faintly, or as empty circles as points.</p>
+<p>
 After step four, the process repeats until we only have one blue and one read line remaining. Their crossing must be the ham sandwich cut.
 <br>
 The algorithm may stop earlier though. If at any point where we check whether the red or the blue median level is higher and it turns out they cross at this point, we found a ham sandwich cut and can stop the algorithm.
+</p>
 
 <h3>What about higher dimensions?</h3>
 The ham sandwich problem can be generalized to higher dimensions. For example, in three dimensions you can always find a plane that halves three sets of points. Or, more generally, in d dimensions you can always find a hyperplane that halves d sets of points.
@@ -65,6 +62,7 @@ insert special cases here!
 <a name="ref1">[1]</a>  Chi-Yuan Lo, J. Matoušek, W. Steiger, Algorithms for ham-sandwich cuts
     The algorithm we use is described in here.
  <a href="http://link.springer.com/article/10.1007/BF02574017">http://link.springer.com/article/10.1007/BF02574017</a>
+<br>
 <a name="ref2">[2]</a> H. Edelsbrunner and E. Mucke, Simulation of Simplicity: A Technique to Cope With Degenerate Cases in Geometric Algorithms.
     This technique is employed in the algorithm in order to pretend that the points are in general position
  <a href="http://arxiv.org/pdf/math/9410209.pdf">http://arxiv.org/pdf/math/9410209.pdf</a>
@@ -81,6 +79,7 @@ Other ham sandwich algorithms:
 <a name="ref5">[5]</a> H. Edelsbrunner and R. Waupotitsch, Computing a ham-sandwich cut in two dimensions
     This algorithm is arguably easier to understand and runs in O(n log n) time.
  <a href="http://www.sciencedirect.com/science/article/pii/S0747717186800207#">http://www.sciencedirect.com/science/article/pii/S0747717186800207#</a>
+<br>
 <a name="ref6">[6]</a> D. Mount, Computational Geometry - lecture notes pp. 136 lecture 30
 Discussion of the easier special case that the point sets are seperated by a vertical line
  <a href="http://www.cs.umd.edu/class/spring2012/cmsc754/Lects/cmsc754-lects.pdf">http://www.cs.umd.edu/class/spring2012/cmsc754/Lects/cmsc754-lects.pdf</a>
