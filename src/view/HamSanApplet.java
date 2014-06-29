@@ -26,6 +26,7 @@ import control.RandomButtonListener;
 import control.ResetButtonListener;
 import control.ResetZoomListener;
 import control.ToggleListener;
+import control.ZoomDragListener;
 
 public class HamSanApplet extends JApplet {
 
@@ -160,6 +161,7 @@ public class HamSanApplet extends JApplet {
 		this.add(dualPanels, BorderLayout.CENTER);
 	    this.add(buttonsAndLabel, BorderLayout.SOUTH);
 	    this.addKeyListener(new ToggleListener(pp,doAlgButtonListener,doAllgButtonListener,resetButtonListener,randomButtonListener));
+	    this.addKeyListener(new ZoomDragListener(lp));
 	    setFocusable(true);
 	    this.requestFocusInWindow();
 	    this.requestFocus();
