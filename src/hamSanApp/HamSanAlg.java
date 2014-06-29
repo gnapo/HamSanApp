@@ -71,6 +71,9 @@ public class HamSanAlg {
 		lRed = new ArrayList<Point>();
 		lBlueDel = new ArrayList<Point>();
 		lRedDel = new ArrayList<Point>();
+		firstlRed = new ArrayList<Point>();
+		firstlBlue = lRed;
+		firstlBlue = new ArrayList<Point>();
 		leftborder = false;
 		rightborder = false;
 		leftb = 0;
