@@ -20,7 +20,7 @@ public class DoAllgButtonListener implements ActionListener {
 	private LinePanel lp;
 	private JLabel l;
 	private HamSanApplet applet;
-	
+
 	public DoAllgButtonListener(HamSanAlg hsa, PointPanel pp, LinePanel lp, JLabel label, HamSanApplet hamSanApplet) {
 		this.h = hsa;
 		this.pp = pp;
@@ -28,35 +28,37 @@ public class DoAllgButtonListener implements ActionListener {
 		this.l = label;
 		this.applet = hamSanApplet;
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		doStuff();
 	}
-	
-	public void doStuff(){
-		if (h.lBlue.size()==0 && h.lRed.size() ==0) {
-			return;
-		} else {
-			applet.setPlacingEnabled(false);
-			applet.setStepsEnabled(false);
+
+	public void doStuff() {
+		if (!h.done) {
+			if (h.lBlue.size() == 0 && h.lRed.size() == 0) {
+				return;
+			} else {
+				applet.setPlacingEnabled(false);
+				applet.setStepsEnabled(false);
+			}
+			while (!h.done) {
+				h.doAlg();
+			}
+			if (h.validSol(false) == false) {
+				l.setText("uh oh");
+			} else {
+				l.setText("found valid solution");
+			}
+			pp.setAddingAllowed(false);
+			List<VisualPoint> vpoints = h.getVisualPoints();
+			pp.setVisualPoints(vpoints);
+			lp.setVisualPoints(vpoints);
+			pp.revalidate();
+			pp.repaint();
+			lp.revalidate();
+			lp.repaint();
 		}
-		while (!h.done) {
-			h.doAlg();
-		}
-		if (h.validSol(false)==false) {
-			l.setText("uh oh");
-		}
-		else {
-			l.setText("found valid solution");
-		}
-		pp.setAddingAllowed(false);
-		List<VisualPoint> vpoints = h.getVisualPoints();
-		pp.setVisualPoints(vpoints);
-		lp.setVisualPoints(vpoints);
-		pp.revalidate();
-		pp.repaint();
-		lp.revalidate();
-		lp.repaint();
 	}
 
 }
