@@ -107,26 +107,36 @@ public class HamSanApplet extends JApplet {
 	    DoAllgButtonListener doAllgButtonListener = new DoAllgButtonListener(hsa, pp, lp, infoLabel, this); 
 	    doAllgButton.addActionListener(doAllgButtonListener);
 	    
-	    JButton resetZoomButton = new JButton("Reset Zoom");
+	    JButton resetZoomButton = new JButton("Reset zoom");
 	    resetZoomButton.setFocusable(false);
 	    resetZoomButton.addActionListener(new ResetZoomListener(lp));
 	    
-	    randomButton = new JButton("Add Points");
+	    randomButton = new JButton("Add points");
 	    randomButton.setMnemonic(KeyEvent.VK_P);
 	    RandomButtonListener randomButtonListener = new RandomButtonListener(hsa,lp,pp,presetList, this); 
 	    randomButton.addActionListener(randomButtonListener);
 	    randomButton.setFocusable(false);
 	    
 	    //coordinates of points
+	    JLabel xLabel = new JLabel("x:");
+	    JLabel yLabel = new JLabel("y:");
 	    coord1 = new JTextField(3);
 	    coord2 = new JTextField(3);
-	    setPoint = new JButton("Setze Punkt an Koordinaten");
+	    setPoint = new JButton("Place point at");
 		setPoint.setVisible(true);
 	    setPoint.setFocusable(false);
 	    setPoint.addActionListener(new CoordsListener(this,pp,coord1, coord2));
 	    
 	    JPanel buttonPanel = new JPanel();
 	    buttonPanel.setLayout(new GridLayout(2, 1));
+	    
+	    JPanel xPanel = new JPanel();
+	    xPanel.add(xLabel);
+	    xPanel.add(coord1);
+	    
+	    JPanel yPanel = new JPanel();
+	    xPanel.add(yLabel);
+	    xPanel.add(coord2);
 	    
 	    buttonPanel.add(startAlgButton);
 	    buttonPanel.add(doAllgButton);
@@ -136,8 +146,8 @@ public class HamSanApplet extends JApplet {
 	    buttonPanel.add(resetZoomButton);
 	    buttonPanel.add(randomButton);
 	    buttonPanel.add(setPoint);//Koordinateneingabe
-	    buttonPanel.add(coord1);
-	    buttonPanel.add(coord2);
+	    buttonPanel.add(xPanel);
+	    buttonPanel.add(yPanel);
 	    buttonPanel.add(presetList);
 	    
 	    JPanel buttonsAndLabel = new JPanel();
